@@ -15,12 +15,9 @@ jobs:
           args: -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode -shell-escape
 
       - name: Generate a random name for the relase
-        uses: TGPSKI/name-generator-node-action@v2
-        id: generator
-        with:
-          separator: '_'
-          length: '4'
-          style: 'upperCase'
+      id: generate_relase_name
+      run: |
+        echo "relase_name=$(echo $RANDOM | md5sum | head -c 20; echo;)" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -28,8 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.generator.outputs.name }}
-          release_name: Release ${{ steps.generator.outputs.name }}
+          tag_name: relase_name
+          release_name: Release relase_name
           draft: false
           prerelease: false
 
