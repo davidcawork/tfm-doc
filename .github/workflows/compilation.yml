@@ -15,10 +15,10 @@ jobs:
           args: -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode -shell-escape
 
       - name: Generate a random name for the relase
-      id: generate_relase_name
-      run: |
-        echo "relase_name=$(echo $RANDOM | md5sum | head -c 20; echo;)" >> $GITHUB_ENV
-
+        id: generate_relase_name
+        run: |
+          echo "relase_name=$(echo $RANDOM | md5sum | head -c 20; echo;)" >> $GITHUB_ENV
+          
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
