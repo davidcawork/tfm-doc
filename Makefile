@@ -1,7 +1,7 @@
 # Makefile for compiling the End-of-degree project (TFG)
 
 # Trashy file formats
-TRASH = *.aux *.ist *.log *.out *.sbl *.acn *.lol *.lot *.toc *.lof *.xml main-blx.bib *.bbl *.blg *.auxlock *.glo
+TRASH = *.aux *.ist *.log *.out *.sbl *.acn *.lol *.lot *.toc *.lof *.xml main-blx.bib *.bbl *.blg *.auxlock *.glo *.fls *.fdb_latexmk
 
 # LaTeX compiler flags
 FLAGS = -shell-escape
