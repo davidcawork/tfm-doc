@@ -14,9 +14,9 @@
 % Formato y contenido de la información de cabecera y pie de página
 %%
 % Información de capítulo en cabecera e interno
-\ihead{{\color{gray30}\scshape\small\headmark}}	
+\ihead{{\color{gray30}\scshape\small\headmark}}
 % Número de página en cabecera y externo
-\ohead{\normalfont\pagemark} 
+\ohead{\normalfont\pagemark}
 % Número de página en pie de página y externo. Sólo en páginas sin cabecera
 \ofoot[\normalfont\pagemark]{}
 %% 		
@@ -35,13 +35,13 @@
 % MÁRGENES DE LAS PÁGINAS
 \usepackage[
   inner	=	3.0cm, % Margen interior
-  outer	=	2.5cm, % Margen exterior
+  outer	=	2.7cm, % Margen exterior
   top	=	2.5cm, % Margen superior
   bottom=	2.5cm, % Margen inferior
   includeheadfoot, % Incluye cabecera y pie de página en los márgenes
 ]{geometry}
 % Valor de interlineado
-\renewcommand{\baselinestretch}{1.0} % 1 línea de interlineado
+\renewcommand{\baselinestretch}{1.2} % 1 línea de interlineado
 % Para poder generar páginas horizontales
 \usepackage{lscape}
 % Ancho de la zona para comentarios en el margen. (modificado para todonotes)
@@ -62,13 +62,13 @@
 \setdefaultlanguage{spanish}
 
 \addto\captionsspanish{%
-	\renewcommand{\listtablename}{Índice de tablas} 
-	\renewcommand{\tablename}{Tabla}
-	\renewcommand{\lstlistingname}{Código}
-	\renewcommand{\lstlistlistingname}{Índice de \lstlistingname s}
-	\renewcommand{\glossaryname}{Glosario}
-	\renewcommand{\acronymname}{Acrónimos}
-	\renewcommand{\bibname}{Bibliografía}%
+  \renewcommand{\listtablename}{Índice de tablas}
+  \renewcommand{\tablename}{Tabla}
+  \renewcommand{\lstlistingname}{Código}
+  \renewcommand{\lstlistlistingname}{Índice de \lstlistingname s}
+  \renewcommand{\glossaryname}{Glosario}
+  \renewcommand{\acronymname}{Acrónimos}
+  \renewcommand{\bibname}{Bibliografía}%
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%% 
@@ -124,10 +124,10 @@
 % para agilizar el procesado y tenerlas para utilizarlas en otros
 % documentos
 \if\OptimizaTikZ 1
-\usepgfplotslibrary{external}
-\tikzset{%
+  \usepgfplotslibrary{external}
+  \tikzset{%
     external/system call ={xelatex -enable-write18 -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"},
-}
+  }
 \fi
 
 % Estilos para elementos graficos
@@ -193,7 +193,7 @@
 % OTROS
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Para hacer una pagina horizontal. Uso: \begin{landscape} xxxx \end{lanscape}
-\usepackage{lscape} 
+\usepackage{lscape}
 % Para incluir paginas PDF. Uso:
 % \includepdf[pages={1}]{tuarchivo.pdf}
 \usepackage{pdfpages}
@@ -213,21 +213,21 @@
 % Paquete para realizar calculos en el código
 \usepackage{calc}
 % Para rotar tablas o figuras o su contenido
-\usepackage{rotating} 
+\usepackage{rotating}
 % Para incluir comentarios en el texto. El parámetro 'disable' oculta todas las notas.
 % USO: \todo{tutexto}
 \usepackage[textsize=tiny,spanish,shadow,textwidth=2cm]{todonotes}
 %\reversemarginpar % Descomentar si se quiere todos los comentarios en el mismo lado
 % Desactiva la exportación de los ToDo y Missingfigures como figuras
 \if\OptimizaTikZ 1
-\makeatletter
-\renewcommand{\todo}[2][]{\tikzexternaldisable\@todo[#1]{#2}\tikzexternalenable}
-\makeatother
-\usepackage{letltxmacro}
-\LetLtxMacro{\oldmissingfigure}{\missingfigure}
-\makeatletter
-\renewcommand{\missingfigure}[2][]{\tikzexternaldisable\oldmissingfigure[{#1}]{#2}\tikzexternalenable}
-\makeatother
+  \makeatletter
+  \renewcommand{\todo}[2][]{\tikzexternaldisable\@todo[#1]{#2}\tikzexternalenable}
+  \makeatother
+  \usepackage{letltxmacro}
+  \LetLtxMacro{\oldmissingfigure}{\missingfigure}
+  \makeatletter
+  \renewcommand{\missingfigure}[2][]{\tikzexternaldisable\oldmissingfigure[{#1}]{#2}\tikzexternalenable}
+  \makeatother
 \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%% 
@@ -248,18 +248,18 @@
 % Para mostrar la fecha actual (mes año) con \Hoy
 \newcommand{\MES}{%
   \ifcase\month% 0
-    \or Enero% 1
-    \or Febrero% 2
-    \or Marzo% 3
-    \or Abril% 4
-    \or Mayo% 5
-    \or Junio% 6
-    \or Julio% 7
-    \or Agosto% 8
-    \or Septiembre% 9
-    \or Octubre% 10
-    \or Noviembre% 11
-    \or Diciembre% 12
+  \or Enero% 1
+  \or Febrero% 2
+  \or Marzo% 3
+  \or Abril% 4
+  \or Mayo% 5
+  \or Junio% 6
+  \or Julio% 7
+  \or Agosto% 8
+  \or Septiembre% 9
+  \or Octubre% 10
+  \or Noviembre% 11
+  \or Diciembre% 12
   \fi}
 \newcommand{\ANYO}{\number\year}
 \newcommand{\Hoy}{\MES\ \ANYO}
@@ -267,16 +267,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%% 
 % MATEMÁTICAS
 %%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{mathtools,amsthm,amsfonts,amssymb,bm,mathrsfs,nicefrac,upgreek,bigints} 
+\usepackage{mathtools,amsthm,amsfonts,amssymb,bm,mathrsfs,nicefrac,upgreek,bigints}
 % Comando para añadir información de variables a las ecuaciones
 % Uso: \begin{condiciones}[donde:] ....... \end{condiciones}
 \newenvironment{condiciones}[1][2]
-  {%
-   #1\tabularx{\textwidth-\widthof{#1}}[t]{
-     >{$}l<{$} @{}>{${}}c<{{}$}@{} >{\raggedright\arraybackslash}X
-   }%
-  }
-  {\endtabularx\\[\belowdisplayskip]}
+{%
+#1\tabularx{\textwidth-\widthof{#1}}[t]{
+>{$}l<{$} @{}>{${}}c<{{}$}@{} >{\raggedright\arraybackslash}X
+}%
+}
+{\endtabularx\\[\belowdisplayskip]}
 
 %%%%%
 % PARÁMETROS DE FORMATO DE CODIGOS
