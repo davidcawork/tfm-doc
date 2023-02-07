@@ -15,7 +15,8 @@ main: main.tex
 	xelatex $(FLAGS) -jobname $@ $<
 	bibtex main.aux
 	xelatex $(FLAGS) -jobname $@ $<
-
+	xelatex $(FLAGS) -jobname $@ $<
+	
 .PHONY: clean clean_pdf
 
 clean:
