@@ -43,7 +43,8 @@ filecolor=black,
 citecolor=RoyalBlue,
 }
 % Archivo de acrónimos
-\makeglossaries 
+\makeglossaries
+%\makenoidxglossaries 
 \input{body/anexos/acronimos.tex} % Archivo que contiene los acrónimos
 
 
@@ -88,13 +89,13 @@ citecolor=RoyalBlue,
 
 % Acronimos 
 \printglossary[style=modsuper,type=\acronymtype,title={Lista de Acrónimos y Abreviaturas}]
-\glsaddallunused
+%\glsaddallunused
 
 % Anexos 
 \appendix
-%\input{body/anexos/condiciones}
-%\input{body/anexos/presupuesto}
-%\input{body/anexos/manuales}
+\input{body/anexos/condiciones}
+\input{body/anexos/presupuesto}
+\input{body/anexos/manuales}
 
 
 % Contra portada

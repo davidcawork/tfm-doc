@@ -1,7 +1,7 @@
 # Makefile for compiling the End-of-degree project (TFG)
 
 # Trashy file formats
-TRASH = *.aux *.ist *.log *.out *.sbl *.acn *.lol *.lot *.toc *.lof *.xml main-blx.bib *.bbl *.blg *.auxlock *.glo *.fls *.fdb_latexmk
+TRASH = *.aux *.ist *.log *.out *.sbl *.acn *.lol *.lot *.toc *.lof *.xml main-blx.bib *.bbl *.blg *.auxlock *.glo *.gls *.glg *.alg *.acr *.fls *.fdb_latexmk
 
 # LaTeX compiler flags
 FLAGS = -shell-escape
@@ -14,6 +14,7 @@ dbg: main
 main: main.tex
 	xelatex $(FLAGS) -jobname $@ $<
 	bibtex main.aux
+	makeglossaries main
 	xelatex $(FLAGS) -jobname $@ $<
 	xelatex $(FLAGS) -jobname $@ $<
 	
