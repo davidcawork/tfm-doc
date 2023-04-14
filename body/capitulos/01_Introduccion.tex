@@ -50,29 +50,56 @@ Dicho \textit{roadmap} se compone de varias fases, las cuales se han subdivido e
 \\
 Pero el interés en la próxima generación de redes moviles, no es meramente local, si nos vamos a Estados Unidos, podemos ver como ya la FCC libera espectro en la banda de los THz en US para hacer pruebas de concepto para el 6G \cite{us6g}. O a Corea del Sur, donde ya han planeado lanzar un proyecto piloto de \gls{6g} para el 2026 \cite{coreaSur6G}.\\
 \\
-Como se puede ver, el interés por el \gls{6g} es real, y se están realizando esfuerzos exhaustivos para la proliferación de las tecnologías habilitadoras del \gls{6g}, por lo que distintas instituciones apuntan a que las primeras redes \gls{6g} que podrán ser desplegadas en 2028 pero que su comercialización y la llegada a las personas de a pie no llegará hasta el 2030 \cite{Nguyen2022}. Uno de los aspectos relevantes en la nueva generación de redes móviles, es la arquitectura de interconexión física que se va a plantear. En el \gls{5g}, ya se reaprovecho el \textit{backbone} existente de \gls{sdn}, al cual haciendo uso de flexidad y de la programabilidad,  se le inducieron modificaciones software para atender las nuevas especificaciones de la arquitectura planteada~\cite{Li2018}. Teniendo esto en cuenta, al lector le pueden surgir dudas de si la próxima red de \gls{6g} hará uso de las bondades de las redes \gls{sdn} para impulsar el procesamiento de datos en su arquitectura como parte del \textit{backbone}. Según los informes preliminares que se han presentado en cuanto al diseño de la red \gls{6g}, se indica que harán uso del \gls{sdn},  junto a la tecnología \gls{p4}, para la definición de plano de procesamiento de datos, para mejorar el rendimiento del \textit{backbone} ya existente. \\
+Como se puede ver, el interés por el \gls{6g} es real, y se están realizando esfuerzos exhaustivos para la proliferación de las tecnologías habilitadoras del \gls{6g}, por lo que distintas instituciones apuntan a que las primeras redes \gls{6g} que podrán ser desplegadas en 2028, pero que su comercialización y la llegada a las personas de a pie no llegará hasta el 2030 \cite{Nguyen2022}. Uno de los aspectos relevantes en la nueva generación de redes móviles, es la arquitectura de interconexión física que se va a plantear. En el \gls{5g}, ya se reaprovecho el \textit{backbone} existente de \gls{sdn}, al cual haciendo uso de flexibilidad y de la programabilidad,  se le indujeron modificaciones software para atender las nuevas especificaciones de la arquitectura planteada~\cite{Li2018}. Teniendo esto en cuenta, al lector le pueden surgir dudas de si la próxima red de \gls{6g} hará uso de las bondades de las redes \gls{sdn} para impulsar el procesamiento de datos en su arquitectura como parte del \textit{backbone}. Según los informes preliminares \cite{Uusitalo2021}~\cite{6garch1}~\cite{6garch2} que se han presentado en cuanto al diseño de la red \gls{6g}, se indica que harán uso del \gls{sdn},  junto a la tecnología \gls{p4} y tecnicas \gls{ai}/\gls{ml}, para la definición de plano de procesamiento de datos y mejorar el rendimiento y orquestación del \textit{backbone} ya existente.\\
 
 
 \section{Redes \glsentryshort{sdn}}
 \label{sec:6gIoT_sdn}
 
+%Como se ha podido ver, las redes \gls{sdn} son un hecho en las próximas redes de comuniaciones moviles \gls{6g}. Con las redes SDN, como se puede apreciar en la figura 1.1, se desea extraer el plano de control de los dispositivos intermedios de procesamiento de la red, unificándolo en entes llamados controladores, haciendo la administración de red una tarea más centralizada y flexible.
+
+Como se ha podido ver, las redes \gls{sdn} serán una realidad en las próximas redes de comunicaciones móviles \gls{6g}. La figura \ref{fig:sdnParadig} muestra cómo con estas redes, se pretende separar el plano de control de los dispositivos intermedios de procesamiento de la red y centralizarlo en entidades denominadas controladores, lo que permitirá una administración más flexible y centralizada de la red.\\
+\\
+Antes de que apareciera el concepto de \gls{sdn}, las redes convencionales solían tener un plano de control unificado en los propios dispositivos, llamado generalmente \textit{Control plane}, en el que se definía la lógica que dictaba cómo se debía llevar a cabo el forwarding de los paquetes, y un plano de datos, conocido como \textit{Data plane}, que se implementaba definiendo su datapath, compuesto por varios bloques de procesamiento para reenviar los paquetes. Sin embargo, con la aparición del paradigma de las redes \gls{sdn}, como se muestra en la Figura \ref{fig:sdnParadig}, los nodos tradicionales de la red verían cómo su plano de control sería delegado a una entidad externa llamada controlador. Este controlador tendría una perspectiva global de toda la red en su conjunto, lo que permitiría una gestión más flexible, dinámica y optimizada.
+
+% figura sdn
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{archivos/img/intro/sdn.png}
+    \caption{Paradigma en las redes \gls{sdn} \cite{carrascal2020diseno}}
+    \label{fig:sdnParadig}
+\end{figure}
+
+A la hora de la transmisión de la información de control desde el controlador hacia los nodos \gls{sdn}, se plantean dos puntos importantes. El primero de ellos es qué esquema en la red control se va a plantear, y la segunda que protocolo de comunicaciones se va a emplear. Empezando por los protocolos de comunicación de información de control en redes \gls{sdn}, el más utilizado es OpenFlow, aunque más adelante se verán en detalle alguno que otro más.\\
+\\
+En cuanto a los paradigmas de control \gls{sdn}, tenemos dos vertientes \cite{carrascal2023comprehensive}, \textbf{\textit{out-of-band}} e \textbf{\textit{in-band}}. La diferencia entre cada paradigma, ver Figura \ref{fig:sdnParadigControl}, es que en el modelo \textit{out-of-band}, cada nodo \gls{sdn} tiene un enlace dedicado con el controlador, es decir la información de control tiene una red dedicada por y para ella. El modelo \textit{in-band} por el contrario, se tiene que solo alguno/s de los nodos \gls{sdn} gestionados tiene un enlace con el controlador, y el resto de equipos emplean ese enlace para hacerle llegar al controlador la información de control. Se quiere señalar que en este último modo la información de control al no tener una red dedicada para ella misma, viajará de forma conjunta por el plano de datos hasta llegar al controlador. \\
+\\
+No hay un paradigma mejor que otro, cada paradigma de control tiene unos pros y unos contras, y será el caso de uso quien predisponga cuál de los dos usar. Por ejemplo, el modelo \textit{out-of-band} es un modelo mucho más caro dado que se tiene un enlace dedicado para comunicación controlador - nodo \gls{sdn}, pero por ello, también es más seguro dado que el tráfico de control está aislado. Por el contrario, el modelo \textit{in-band}, es mucho más barato dado que se emplea de red de datos para la transmisión de la información de control. Sin embargo, es un modelo más inseguro, ya que la información de control está expuesta al plano de datos.
+\newpage
+% fig
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{archivos/img/intro/InBandOutBandScheme.pdf}
+    \caption{Paradigma control en las redes \gls{sdn} \cite{carrascal2023comprehensive}}
+    \label{fig:sdnParadigControl}
+\end{figure}
+
+Uno de los puntos diferenciadores entre ambos paradigmas de control, es la configuración requerida en cada caso. En el modelo de \textit{out-of-band}, no hay apenas configuración requerida, dado que, si la información es de control, tendremos una interfaz de red exclusiva con la cual trabajar. Por el contrario, en el modelo \textit{in-band}, si tenemos que tratar información de control no sabemos con qué interfaz operar. El nodo \gls{sdn} deberá saber a priori por donde reenviar los paquetes de control. Dicha configuración se obtiene de algún tipo de protocolo de comunicación \textit{in-band}, el cual proporcione a cada nodo de la red la capacidad de alcanzar el nodo que les da acceso al controlador de la red \gls{sdn}.\\
+\\
+Como se ha indicado anteriormente, no hay paradigma mejor que otro, cada cual ofrece unas características propias que tendrán un comportamiento mejor o peor en función del caso de uso. Por ejemplo, en un entorno \gls{iot}, donde los dispositivos a lo sumo tienen una única interfaz de comunicaciones, el modelo in-band sería ideal. El coste de añadir otra interfaz de comunicaciones no es solo monetario, sino que también impacta en la vida útil del sensor, al tener que alimentar una interfaz de comunicaciones adicional.
+
+%En redes convencionales previas al concepto de SDN, los nodos de la red tenían unificado un plano de control, Control plane, donde se definía la lógica que dictaba como debía llevarse a cabo el forwarding de los paquetes, y un plano de datos, dataplane, el cual se puede implementar definiendo su datapath. Dicho datapath se compone de varios bloques de procesado para reenviar los paquetes. Con la llegada del paradigma de las redes SDN, como se puede apreciar en la figura 1.1, los nodos clásicos de red verían como su plano de control sería delegado a una entidad llamada controlador. El controlador tendría una perspectiva global de toda la red en su conjunto pudiendo gestionarla de una manera más flexible y centralizada.
 
 \section{Objetivos}
 \label{sec:obj}
 
-El objetivo principal de este proyecto es conseguir el desarrollo de un protocolo de control in-band eficiente
-para la integración de la tecnologı́a IoT en las futuras de redes de 6G. Como ya hemos introducido, con la
-llegada del IoT la dimensión de las redes va a crecer exponencialmente. Por lo consiguiente, la complejidad
-de la administración de dichas redes va a suponer un gran desafı́o. Los dispositivos IoT se podrán beneficiar
-de la integración con las redes SDN en 6G, ya que estas les reportará la flexibilidad y programabilidad
-requerida para una correcta gestión y administración de cada elemento de la red. Por ello, se pueden resumir
-los objetivos del proyecto en los siguientes puntos:
+El objetivo principal de este proyecto es conseguir el desarrollo de un protocolo de control in-band eficiente para la integración de la tecnología IoT en las futuras de redes de 6G. Como ya hemos introducido, con la llegada del IoT la dimensión de las redes va a crecer exponencialmente. Por lo consiguiente, la complejidad de la administración de dichas redes va a suponer un gran desafío. Los dispositivos IoT se podrán beneficiar de la integración con las redes SDN en 6G, ya que estas les reportará la flexibilidad y programabilidad requerida para una correcta gestión y administración de cada elemento de la red. Por ello, se pueden resumir los objetivos del proyecto en los siguientes puntos:
 
 \begin{itemize}
-    \item Analizar el estado del arte y necesidades actuales de IoT en 6G.
-    \item Diseño de un protocolo in-band eficiente para IoT integrado con SDN.
-    \item Emulación mediante plataformas como Contiki-NG, Mininet y ONOS.
-    \item Implementación y despliegue en hardware real (tarjetas Raspberry Pi, o remotas IoT-LAB)
+    \item \textbf{Analizar el estado del arte y necesidades actuales de IoT en 6G}. Se realizará una búsqueda y recolección de información, artículos e informes sobre las demandas del \gls{iot} y las bondades preliminares del \gls{6g}.
+    \item \textbf{Diseño de un protocolo in-band eficiente para IoT integrado con SDN}. Se realizará un estudio previo de las soluciones \textit{in-band} ya implementadas, se analizarán, y se propondrá una solución a medida que cubra los equipos \gls{iot} en las redes \gls{sdn}.
+    \item \textbf{Emulación mediante plataformas como Contiki-NG, Mininet y ONOS}. El desarrollo inicial se probará sobre las plataformas más utilizadas en el prototipado de protocolos de comunicaciones.
+    \item \textbf{Implementación y despliegue en hardware real} (tarjetas Raspberry Pi, o remotas IoT-LAB), en función de la ejecución del proyecto se estudiará la implementación del protocolo en \textit{hardware} en real.
 \end{itemize}
 
 
@@ -83,6 +110,25 @@ los objetivos del proyecto en los siguientes puntos:
 \label{sec:structure}
 
 
+En esta sección se indica la estructura organizativa de la memoria del proyecto \gls{tfm}, haciendo un resumen de los aspectos más significativos de cada capítulo.
+
+
+\begin{description}
+    \item\textbf{Capítulo 1: Introducción}. Se hará una breve introducción de la motivación principal que ha originado la realización de este \gls{tfm}, así como una breve explicación de los aspectos generales y de los objetivos que se quieren alcanzar con el trabajo presentado. Por último, se indicarán las contribuciones que se han conseguido con el mismo, en revistas científicas.
+
+    \item\textbf{Capítulo 2: Estado del arte}. Se indicarán los conceptos fundamentales en relación al proyecto. La motivación de este capítulo es la de establecer un marco teórico lo suficientemente consistente para abordar el diseño del protocolo de comunicación \textit{in-band}.
+
+    \item\textbf{Capítulo 3: Diseño del protocolo de control In-Band}. Se analizará soluciones anteriores \textit{in-band}, debatiendo las funcionalidades básicas que debe tener el protocolo. Se explicará el funcionamiento del mismo y se decidirá la plataforma para implementarlo.
+
+    \item\textbf{Capítulo 4: Desarrollo y evaluación del protocolo}. Se describirá el desarrollo realizado en la plataforma elegida. Señalando aquellas partes que se consideran de mayor importancia. Por último, se incluirá una evaluación del mismo.
+
+    \item\textbf{Capítulo 5: Conclusiones y trabajo futuro}. Se terminará la memoria de este \gls{tfm} con las conclusiones, y se presentarán las vías de trabajo a futuro que tiene este proyecto.
+
+    \item[]\textbf{Bibliografía y referencias}. Se añadirán todos los artículos, libros, materiales consultados y empleados en la elaboración de esta memoria. Se seguirá el estilo de citación del \gls{ieee}, siguiendo las recomendaciones oficiales de la normativa sobre \gls{tfm}s de la \gls{uah}.
+
+    \item[]\textbf{Anexos}. Se incluirán todos los manuales de usuario e instalación que se consideren oportunos. De forma adicional, se añadirán las características técnicas del \textit{hardware} con el cual se ha desarrollado este \glsentryshort{tfm}. Por último, se hará un presupuesto que incluya el coste de mano de obra, material y gastos generales.
+
+\end{description}
 
 \section{Contribuciones}
 \label{sec:contributions}
