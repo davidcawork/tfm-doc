@@ -1,8 +1,7 @@
 \section{Linux Networking}
 \label{sec:linuxNetworking}
 
-En esta sección se van a recoger todos los conceptos y herramientas que se engloben en la parte de \textit{Networking} de Linux y se crean fundamentales en el desarrollo de este proyecto.
-
+Esta sección recopilará todos los conceptos y herramientas relacionadas con la parte de Networking en Linux, que son fundamentales para el desarrollo, análisis y validación de este proyecto.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,8 +9,56 @@ En esta sección se van a recoger todos los conceptos y herramientas que se engl
 \subsection{Interfaz virtual - \texttt{tun/tap}}
 \label{linuxNetworking_tuntap}
 
+En el mundo de las redes siempre se habla de las interfaces tun/tap de forma indistinta cuando van a utilizarse, sin embargo, cada una tiene su cometido. Como se ha indicado, en networking, las interfaces TUN y TAP son interfaces virtuales que se crean y se gestionan en espacio de kernel. Mencionar que como estas interfaces son virtuales y se gestionan directamente vía softaware, no como las interfaces reales que se gestionan con unos drivers diferentes, cada interfaz con su driver especifico de la interfaz.  Los drivers de las interfaces TUN/TAP se crearon en los 2000 como una unión de los avances de los drivers desarrollados en las comunidades de Solaris, Linux, BSD. Actualmente los drivers solo tienen mantenimiento por los kernels de linux y FreeBSD. Ambos tipos de interfaces se utilizan para tunelado, pero no pueden ser utilizadas a la vez dado que trabajan en niveles distintos. Las TUN, de \textit{network \textbf{TUN}nel}, emula la capa de red y puede llegar hacer reenvío de los paquetes. En cambio las interfaces TAP,  trabajan en capa 2 solo en capa dos, y emulan un equipo que trabaja en dicha capa, como por ejemplo un switch. Por tanto, hay que dejar claro lo que se puede llegar a realizar con cada interfaz (Ver figura \ref{fig:linux1}).
+
+\begin{itemize}
+    \item \texttt{TUN} se puede llegar a utilizar para routing.
+    \item \texttt{TAP} se puede llegara utilizar para crear un bridge.
+\end{itemize}
+
+Generalmente, cuando los paquetes son enviados por el sistema operativo a través de una interfaz TUN/TAP,  serán recibidos por algun programa de espacio de usuario, el cual, está enganchado directamente en la interfaz. Cualquier programa de espacio de usuario podrá pasar paquetes por las interfaces, y las interfaces virtuales se lo pasarán al \textit{stack} de red por defecto, emulando la recepción de los paquetes inyectados desde espacio de usuario.
+
+% fig
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/teoria/linux1.png}
+    \caption{Diagrama de funcionamiento de las interfaces virtuales TUN/TAP }
+    \label{fig:linux1}
+\end{figure}
+
+Para la creación de estas interfaces lo podemos hacer por ioctl o podemos hacerlo mas facil a través del binario tunctl o en su defecto con el comando de tuntap del set de herramientas iproute2. A continuación, en el bloque \ref{code:tun_tap_use} se indican todos los comandos necesarios para trabajar con las interfaces TUN/TAP.
+
+\begin{lstlisting}[language= bash, style=Consola, caption={Manejo de interfaces TUN - TAP},label=code:tun_tap_use]
+    # En caso de querer utilizar tunctl hay que instalar el binario
+    sudo apt install -y uml-utilities
+    
+    # Para crear una un interfaz podemos hacer lo siguiente
+    tunctl -t {nombre_tun}
+
+    # Para eliminarla
+    tunctl -d {nombre_tun}
+
+    # Para crear interfaces de tipo TAP hay que hacer lo siguiente
+    tunctl -p -t {nombre_tun}
+    
+    # El comando analogo con iproute2 sería el siguiente
+    ip tuntap add dev {nombre_tun} mode {tun|tap}
+\end{lstlisting}
+\vspace{0.5cm}
+
+En caso de que queramos comprobar que la interfaces se han creado correctamente siempre se puede hacer uso de la herramienta \texttt{ethtool}. A continuación, en la figura \ref{fig:linux2}, se puede ver como en el campo \texttt{bus-info} nos indica que tipo de interfaz es.
+
+% fig
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/teoria/linux2.png}
+    \caption{Comprobación con \texttt{ethtool} de tipo de interfaz virtual.}
+    \label{fig:linux2}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Interfaz virtual - \texttt{veth}}
+\subsection{Interfaz virtual - \texttt{veth}}
 \label{linuxVeths}
 Las \gls{veth}, son interfaces de Ethernet virtuales creadas como un par de interfaces interconectadas entre si. El modelo funcional es sencillo, los paquetes enviados desde una son recibidos por la otra interfaz de forma directa, bastante parecido al funcionamiento de las \textit{pipes}. Una condición interesante de estas interfaces es que su gestión está asociada, es decir, si se levanta una extremo de la \gls{veth}, la otra también lo hará, si por el contrario se deshabilita o se destruye algún extremo de un par de \gls{veth} el otro extremo también se verá afectado \cite{veth}.\\
 \par
