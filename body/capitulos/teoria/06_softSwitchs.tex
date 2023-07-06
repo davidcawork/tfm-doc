@@ -51,7 +51,7 @@ En resumen, el \gls{ovs} es un software switch \gls{sdn} ampliamente utilizado q
 \subsection{BOFUSS}
 \label{subsec:BOFUSS}
 
-\gls{bofus}, es la otra gran alternativa en el mundo de los software switches \gls{sdn}. Este switch nació como una primera implementación por el 2008 en la universidad de Stanford, acuñado como  \textit{The Stanford Reference OpenFlow Switch}. Esta implementación era un mínimo producto viable para demostrar y ayudar en el proceso de estandarización del protocolo \texttt{Openflow 1.0}. Dicho mínimo producto viable, fue retomado por los laboratorios de Ericsson, \textit{Ericsson Research TrafficLab}, para desarrollar la versión \texttt{Openflow 1.1}. \\
+\gls{bofus}, es la otra gran alternativa en el mundo de los software switches \gls{sdn}. Este switch nació como una primera implementación por el 2008 en la universidad de Stanford, acuñado como  \textit{The Stanford Reference OpenFlow Switch}. Esta implementación era un mínimo producto viable para demostrar y ayudar en el proceso de estandarización del protocolo \texttt{Openflow 1.0}. Dicho mínimo producto viable, fue retomado por los laboratorios de Ericsson, \textit{Ericsson Research TrafficLab}, para desarrollar la versión \texttt{Openflow 1.1} \cite{fernandes2020road}. \\
 \\
 Este último desarrollo fue retomado por el investigador Eder Leão Fernandes, desde el CPqD de Brasil, fue parte de su trabajo fin de máster y tesis doctoral, donde completo lo que hoy conocemos como el \gls{bofus}, el cual da soporte para la versión \texttt{Openflow 1.3}. Por último, se verá más adelante que este switch fue tomado por Boby Nicusor Constantin y modificado para hacer una implementación de control In-band. En la siguiente figura, ver figura \ref{fig:bofuss1}, se puede apreciar un pequeño resumen de la historia del software switch \gls{bofus}.
 
@@ -76,7 +76,7 @@ El primero de ellos, el \texttt{udatapath/ofdatapath} se caracteriza por ser el 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{archivos/img/teoria/bofuss2.png}
-    \caption{Arquitectura del \glsentryshort{bofus}}
+    \caption{Arquitectura del \glsentryshort{bofus} \cite{fernandes2015software}}
     \label{fig:bofuss2}
 \end{figure}
 
@@ -104,7 +104,7 @@ Antes que el paquete en cuestión llegue a la pipeline de procesamiento del soft
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/teoria/bofuss3.png}
-    \caption{Parseador de paquetes del \glsentryshort{bofus}}
+    \caption{Parseador de paquetes del \glsentryshort{bofus} \cite{fernandes2015software}}
     \label{fig:bofuss3}
 \end{figure}
 
@@ -146,7 +146,7 @@ Las \textit{Group Tables}, se utilizan para agregar flow entries que tienen una 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/teoria/bofuss4.png}
-    \caption{Estructura de las \textit{Group tables} del \glsentryshort{bofus}}
+    \caption{Estructura de las \textit{Group tables} del \glsentryshort{bofus} \cite{fernandes2015software}}
     \label{fig:bofuss4}
 \end{figure}
 
@@ -159,7 +159,7 @@ La \textit{Meter Table} es el core del \gls{qos} del software switch. Para cada 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{archivos/img/teoria/bofuss5.png}
-    \caption{Estructura de las \textit{Meter tables} del \glsentryshort{bofus}}
+    \caption{Estructura de las \textit{Meter tables} del \glsentryshort{bofus} \cite{fernandes2015software}}
     \label{fig:bofuss5}
 \end{figure}
 
