@@ -9,7 +9,7 @@ Esta sección recopilará todos los conceptos y herramientas relacionadas con la
 \subsection{Interfaz virtual - \texttt{tun/tap}}
 \label{linuxNetworking_tuntap}
 
-En el mundo de las redes siempre se habla de las interfaces tun/tap de forma indistinta cuando van a utilizarse, sin embargo, cada una tiene su cometido. Como se ha indicado, en networking, las interfaces TUN y TAP son interfaces virtuales que se crean y se gestionan en espacio de kernel. Mencionar que como estas interfaces son virtuales y se gestionan directamente vía softaware, no como las interfaces reales que se gestionan con unos drivers diferentes, cada interfaz con su driver específico de la interfaz.  Los drivers de las interfaces TUN/TAP se crearon en los 2000 como una unión de los avances de los drivers desarrollados en las comunidades de Solaris, Linux, BSD. Actualmente los drivers solo tienen mantenimiento por los kernels de linux y FreeBSD. Ambos tipos de interfaces se utilizan para tunelado, pero no pueden ser utilizadas a la vez dado que trabajan en niveles distintos. Las TUN, de \textit{network \textbf{TUN}nel}, emula la capa de red y puede llegar hacer reenvío de los paquetes. En cambio las interfaces TAP,  trabajan en capa 2 solo en capa dos, y emulan un equipo que trabaja en dicha capa, como por ejemplo un switch \cite{tuntap1}. Por tanto, hay que dejar claro lo que se puede llegar a realizar con cada interfaz (Ver figura \ref{fig:linux1}).
+En el mundo de las redes siempre se habla de las interfaces tun/tap de forma indistinta cuando van a utilizarse, sin embargo, cada una tiene su cometido. Como se ha indicado, en networking, las interfaces TUN/TAP son interfaces virtuales que se crean y se gestionan en espacio de kernel. Mencionar que como estas interfaces son virtuales y se gestionan directamente vía softaware, no como las interfaces reales que se gestionan con unos drivers diferentes, cada interfaz con su driver específico de la interfaz.  Los drivers de las interfaces TUN/TAP se crearon en los 2000 como una unión de los avances de los drivers desarrollados en las comunidades de Solaris, Linux, BSD. Actualmente los drivers solo tienen mantenimiento por los kernels de linux y FreeBSD. Ambos tipos de interfaces se utilizan para tunelado, pero no pueden ser utilizadas a la vez dado que trabajan en niveles distintos. Las TUN, de \textit{network \textbf{TUN}nel}, emula la capa de red y puede llegar hacer reenvío de los paquetes. En cambio las interfaces TAP,  trabajan en capa 2 solo en capa dos, y emulan un equipo que trabaja en dicha capa, como por ejemplo un switch \cite{tuntap1}. Por tanto, hay que dejar claro lo que se puede llegar a realizar con cada interfaz (Ver figura \ref{fig:linux1}).
 
 \begin{itemize}
     \item \texttt{TUN} se puede llegar a utilizar para routing.
@@ -60,16 +60,16 @@ En caso de que queramos comprobar que las interfaces se han creado correctamente
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaz virtual - \texttt{veth}}
 \label{linuxVeths}
-Las \gls{veth}, son interfaces de Ethernet virtuales creadas como un par de interfaces interconectadas entre si. El modelo funcional es sencillo, los paquetes enviados desde una son recibidos por la otra interfaz de forma directa, bastante parecido al funcionamiento de las \textit{pipes}. Una condición interesante de estas interfaces es que su gestión está asociada, es decir, si se levanta una extremo de la \gls{veth}, la otra también lo hará, si por el contrario se deshabilita o se destruye algún extremo de un par de \gls{veth} el otro extremo también se verá afectado \cite{veth}.\\
-\par
-Es muy común hacer uso de las \gls{veth} para interconectar \textit{Network Namespaces}, ya que, sabiendo que estas van a estar conectadas de forma directa, se puede utilizar este enlace como pasarela entre dos \textit{Network Namespaces}. De esta forma, se estaría interconectando dos \textit{stacks} independientes de red. La creación y destrucción de este tipo de interfaces se puede apreciar en el bloque \ref{code:iproute2_veth_use}, se recuerda que es necesario permisos de súper usuario.\\
+Las \gls{veth} son interfaces de Ethernet virtuales creadas como un par de interfaces interconectadas entre sí. El modelo funcional es sencillo: los paquetes enviados desde una interfaz son recibidos por la otra de forma directa, similar al funcionamiento de las \textit{pipes} (mecanismo de comunicación interprocesos en linux). Una característica interesante de estas interfaces es que su gestión está asociada, lo que significa que si se habilita una extremo de la \gls{veth}, el otro extremo también se habilitará, y si se deshabilita o se elimina un extremo de un par de \gls{veth}, el otro extremo también se verá afectado \cite{veth}.\\
+\\
+Es muy común utilizar las \gls{veth} para interconectar \textit{Network Namespaces}. Al saber que estas interfaces estarán conectadas de forma directa, se puede utilizar este enlace como una pasarela entre dos \textit{Network Namespaces}. De esta manera, se pueden interconectar dos \textit{stacks} independientes de red. Más adelante se verá que alguno de los emuladores más utilizados para comprobar despliegues de red \gls{sdn} hace uso de estas interfaces. Y podemos ir más allá, no sé quiere tampoco entrar en el mundo de los contenedores dado que el proyecto no va a utilizarlos, pero simplemente indicar que estas interfaces también son utilizadas para la interconexión y contenedores de Docker \cite{veths1}. La creación y eliminación de este tipo de interfaces se puede observar en el bloque de código \ref{code:iproute2_veth}. Se recuerda que se necesitan permisos de root para realizar estas operaciones.
 
-\begin{lstlisting}[language= bash, style=Consola, caption={Manejo de Veths},label=code:iproute2_veth_use]
-    # Crear un par veth
-    ip link add {nombre_veth1} type veth peer name {nombre_veth2}
+\begin{lstlisting}[language= bash, style=Consola, caption={Uso de las interfaces Veths},label=code:iproute2_veth]
+    # COn este comando se crean un par interfaces veth
+    ip link add {veth1_name} type veth peer name {veth2_name}
     
-    # Si se elimina un extremo, el otro también lo hará
-    ip link delete {nombre_veth}
+    # Solo hace falta indicar uno de los dos nombres del par de Veths
+    ip link delete {veth_name}
     
 \end{lstlisting}
 \vspace{0.5cm}
