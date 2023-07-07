@@ -24,20 +24,16 @@ En los últimos años apareció un nuevo proyecto, \textbf{Contiki-ng} \footnote
 
 \subsection{Simulador Cooja}
 
-El flujo de trabajo con Contiki o Contiki-ng, dependerá si se va a trabajar sobre hardware real o si se va a simular los programas desarrollados. Cuando se trabaja sobre hardware real, el flujo de trabajo consistirá en la compilación del sistema operativo y de los programas desarrollados con el target donde se vaya a trabajar, generando así un binario el cual se podrá instanciar en el disco del hardware. \\
+El flujo de trabajo con Contiki o Contiki-ng varía dependiendo de si se trabaja con hardware real o si se realiza una simulación de los programas desarrollados. En el caso de trabajar con hardware real, el proceso consiste en compilar el sistema operativo y los programas específicos utilizando el objetivo (target) correspondiente, lo que generará un archivo binario que se puede cargar en la memoria del hardware.\\
+\\
+Por otro lado, si se opta por la simulación, se utilizará el simulador llamado Cooja\footnote{\url{https://github.com/contiki-ng/cooja/tree/master}}. Cooja es un simulador escrito en Java que permite \textbf{simular} una serie de nodos \gls{iot}. Al simular, es posible observar el comportamiento del programa desarrollado en diferentes plataformas. El proceso de compilación del núcleo (core) de Contiki y los programas desarrollados está integrado en el propio simulador, lo que facilita al usuario la compilación de sus programas para diferentes tipos de nodos. Cada simulación se puede guardar en un archivo con extensión \texttt{*.csc}, que almacena todos los datos de la simulación, como la semilla (\textit{seed}), las posiciones y los tipos de nodos, utilizando una estructura XML.\\
+\\
+De esta manera, tanto si se trabaja con hardware real como si se realiza una simulación, Contiki y Contiki-ng ofrecen herramientas y entornos integrados que permiten desarrollar y probar programas para sistemas embebidos y dispositivos \gls{iot}. A continuación, en la figura \ref{fig:cooja}, se indica la interfaz gráfica del simulador.
 
-\par
-Si por el contrario se va a simular, se hará uso del simulador llamado Cooja\footnote{\url{https://github.com/contiki-ng/cooja/tree/master}}. Cooja es una simulador escrito en Java que permite simular una serie de motas \gls{iot}. Por tanto, a la hora de simular se podrá ver el comportamiento del programa desarrollado en distintas plataformas. \\
-\par
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{archivos/img/teoria/cooja.png}
+    \caption{Interfaz gráfica del simulador Cooja \cite{cooja1}}
+    \label{fig:cooja}
+\end{figure}
 
-Todo el proceso de compilación del \textit{core} de Contiki y programas desarrollados está integrado en el propio simulador, permitiendo al usuario compilar sus programas hacia distintos tipos de motas. Cada simulación se podrá almacenar en un fichero con la extensión \texttt{*.csc}, los cuales almacenarán todos los datos de la simulación, \textit{seed}, posiciones y tipos de motas en una estructura XML. \\
-\par
-
-
-% % Foto 
-% \begin{figure}[ht]
-%     \centering
-%     \includegraphics[width=13.5cm]{archivos/img/teoria/cooja.png}
-%     \caption{GUI Simulador Cooja \cite{cooja}}
-%     \label{fig:cooja}
-% \end{figure}
