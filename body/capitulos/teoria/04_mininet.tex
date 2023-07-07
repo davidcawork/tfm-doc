@@ -24,23 +24,23 @@ Aunque Mininet ofrece muchas ventajas, también tiene una limitación importante
 
 \subsection{Funcionamiento de Mininet}
 
-Se ha introducido anteriormente que Mininet hace uso de \textit{Network Namespaces} como método para virtualizar \textit{stacks} de red independientes entre sí, y así poder emular redes a un coste mínimo. En la figura \ref{fig:mininet_arch}, se puede ver la arquitectura interna de Mininet para una topología compuesta de dos \texttt{Host}, y de un soft-switch conectado por TCP a un controlador remoto.\\
-\par
-Como se puede apreciar los host están aislados en sus propias \textit{Namespaces}, y en este caso el switch está corriendo en la \textit{Namespace} por defecto (root). El mecanismo para comunicar a los nodos de esta topología como se adelantaba anteriormente son las \gls{veth}s (Ir a \ref{linuxVeths}), las cuales permitirán emular los enlaces entre los distintos nodos de la red.\\
+Anteriormente se mencionó que Mininet utiliza \textit{Network Namespaces} como método para virtualizar \textit{stacks} de red independientes y así emular redes con un costo mínimo. En la figura \ref{fig:mininet_arch}, se muestra la arquitectura interna de Mininet para una topología compuesta por dos nodos \texttt{Host} y un software switch conectado por TCP a un controlador remoto.\\
+\\
+Como se puede observar, cada nodo \texttt{Host} está aislado en su propia \textit{Namespace} de red, mientras que el switch se ejecuta en la \textit{Namespace} por defecto (root). La comunicación entre los nodos de esta topología se realiza mediante \gls{veth}s (consultar \ref{linuxVeths}), las cuales permiten emular los enlaces entre los diferentes nodos de la red.\\
 
-
+%fig
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=11.5cm]{archivos/img/teoria/mn_arch.png}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mn_arch.png}
     \caption{Arquitectura de Mininet \cite{heller2013reproducible}}
     \label{fig:mininet_arch}
 \end{figure}
 
-Una vez expuesta toda la teoría sobre Mininet, podría surgir la siguiente pregunta, ¿Cómo se puede comprobar que realmente hace uso de \textit{Network Namespaces}? Lo primero que se debe hacer es levantar el escenario para que así, Mininet cree las \textit{Network namespaces} que tenga que crear. En este caso, se utilizará la topología expuesta en la figura \ref{fig:mininet_arch}, para levantar dicha topología únicamente se tiene que tener Mininet instalado y seguir los pasos que se indican el bloque \ref{code:scenarioMininet}.
+Una vez presentada toda la teoría sobre Mininet, puede surgir la pregunta de cómo se puede comprobar si realmente utiliza \textit{Network Namespaces}. Para hacerlo, lo primero que se debe hacer es crear el escenario para que Mininet pueda crear las \textit{Network Namespaces} necesarias. En este caso, se utilizará la topología mostrada en la figura \ref{fig:mininet_arch}. Para crear esta topología, solo se necesita tener Mininet instalado y seguir los pasos que se indican en el bloque \ref{code:scenarioMininet}. Una vez levantado el escenario, se debería obtener el output indicado en la figura \ref{fig:mininet_01}.
 
 
-\begin{lstlisting}[language= bash, style=Consola, caption={Levantamiento de la topología de ejemplo},label=code:scenarioMininet]
-    # Por defecto siempre carga la topología descrita en la figura anterior
+\begin{lstlisting}[language= bash, style=Consola, caption={Ejecución de Mininet con la topología por defecto},label=code:scenarioMininet]
+    # Lanzamos Mininet con la topo por defecto :)
     sudo mn
     
 \end{lstlisting}
@@ -48,26 +48,28 @@ Una vez expuesta toda la teoría sobre Mininet, podría surgir la siguiente preg
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=9.5cm]{archivos/img/teoria/mn_01.png}
-    \caption{Topología de ejemplo levantada}
+    \includegraphics[width=0.7\textwidth]{archivos/img/teoria/mn_01.png}
+    \caption{Salida por pantalla de la ejecución de la topología por defecto}
     \label{fig:mininet_01}
 \end{figure}
 
-Ahora que ya se ha levantado el escenario se debería ser capaces de poder ver si hay \textit{Network Namespaces} en el sistema, para ello se hará uso del \textit{pack} de herramientas iproute2 (Ir a \ref{iproute2}). El comando por excelencia para listar las \textit{Network Namespaces} haciendo uso del módulo \textbf{netns} se puede ver en el bloque \ref{code:MininetNs}.
+Ahora que hemos creado el escenario, podemos verificar si hay \textit{Network Namespaces} en el sistema utilizando el conjunto de herramientas iproute2 (consultar \ref{iproute2}). El comando más utilizado para listar las \textit{Network Namespaces} utilizando el módulo \textbf{netns} se muestra en el bloque \ref{code:MininetNs}.
 
 
-\begin{lstlisting}[language= bash, style=Consola, caption={Listar Network Namespaces},label=code:MininetNs]
+\begin{lstlisting}[language= bash, style=Consola, caption={Listar Named Network Namespaces},label=code:MininetNs]
+    # Listamos las network namespaces con Nombre! ojito :)
     sudo ip netns list
 \end{lstlisting}
 \vspace{0.5cm}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=15.5cm]{archivos/img/teoria/mn_02.png}
-    \caption{Listado de Network Namespaces existentes en el sistema}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mn_02.png}
+    \caption{Listado de Named Network Namespaces existentes en el sistema}
     \label{fig:mininet_02}
 \end{figure}
 
+%%%%%%%%%%%55 hasta aqui 
 Según se puede apreciar en la figura \ref{fig:mininet_02}, no parece que haya ninguna \textit{Network Namespace} en el sistema, pero entonces, ¿Dónde está el problema? El problema de que el comando \texttt{ip netns list} no arroje información, es que Mininet no está creando el \textit{softlink} requerido para que la herramienta sea capaz de listar las \textit{Network Namespaces}. Atendiendo a la documentación del comando se puede averiguar que dicho comando lee del path \texttt{/var/run/netns/} donde se encuentran todas las \textit{Network Namespaces} con nombre\footnote{Aquellas Netns las cuales se ha hecho un bindmount con su nombre en ese directorio para que persistan aunque no haya ningún proceso corriendo en ellas.}.\\
 \par
 Como ya se explicó, las \textit{Namespaces} tienen una vida finita, éstas viven siempre y cuando estén referenciadas (Ir a \ref{tab:linux_ns}), por tanto, si ninguna condición de referenciación se cumple, la \textit{Namespace} en cuestión es eliminada.\\
