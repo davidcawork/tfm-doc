@@ -5,7 +5,7 @@ Contiki es un sistema operativo diseñado específicamente para dispositivos de 
 \\
 El kernel de Contiki se basa en un modelo orientado a eventos y admite multitarea con prelación. Está escrito en lenguaje C y ha sido portado a diversas arquitecturas de microcontroladores, como el MSP430 de Texas Instruments y sus variantes.\\
 \\
-En un sistema que ejecuta Contiki, este se divide en dos partes claramente diferenciadas, como se muestra en la Figura \ref{fig:contikiParts}: el núcleo (\textit{core}) y los programas o servicios cargados. Esta partición se realiza durante la etapa de compilación y es independiente del objetivo (target) donde se desplegará el sistema. El núcleo (\textit{core}) incluye el propio kernel, un conjunto de servicios base (como temporizadores y controladores), bibliotecas, controladores y el stack de comunicación. Los programas o servicios cargados se mapean en memoria mediante el cargador del kernel durante el tiempo de ejecución.\\
+En un sistema que ejecuta Contiki, se divide en dos partes claramente diferenciadas del firmware, como se muestra en la Figura \ref{fig:contikiParts}: el núcleo (\textit{core}) y los programas o servicios cargados. Esta partición se realiza durante la etapa de compilación y es independiente del objetivo (target) donde se desplegará el sistema. El núcleo (\textit{core}) incluye el propio kernel, un conjunto de servicios base (como temporizadores y controladores), bibliotecas, controladores y el stack de comunicación. Los programas o servicios cargados se mapean en memoria mediante el cargador del kernel durante el tiempo de ejecución.\\
 
 
 % Foto 
