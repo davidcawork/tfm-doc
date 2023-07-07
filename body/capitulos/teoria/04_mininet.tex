@@ -1,7 +1,7 @@
 \section{Mininet y Mininet-WiFi}
 \label{sec:mininet}
 
-En esta sección se cubrirá el marco teórico sobre las principales herramientas de emulación utilizadas en este proyecto. Se indagará en mayor parte Mininet, al ser la herramienta principal desde la cual han nacido otras herramientas de emulación como Mininet-WiFi.\\
+En esta sección se abordará el marco teórico relacionado con las principales herramientas de emulación utilizadas en este proyecto. Se prestará especial atención a Mininet, que es la herramienta principal y la base sobre la cual han surgido otras herramientas de emulación, como Mininet-WiFi y Mininet-IoT.\\
 
 \subsection{Mininet}
 
@@ -16,7 +16,7 @@ Por tanto, se podrían resumir los aspectos más fuertes de Mininet en los sigui
 
 \begin{itemize}
     \item Es rápido, debido a su condición de diseño con \textit{Namespaces}, más adelante se indicará como se lleva a cabo su gestión.
-    \item No consume recursos en exceso, virtualiza únicamente lo necesario, y en el caso que fuera necesario se pueden establecer los recursos máximos para la emulación. 
+    \item No consume recursos en exceso, virtualiza únicamente lo necesario, y en el caso que fuera necesario se pueden establecer los recursos máximos para la emulación.
     \item Ofrece libertad al usuario para crear topologías y escenarios personalizados a través de la API en Python de Mininet. Además, estos escenarios son fácilmente extrapolables\footnote{Los resultados de las pruebas no tienen por que ser exactos en dos máquinas distintas, se emula, no se simula. Por tanto se depende de las condiciones de la máquina donde se vayan a correr las pruebas} a otra máquina, ya que únicamente se debe compartir el script que describe la topología.
 \end{itemize}
 
@@ -37,10 +37,10 @@ Como se puede apreciar los host están aislados en sus propias \textit{Namespace
     \label{fig:mininet_arch}
 \end{figure}
 
-Una vez expuesta toda la teoría sobre Mininet, podría surgir la siguiente pregunta, ¿Cómo se puede comprobar que realmente hace uso de \textit{Network Namespaces}? Lo primero que se debe hacer es levantar el escenario para que así, Mininet cree las \textit{Network namespaces} que tenga que crear. En este caso, se utilizará la topología expuesta en la figura \ref{fig:mininet_arch}, para levantar dicha topología únicamente se tiene que tener Mininet instalado y seguir los pasos que se indican el bloque \ref{code:scenarioMininet}. 
+Una vez expuesta toda la teoría sobre Mininet, podría surgir la siguiente pregunta, ¿Cómo se puede comprobar que realmente hace uso de \textit{Network Namespaces}? Lo primero que se debe hacer es levantar el escenario para que así, Mininet cree las \textit{Network namespaces} que tenga que crear. En este caso, se utilizará la topología expuesta en la figura \ref{fig:mininet_arch}, para levantar dicha topología únicamente se tiene que tener Mininet instalado y seguir los pasos que se indican el bloque \ref{code:scenarioMininet}.
 
 
- \begin{lstlisting}[language= bash, style=Consola, caption={Levantamiento de la topología de ejemplo},label=code:scenarioMininet]
+\begin{lstlisting}[language= bash, style=Consola, caption={Levantamiento de la topología de ejemplo},label=code:scenarioMininet]
     # Por defecto siempre carga la topología descrita en la figura anterior
     sudo mn
     
@@ -105,27 +105,7 @@ Si se inspecciona el fichero \texttt{/proc/\{pid\}/ns/net} para cada proceso ind
     \label{fig:mininet_05}
 \end{figure}
 
-Como se puede ver, \textit{inode} distintos, ficheros distintos, distintas \textit{Network namespaces}. Con esta prueba se puede ver como Mininet hace uso de procesos de bash para sostener las \textit{Network Namespaces} de los nodos que lo requieran. 
-
-\subsection{Mininet CLI}
-
-Mininet incluye una \gls{cli}, la cual puede ser invocada desde el script donde se describe la topología. Dicha \gls{cli}, contiene una gran variedad de comandos, por ejemplo listar la red, tirar enlaces, comprobar el estado de las interfaces, abrir una \textit{xterm} a un nodo, etc. A continuación se indica la tabla \ref{tab:cmdsMininet}, la cual resume todos los comandos existentes a día de hoy, para una explicación de cada uno de ellos en detalle se recomienda seguir esta \href{https://github.com/mininet/mininet/wiki/Introduction-to-Mininet}{\textbf{guía}}\footnote{\url{https://github.com/mininet/mininet/wiki/Introduction-to-Mininet}}.\\
-\par
-
-\begin{table}[!ht]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\texttt{EOF}      & \texttt{gterm}    & \texttt{links}   & \texttt{pingallfull}  & \texttt{py}     & \texttt{stop}   \\ \hline
-\texttt{distance} & \texttt{help}     & \texttt{net}     & \texttt{pingpair}     & \texttt{quit}   & \texttt{switch} \\ \hline
-\texttt{dpctl}    & \texttt{intfs}    & \texttt{nodes}   & \texttt{pingpairfull} & \texttt{sh}     & \texttt{time}   \\ \hline
-\texttt{dump}     & \texttt{iperf}    & \texttt{noecho}  & \texttt{ports}        & \texttt{source} & \texttt{x}      \\ \hline
-\texttt{exit}     & \texttt{iperfudp} & \texttt{pingall} & \texttt{px}           & \texttt{start}  & \texttt{xterm}  \\ \hline
-\end{tabular}
-\centering
-\caption{Resumen comandos existentes en Mininet}
-\label{tab:cmdsMininet}
-\end{table}
+Como se puede ver, \textit{inode} distintos, ficheros distintos, distintas \textit{Network namespaces}. Con esta prueba se puede ver como Mininet hace uso de procesos de bash para sostener las \textit{Network Namespaces} de los nodos que lo requieran.
 
 
 \subsection{Mininet-WiFi}
@@ -142,4 +122,4 @@ Esto es así ya que toda la funcionalidad wireless es un añadido sobre la base 
 La herramienta Mininet-IoT \cite{mininetIOT} es un emulador de redes de baja capacidad diseñado para trabajar en conjunto bajo el estándar \texttt{ieee802154} y la capa de adaptación 6LoWPAN. Esta herramienta nació de Mininet-WiFi, que a su vez nació de Mininet, por lo que en la práctica, Mininet-IoT comparte todas las técnicas de virtualización ``ligera" de Mininet. Al heredar de Mininet-WiFi y Mininet, todos los scripts para desplegar topologías alámbricas y WiFi son compatibles en Mininet-IoT.  \\
 \par
 
-La gran diferencia entre Mininet-IoT y Mininet-WiFi, radica en el módulo que emplean para conseguir emular las interfaces y el supuesto medio inalámbrico. Mininet-WiFi hace uso del módulo mac80211\_hwsim, mientras que Mininet-IoT hace uso del módulo del Kernel mac802154\_hwsim (es necesario tener una versión del Kernel superior a la \texttt{4.18.x} para obtener dicho modulo). Toda la gestión de nodos, interfaces y enlaces es exactamente la misma a la de Mininet-WiFi. Por ello, Ramon Fontes (principal desarrollador de la herramienta), creó una clase agnóstica para gestionar módulos del Kernel en Mininet-WiFi, y migró todo el proyecto de Mininet-IoT a Mininet-WiFi. De esta forma, el mantenimiento del \textit{core} que compartían ambas herramientas se hacía únicamente en un proyecto, y daba la posibilidad al usuario de Mininet-WiFi de establecer enlaces de baja capacidad en sus topologías inalámbricas.  
+La gran diferencia entre Mininet-IoT y Mininet-WiFi, radica en el módulo que emplean para conseguir emular las interfaces y el supuesto medio inalámbrico. Mininet-WiFi hace uso del módulo mac80211\_hwsim, mientras que Mininet-IoT hace uso del módulo del Kernel mac802154\_hwsim (es necesario tener una versión del Kernel superior a la \texttt{4.18.x} para obtener dicho modulo). Toda la gestión de nodos, interfaces y enlaces es exactamente la misma a la de Mininet-WiFi. Por ello, Ramon Fontes (principal desarrollador de la herramienta), creó una clase agnóstica para gestionar módulos del Kernel en Mininet-WiFi, y migró todo el proyecto de Mininet-IoT a Mininet-WiFi. De esta forma, el mantenimiento del \textit{core} que compartían ambas herramientas se hacía únicamente en un proyecto, y daba la posibilidad al usuario de Mininet-WiFi de establecer enlaces de baja capacidad en sus topologías inalámbricas.
