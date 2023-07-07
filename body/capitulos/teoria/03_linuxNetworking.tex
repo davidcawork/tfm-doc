@@ -133,79 +133,62 @@ Estos son solo algunos ejemplos de los tipos de filtros disponibles en \gls{tc}.
 
 \subsection{Namespaces}
 \label{namespaces}
-Una \textit{Namespace} se utiliza para aislar un recurso del sistema en una abstracción que hace  creer a los procesos dentro de dicha \textit{Namespace} que tienen su propia instancia del recurso en cuestión aislada del sistema real.  Los cambios realizados sobre recursos aislados del sistema, son solo visibles para procesos que son pertenecientes a la \textit{Namespace}, pero son invisibles para otros procesos pertenecientes al sistema o a otra \textit{Namespace}.\\
-\par
-Hay muchos tipos de \textit{Namespaces}, en la tabla \ref{tab:linux_ns} se pueden apreciar todos los tipos que existen a día de hoy. El uso de todos estos tipos de \textit{Namespaces} puede ser muy variado, pero el más importante de todos ellos son los contenedores. Los contenedores son elementos para correr aplicaciones, o herraminetas en un entorno aislado del sistema. A día de hoy, los contenedores más utilizados son los de Docker\footnote{\url{https://www.docker.com/}}, pero, ¿Realmente que hace Docker, qué es Docker?\\
-\par
 
-Docker se vale de las bondades del Kernel de Linux para aislar recursos y con esto conformar contenedores. Éste hará uso de las APIs suministradas por el Kernel para crear y destruir a conveniencia las distintas \textit{Namespaces}. Por lo que, Docker en verdad simplemente es un envoltorio de las llamadas al sistema para gestionar \textit{Namespaces}. Docker además, provee de distintos aspectos al usuario como \textit{copy-on-write}, o una configuración en modo \textit{bridge} hacia el exterior, pero en el fondo es
-un mero \textit{wrapper} para la gestión de las \textit{Namespaces} con la finalidad de implementar contenedores.
+Una \textit{Namespace} se utiliza para encapsular un recurso del sistema operativo en una abstracción que engaña a los procesos dentro de esa \textit{Namespace} haciéndoles creer que tienen su propia instancia aislada del recurso en cuestión, separada del sistema real. Los cambios realizados en los recursos aislados solo son visibles para los procesos que pertenecen a esa \textit{Namespace}, mientras que son invisibles para otros procesos que pertenecen al sistema o a otra \textit{Namespace}.\\
+\\
+Existen varios tipos de \textit{Namespaces}, los cuales se detallan en la tabla \ref{tab:linux_ns}. Cada tipo de \textit{Namespace} tiene diversos usos y aplicaciones, pero uno de los más relevantes es el de los contenedores. Los contenedores proporcionan un entorno aislado para ejecutar aplicaciones o herramientas. Actualmente, los contenedores más populares son los de Docker, una plataforma ampliamente utilizada en el mundo del desarrollo de software. Docker aprovecha las bondades del kernel de Linux para aislar recursos y crear instancias aisladas del sistema Host sobre el cual se ejecutan. Utiliza la API proporcionada por el kernel para crear y destruir \textit{Namespaces} según sea necesario. En esencia, Docker es un conjunto de llamadas al sistema que se encarga de gestionar \textit{Namespaces}. Además de la gestión de \textit{Namespaces}, Docker proporciona otras características útiles, como el mecanismo de \textit{copy-on-write} y una configuración de red en modo \textit{bridge} hacia el exterior. Sin embargo, en su núcleo, Docker es simplemente un\textit{wrapper} que facilita la gestión de \textit{Namespaces} con el objetivo de implementar contenedores.
 
 \input{archivos/diagramas/tabla_ns}
 
 \subsubsection{Persistencia de las Namespaces}
 
-Atendiendo a la \textit{man-page} \cite{ns} sobre \textit{Namespaces}, es importante señalar que las \textit{Namespaces} tienen una vida finita. La vida finita de la \textit{Namespace} dependerá de si la \textit{Namespace} en cuestión está referenciada, por lo que éstas vivirán siempre y cuando estén referenciadas, cuando dejen de estarlo serán destruidas.\\
-\par
-Este concepto de vida finita, será útil entenderlo para tener una mejor comprensión sobre el funcionamiento interno de Mininet ó Mininet-WiFI, los cuales se valen de estos conceptos para ahorrarse operaciones y ganar en rendimiento.  Una Namespace a día de hoy puede ser referenciada de tres maneras distintas:\\
+
+Según la página man-page sobre las \textit{Namespaces} \cite{ns}, es importante tener en cuenta que las \textit{Namespaces} tienen una vida finita. La duración de una \textit{Namespace} dependerá de si está siendo referenciada, lo que significa que vivirá mientras siga siendo referenciada y será destruida cuando deje de serlo. Comprender este concepto de vida finita es crucial para tener una mejor comprensión del funcionamiento interno de Mininet o Mininet-WiFi, ya que estas herramientas aprovechan estos conceptos para optimizar las operaciones y mejorar el rendimiento de sus respectivos emuladores.\\
+\\
+Actualmente, una \textit{Namespace} puede ser referenciada de tres maneras diferentes:
 
 \begin{itemize}
-    \item Siempre y cuando haya un proceso corriendo dentro de esta \textit{Namespace}.
-    \item Siempre que haya abierto un descriptor de archivo al fichero identificativo de la \textit{Namespace} (\texttt{/proc/{pid}/ns/{tipo\_namespace}}).
-    \item Siempre que exista un \textit{bind-mount} del fichero (\texttt{/proc/{pid}/ns/{tipo\_namespace}}) de la \textit{Namespace} en cuestión.
+    \item Siempre que haya un proceso en ejecución dentro de dicha \textit{Namespace}.
+    \item Siempre que haya abierto un descriptor de archivo para el archivo identificador de la \textit{Namespace} (por ejemplo, \texttt{/proc/{pid}/ns/{tipo\_namespace}}).
+    \item Siempre que exista un \textit{bind-mount} del archivo (\texttt{/proc/{pid}/ns/{tipo\_namespace}}) de la \textit{Namespace} en cuestión.
 \end{itemize}
 
-Si ninguna de estas condiciones se cumple, la \textit{Namespace} en cuestión es eliminada automáticamente por el Kernel. Si se tratase de una \textit{Network Namespace}, aquellas interfaces que se encuentren en la \textit{Namespace} en desaparición volverán a la \textit{Network Namespace} por defecto \cite{ns}.
+Si ninguna de estas condiciones se cumple, el kernel eliminará automáticamente la \textit{Namespace}. En el caso de una \textit{Network Namespace}, las interfaces que se encuentren dentro de la \textit{Namespace} que está siendo eliminada volverán a la \textit{Network Namespace} predeterminada \cite{ns}. Es fundamental tener en cuenta estos detalles, ya que ayudan a comprender cómo se manejan las \textit{Namespaces} y cómo se gestionan los recursos en el contexto de Mininet o Mininet-WiFi.
 
 \subsubsection{Concepto de las Network Namespaces}
 
-Una vez entendido el concepto de \textit{Namespace} en Linux, se introducen las \textit{Network Namespace}, las cuales serán fundamentales para las plataformas donde se probarán los distintos test. Éstas consisten en una replica lógica de \textit{stack} de red que por defecto tiene Linux, replicando rutas, tablas ARP, Iptables e interfaces de red \cite{netns}. \\
-\par
-Linux se inicia con un \textit{Network Namespace} por defecto, el espacio \textit{root}, con su tabla de rutas, su tabla ARP,  Iptables e interfaces de red. Pero también es posible crear más \textit{Network Namespace} no predeterminadas,  crear nuevos dispositivos en esos espacios de nombres, o mover un dispositivo existente de un espacio de nombres a otro. \\
-\par
-Para llevar todas estas tareas a cabo, la herramienta más sencilla será \texttt{iproute2} (Ir a Anexo \ref{iproute2}). Esta herramienta, haciendo uso del módulo \texttt{netns}, se podrá gestionar todo en lo relativo a las \textit{Network Namespace} con nombre. Esta coletilla, ``con nombre", atiende a que todas las \textit{Network Namespace} que se gestionen desde \texttt{iproute2} serán persistentes debido a que se realizará un \textit{bind-mount} con el nombre de la \textit{Namespace}, del fichero identificativo de la \textit{Namespace} en cuestión, bajo el directorio \texttt{/var/run/netns} . A continuación, se listan los comandos más frecuentes a la hora de gestionar \textit{Network Namespaces}, se entiende que se ejecutan con permisos de súper usuario.
+Una vez comprendido el concepto de \textit{Namespace} en Linux, es necesario introducir las \textit{Network Namespace}, las cuales desempeñarán un papel fundamental en las plataformas utilizadas para emular. Estas \textit{Network Namespace} consisten en réplicas lógicas del \textit{stack} de red predeterminado de Linux, que incluye rutas, tablas ARP, Iptables e interfaces de red \cite{netns}.\\
+\\
+Linux se inicia con una \textit{Network Namespace} predeterminada, conocida como el espacio \textit{root}, que tiene su propia tabla de rutas, tabla ARP, Iptables e interfaces de red. Sin embargo, también es posible crear \textit{Network Namespace} adicionales que no son predeterminadas, crear nuevos dispositivos dentro de esos espacios de nombres o trasladar dispositivos existentes de un espacio de nombres a otro.\\
+\\
+La herramienta más sencilla para llevar a cabo todas estas tareas de gestión con las Netns es \texttt{iproute2} (consulte el Anexo \ref{iproute2}). Esta herramienta, utilizando el módulo \texttt{netns}, permite gestionar todo lo relacionado con las \textit{Network Namespace} con nombre (\textit{named network namespaces}). La característica ``con nombre" significa que todas las \textit{Network Namespace} administradas mediante \texttt{iproute2} serán persistentes, ya que se realizará un \textit{bind-mount} del archivo identificador de la \textit{Namespace} en cuestión con su nombre correspondiente en el directorio \texttt{/var/run/netns}. A continuación, en el bloque \ref{code:iproute2_ns}, se enumeran los comandos más comunes utilizados para gestionar las \textit{Network Namespace}. Se asume que estos comandos se ejecutan con privilegios de root.
 
-\begin{lstlisting}[language= bash, style=Consola, caption={Comandos útiles con iproute2 - Netns},label=code:iproute2_ns_use]
-    # Para crear una Network Namespace
-    ip netns add {nombre netns}
+\begin{lstlisting}[language= bash, style=Consola, caption={Casos de uso de las Netns},label=code:iproute2_ns]
+    # Con el siguiente comando creamos una network namespace
+    ip netns add {netns_name}
     
-    # Para listar las Network Namespaces "con nombre"
+    # Listamos las Named Network Namespaces :)
     ip netns list
     
-    # Para añadir una interfaz a una Network Namespace
-     ip netns set {nombre netns} Veth
+    # Movemos una interfaz a una Network Namespace determinada
+     ip netns set {netns_name} Veth
     
-    # Para ejecutar un comando dentro de una Network Namespace
-    ip netns exec {nombre netns} {cmd}
+    # Ejecutamos un comando dentro de una Network Namespace
+    ip netns exec {netns_name} {cmd}
     
-    # Para eliminar una Network Namespace
-    ip netns del {nombre netns}
+    # De esta forma, eliminamos una Network Namespace
+    ip netns del {netns_name}
     
 \end{lstlisting}
 
-\subsubsection{Métodos de comunicación inter-Namespaces: \glsentryshort{veth}}
+\subsubsection{Comunicación inter-Namespaces: \glsentryshort{veth}}
 \label{linuxVeths}
-Las \gls{veth}, son interfaces de Ethernet virtuales creadas como un par de interfaces interconectadas entre si. El modelo funcional es sencillo, los paquetes enviados desde una son recibidos por la otra interfaz de forma directa, bastante parecido al funcionamiento de las \textit{pipes}. Una condición interesante de estas interfaces es que su gestión está asociada, es decir, si se levanta una extremo de la \gls{veth}, la otra también lo hará, si por el contrario se deshabilita o se destruye algún extremo de un par de \gls{veth} el otro extremo también se verá afectado \cite{veth}.\\
-\par
-Es muy común hacer uso de las \gls{veth} para interconectar \textit{Network Namespaces}, ya que, sabiendo que estas van a estar conectadas de forma directa, se puede utilizar este enlace como pasarela entre dos \textit{Network Namespaces}. De esta forma, se estaría interconectando dos \textit{stacks} independientes de red. La creación y destrucción de este tipo de interfaces se puede apreciar en el bloque \ref{code:iproute2_veth_use}, se recuerda que es necesario permisos de súper usuario.\\
 
-\begin{lstlisting}[language= bash, style=Consola, caption={Manejo de Veths},label=code:iproute2_veth_use]
-    # Crear un par veth
-    ip link add {nombre_veth1} type veth peer name {nombre_veth2}
-    
-    # Si se elimina un extremo, el otro también lo hará
-    ip link delete {nombre_veth}
-    
-\end{lstlisting}
-\vspace{0.5cm}
-
-Por lo tanto, se puede llegar al siguiente diagrama básico del funcionamiento de un par de \gls{veth}, las cuales estarán asignadas a una \textit{Network Namespace} distinta.  Como se puede apreciar en la figura \ref{fig:linuxNet_veth}, ambas interfaces están conectadas entre si directamente de forma interna en el propio Kernel. En el caso de que se generen paquetes desde una \textit{Network Namespace} hacia la otra, estos paquetes llegarán desde un extremo de la \gls{veth} directamente al otro extremo de la \gls{veth} a través del Kernel, y en este caso, la \textit{Network Namespace} por defecto no percibirá dicho trafico.\\
-\par
-Esta condición será de gran utilidad para recrear enlaces entre nodos independientes de red, los nodos se replicarán con \textit{Network Namespaces} y los enlaces con \gls{veth}s. Estos mecanismos serán utilizados por herramientas de emulación de redes como Mininet o Mininet-WiFI, más adelante se destallará.
+Por lo tanto, se puede representar el siguiente diagrama básico para ilustrar el funcionamiento de un par de interfaces \gls{veth} asignadas a diferentes \textit{Network Namespaces}. Como se muestra en la Figura \ref{fig:linuxNet_veth}, ambas interfaces están directamente conectadas internamente en el Kernel. Si se generan paquetes desde una \textit{Network Namespace} hacia la otra, estos paquetes viajarán desde un extremo de la \gls{veth} directamente al otro extremo de la \gls{veth} a través del Kernel, sin ser percibidos por la \textit{Network Namespace} predeterminada. Esta configuración resulta muy útil para establecer enlaces entre nodos de red independientes. Los nodos se replicarán utilizando \textit{Network Namespaces} y los enlaces se establecerán utilizando pares de interfaces \gls{veth}. Estos mecanismos son ampliamente utilizados por herramientas de emulación de redes como Mininet o Mininet-WiFi, lo cual se explicará en detalle más adelante.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=15.5cm]{archivos/img/teoria/user_kernel.png}
-    \caption{Enlace entre interfaces Veth separadas en dos Network Namespaces}
+    \includegraphics[width=0.7\textwidth]{archivos/img/teoria/user_kernel.png}
+    \caption{Enlace entre interfaces Veth separadas en dos Network Namespaces \cite{carrascal2020diseno}}
     \label{fig:linuxNet_veth}
 \end{figure}
