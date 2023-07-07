@@ -80,37 +80,53 @@ Es muy común utilizar las \gls{veth} para interconectar \textit{Network Namespa
 \subsection{Herramienta \texttt{TC}}
 
 
-\gls{tc}, es un programa de espacio de usuario el cual es la pieza fundamental de la \gls{qos} en el Kernel de Linux. Muchas de sus funcionalidades se pueden resumir en cuatro puntos:
+En Linux, \gls{tc} es un subsistema del kernel, que tiene una interfaz en espacio de usuario que se utiliza para controlar y gestionar el tráfico de red. Proporciona una serie de herramientas y mecanismos para aplicar políticas de \gls{qos}, limitar el ancho de banda, establecer prioridades de tráfico, realizar filtrado y dar forma al tráfico de red \cite{tc1}. Se ha añadido esta sección a la memoria dado que la mayoría de emuladores de red en Linux suelen hacer uso de esta herramienta para modelar los enlaces de las topologías emuladas. El \gls{tc}  se utiliza principalmente para las siguientes tareas.
 
 \begin{itemize}
-    \item \textsc{SHAPING}
-    \item \textsc{SCHEDULING}
-    \item \textsc{POLICING}
-    \item \textsc{DROPPING}
+    \item Control de ancho de banda: Nos permite limitar la cantidad de ancho de banda que un flujo de datos específico puede utilizar. Esto es útil para evitar que un flujo de tráfico acapare todo el ancho de banda y afecte el rendimiento de otros flujos.
+
+    \item Priorización de tráfico: Permite asignar prioridades diferentes a los diferentes flujos de datos. Esto asegura que ciertos flujos de tráfico, como VoIP o similares al ser más sensibles, tengan prioridad sobre otros, como la descarga de archivos donde la latencia y el jitter no son un problema, pero si la integridad.
+
+    \item Modelado y conformación de tráfico: Permite dar forma al tráfico de red mediante la definición de límites en el ritmo de transmisión. Esto es útil para evitar congestiones en la red y garantizar un flujo de tráfico constante y uniforme.
+
+    \item Marcado y filtrado de paquetes: Permite clasificar y filtrar paquetes de acuerdo a diferentes criterios, como direcciones IP, puertos, protocolos, etc. Esto permite aplicar políticas específicas a ciertos flujos de datos o bloquear ciertos tipos de tráfico no deseado. Esta funcionalidad es útil, pero está duplicada con otros submódulos del kernel de Linux, como por ejemplo las \texttt{ip-tables}.
 \end{itemize}
 
-Según su \textit{man-page}\footnote{\url{https://man7.org/linux/man-pages/man8/tc.8.html}}, el procesamiento del trafico para conseguir dichas funcionalidades, se lleva a cabo con tres tipos de objetos: \textbf{qdiscs}, \textbf{classes} y \textbf{filters}.
+El procesamiento del tráfico para conseguir llevar a cabo las tareas anteriormente mencionadas, se emplean tres tipos de objetos: \textbf{qdiscs}, \textbf{classes} y \textbf{filters} \cite{tc1}.
 
 \subsubsection{Qdiscs}
 
-El objeto \gls{qdics}, disciplina de cola, es un concepto básico en el Networking de Linux que indica el orden en que los miembros de la cola, en este caso paquetes, se seleccionan para el servicio. Por ejemplo, en un momento dado puede que una herramienta de espacio de usuario requiera de transmitir un paquete, dicho paquete será entregado al \textit{stack} de red, llegando en última instancia a la interfaz de red por la cual va a ser transmitido. En ese momento el paquete se encontrará encolado en una cola de a la espera de ser trasnmitido, estas colas estarán regidas por un \gls{qdics}. El \gls{qdics} por defecto es un pfifo, es un puro \textit{first-in}, \textit{first-out} con limitación en el tamaño de cola en número de paquetes.
-
+El objeto qdics, que significa ``Quality-Deficit Inverse Congestion Control Scheduler" (Planificador de Control de Congestión Inverso de Calidad-Deficit), es un concepto fundamental en el networking de Linux que determina el orden en el que los miembros de la cola, en este caso los paquetes, son seleccionados para su servicio. \\
+\\
+Por ejemplo, cuando una herramienta de espacio de usuario necesita transmitir un paquete en un momento dado, ese paquete se entrega al \textit{stack} de red y, finalmente, llega a la interfaz de red por la cual será transmitido. En ese momento, el paquete se encuentra encolado en una cola, esperando ser transmitido. Estas colas son gestionadas por un qdics. El qdics por defecto en Linux es un pfifo, que significa ``Priority-First-In, First-Out", señalar el concepto de prioridad, dado que es fundamental. Por tanto lo podemos ver como una cola pura en la que se sigue el orden de llegada (\textit{first-in}) y se atienden los paquetes en ese orden siempre y cuando no haya alguna directriz de prioridad, con una limitación en el tamaño de la cola en términos del número de paquetes que puede contener.
 
 \subsubsection{Classes}
 
-La clases se podrían ver como una sub-\gls{qdics} de una \gls{qdics}. Una clase puede contener a su vez otra clase, o más clases, pudiendo conformar sistemas de \gls{qos} en detalle, véase la figura \ref{fig:linuxNet_tc}. Cuando los paquetes son recibidos en una cola administrada por un \gls{qdics}, estos pueden ser encolados en base a las características del paquete en otras colas,  gestionadas por otras clases. Esto permite por ejemplo, priorizar el envío de datos de una aplicación sobre otra. Para ello, los paquetes de ambas aplicaciones se clasificarán en distintas clases, dándole más prioridad a una clase sobre la otra, asignándole más recursos de transmisión y recepción.
 
-%foto
+Las clases pueden entenderse como sub-qdics dentro de un qdics. Una clase puede contener a su vez otras clases, formando sistemas de  \gls{qos} detallados, como se muestra en la figura \ref{fig:linuxNet_tc}. Cuando los paquetes son recibidos en una cola gestionada por un qdics, pueden ser encolados en base a las características del paquete en otras colas administradas por otras clases. Esto permite, por ejemplo, priorizar el envío de datos de una aplicación sobre otra. Para lograrlo, los paquetes de ambas aplicaciones se clasificarán en clases diferentes, asignándole a una clase más prioridad que a la otra. Esto implica asignar más recursos de transmisión y recepción a la clase prioritaria.\\
+\\
+En resumen, las clases en el contexto de los qdics representan subdivisiones que permiten una gestión más detallada del tráfico de red. Al agrupar paquetes en diferentes clases y asignar prioridades, se puede establecer un control más minucioso sobre la transmisión y recepción de datos, lo que facilita la implementación de políticas de \gls{qos} y la asignación de recursos de manera más eficiente.
+% fig
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=8cm]{archivos/img/teoria/tc_qdisc_example_implementation.png}
-    \caption{Sistema de QoS implementado con distintas clases \cite{qdiscs}}
+    \includegraphics[width=0.7\textwidth]{archivos/img/teoria/tc_qdisc_example_implementation.png}
+    \caption{Mecanimo de calidad de servicio implementado con clases y sub-clases \cite{qdiscs}}
     \label{fig:linuxNet_tc}
 \end{figure}
 
+
 \subsubsection{Filters}
 
-Un filtro es usado para determinar con qué clase debe ser encolado el paquete. Para ello, el paquete siempre debe ser clasificado con una clase determinada. Varios tipos de filtros se pueden utilizar para clasificar los paquetes, pero en este caso será de interés el tipo de filtro \gls{bpf}\footnote{\url{https://man7.org/linux/man-pages/man8/tc-bpf.8.html}}, los cuales permiten anclar un \textit{bytecode} \gls{bpf}. Estos filtros se utilizarán para cargar programas \gls{bpf} que trabajarán en conjunto con \gls{xdp} con la finalidad de lograr el Broadcast. Esto es así, ya que en el \gls{tc} ya se hace uso de la estructura \texttt{sk\_buff} (Ir a \ref{linuxNetworking_skbuff}), por lo que ciertos \textit{helpers} \gls{bpf} para clonar paquetes podrán ser utilizados por \textit{bytecode} anclado en el filtro.
+En el contexto de \gls{tc} en Linux, los filtros son objetos utilizados para seleccionar y clasificar paquetes de red con el fin de aplicar acciones específicas sobre ellos. Los filtros permiten establecer reglas que determinan cómo se deben tratar los paquetes en función de diferentes criterios, como direcciones IP, puertos, protocolos, etiquetas VLAN, campos de encabezado, entre otros. Los filtros en \gls{tc} se utilizan en conjunción con los qdics para controlar y gestionar el tráfico de red de manera más granular. Se pueden aplicar diferentes acciones a los paquetes que coinciden con los criterios definidos por los filtros, como encolarlos en clases específicas, modificar sus encabezados, descartarlos, redirigirlos a interfaces de red diferentes, entre otras opciones. Existen varios tipos de filtros disponibles en \gls{tc}, entre ellos podemos ver los siguientes.
+
+\begin{itemize}
+    \item Tipo U32: Permite filtrar paquetes basados en campos de encabezado, como direcciones IP, puertos y protocolos.
+    \item Tipo Basic: Permite filtrar paquetes utilizando criterios básicos como direcciones IP de origen y destino, puertos y protocolos.
+    \item Tipo Route: Permite filtrar paquetes en función de las rutas de red.
+    \item Tipo \gls{bpf}: Permite utilizar programas \gls{bpf} para filtrar y procesar paquetes.
+\end{itemize}
+
+Estos son solo algunos ejemplos de los tipos de filtros disponibles en \gls{tc}. Cada tipo de filtro tiene su propia sintaxis y opciones de configuración específicas. Por tanto, los filtros en \gls{tc} se utilizan para seleccionar y clasificar paquetes de red en función de diferentes criterios. Estos filtros permiten aplicar acciones específicas a los paquetes que coinciden con los criterios definidos, lo que facilita la gestión y el control del tráfico de red en Linux.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
