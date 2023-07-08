@@ -109,16 +109,52 @@ Como se puede observar, hay diferentes \textit{inodes}, archivos distintos y \te
 
 \subsection{Mininet-WiFi}
 
-Mininet-WiFi \cite{7367387} es un emulador de redes inalámbricas diseñado principalmente para trabajar bajo el estándar \texttt{ieee80211}. Esta herramienta nació de Mininet, es decir, es un \textit{fork} de la misma. Por ello, comparten todas las bases sobre virtualización ``ligera" haciendo uso de \textit{Namespaces} y \gls{veth}s, por tanto, todos los scripts de Mininet son compatibles en Mininet-WiFi. \\
-\par
-Esto es así ya que toda la funcionalidad wireless es un añadido sobre la base que desarrollaron para Mininet. Los desarrolladores de Mininet-WiFi se valieron del subsistema wireless del Kernel de Linux y del módulo mac80211\_hwsim, para conseguir emular las interfaces y el supuesto medio inalámbrico. Para más información sobre esta herramienta se recomienda ir al \textbf{punto} \ref{mn-wifi_bmv2_integration}, donde se hace un análisis profundo sobre las jerarquías de clases añadidas en Mininet-WiFi, como opera internamente y como se comunica con el módulo en el kernel para generar los escenarios inalámbricos.
+Mininet-WiFi \cite{7367387}, es una extensión (\textit{fork}) del emulador de redes Mininet que permite la emulación de redes inalámbricas en entornos virtuales. Utiliza el módulo del kernel llamado mac80211\_hwsim para simular interfaces inalámbricas virtuales y puntos de acceso. El módulo mac80211\_hwsim es un componente del kernel de Linux que proporciona una funcionalidad de emulación de hardware para interfaces inalámbricas. Permite crear interfaces inalámbricas virtuales que se comportan como dispositivos físicos, lo que permite la emulación y prueba de escenarios de red inalámbrica sin necesidad de hardware físico.\\
+\\
+Mininet-WiFi hace uso de este módulo para crear interfaces inalámbricas virtuales y puntos de acceso virtuales en las emulaciones de redes. Esto permite simular la configuración de redes inalámbricas complejas, incluyendo la conexión de dispositivos a puntos de acceso virtuales, la emulación de diferentes canales inalámbricos y la aplicación de configuraciones específicas de los dispositivos inalámbricos. Al utilizar el módulo mac80211\_hwsim, Mininet-WiFi puede proporcionar una capa de emulación adicional para redes inalámbricas, permitiendo a los usuarios experimentar con aplicaciones, protocolos y algoritmos inalámbricos en un entorno virtual controlado. Esto es especialmente útil para la investigación, desarrollo y pruebas de nuevas soluciones de redes inalámbricas, ya que se pueden crear y reproducir escenarios de red de manera rápida y eficiente.\\
+\\
+Como se puede ver en la figura \ref{fig:mininetwifi}, Mininet-WiFi aparte de utilizar el módulo del kernel mac80211\_hwsim para la emulación del entorno inalámbrico, también hace uso de una serie de herramientas para controlarlo y gestionarlo. De forma adicional, si nos fijamos en las herramientas que se despliegan para la emulación se puede ver como los puntos de acceso requieren de un proceso propio (\texttt{hostAPd}) para correr las funcionalidades de AP.\\
+\\
+La arquitectura de virtualización utilizada en Mininet-WiFi es similar a la de Mininet. Se utiliza la herramienta \texttt{mnexec}\footnote{\url{https://github.com/intrig-unicamp/mininet-wifi/blob/master/mnexec.c}} para lanzar diferentes procesos de bash en nuevas Network Namespaces, uno por cada nodo independiente de la red. Estos procesos alojarán todos los procesos relacionados con los nodos de la red. Una vez finalizada la emulación, se finalizan los procesos de bash, lo que elimina las condiciones de referencia de las Network Namespaces y permite que el kernel las elimine.\\
+\\
+De esta manera, los nodos de la red quedan aislados entre sí, y lo único que falta virtualizar son las capacidades inalámbricas de los nodos que las requieran. Para ello, se utiliza el subsistema inalámbrico del kernel de Linux, específicamente el módulo \texttt{mac80211\_hwsim}, que crea las interfaces inalámbricas en el equipo. Este módulo se comunica con el framework \texttt{mac80211}, que proporciona las capacidades de gestión de acceso al medio de la interfaz inalámbrica. Además, en el espacio del kernel, hay un bloque adicional llamado \texttt{cfg80211}, que sirve como API para la configuración de las cabeceras 802.11. Esta configuración se puede realizar mediante la interfaz de usuario de espacio de usuario llamada \texttt{nl80211}. Para la configuración de los puntos de acceso, se utiliza el programa \texttt{HostApd}, que, al recibir la configuración del punto de acceso y la interfaz en la que debe funcionar, emula el comportamiento de un punto de acceso estándar.\\
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mininetwifi.png}
+    \caption{Arquitectura básica de Mininet-WiFi \cite{7367387}}
+    \label{fig:mininetwifi}
+\end{figure}
+
+En cuanto a la jerarquía de clases, cabe mencionar que es bastante similar a la de Mininet. Destacan dos clases clave en la jerarquía de Mininet-WiFi: \texttt{Node\_Wifi}, de la cual heredan todos los nodos con capacidades inalámbricas de Mininet-WiFi, y la clase IntfWireless, de la cual heredan todos los tipos de enlaces disponibles en Mininet-WiFi bajo el estándar \texttt{ieee80211}. A continuación, en las figuras \ref{fig:analysis_p4_wifi_4} y \ref{fig:analysis_p4_wifi_5}, se muestran los UML correspondientes a estas clases.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{archivos/img/dev/p4-wifi/analysis/uml_node.png}
+    \caption{UML de clases de tipo Nodo.}
+    \label{fig:analysis_p4_wifi_4}
+\end{figure}
+
+
+
+Como se puede observar en los diagramas UML, se ha logrado aislar la funcionalidad común en las clases padre con el objetivo de optimizar el código de las clases hijas. Esto permite agregar nuevos tipos de enlaces y nodos en Mininet-WiFi de manera más sencilla y accesible.\\
+\\
+
+% figura escenario
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/p4-wifi/analysis/uml_link.png}
+    \caption{UML de clases de tipo Interfaz.}
+    \label{fig:analysis_p4_wifi_5}
+\end{figure}
+
+
+En resumen, Mininet-WiFi utiliza el módulo del kernel mac80211\_hwsim para emular interfaces inalámbricas virtuales y puntos de acceso virtuales en sus simulaciones de redes inalámbricas. Esto brinda a los usuarios la capacidad de experimentar y probar aplicaciones, protocolos y configuraciones inalámbricas en un entorno virtual controlado.
 
 
 \subsection{Mininet-IoT}
 \label{mininetIoT}
 
-La herramienta Mininet-IoT \cite{mininetIOT} es un emulador de redes de baja capacidad diseñado para trabajar en conjunto bajo el estándar \texttt{ieee802154} y la capa de adaptación 6LoWPAN. Esta herramienta nació de Mininet-WiFi, que a su vez nació de Mininet, por lo que en la práctica, Mininet-IoT comparte todas las técnicas de virtualización ``ligera" de Mininet. Al heredar de Mininet-WiFi y Mininet, todos los scripts para desplegar topologías alámbricas y WiFi son compatibles en Mininet-IoT.  \\
-\par
-
-La gran diferencia entre Mininet-IoT y Mininet-WiFi, radica en el módulo que emplean para conseguir emular las interfaces y el supuesto medio inalámbrico. Mininet-WiFi hace uso del módulo mac80211\_hwsim, mientras que Mininet-IoT hace uso del módulo del Kernel mac802154\_hwsim (es necesario tener una versión del Kernel superior a la \texttt{4.18.x} para obtener dicho modulo). Toda la gestión de nodos, interfaces y enlaces es exactamente la misma a la de Mininet-WiFi. Por ello, Ramon Fontes (principal desarrollador de la herramienta), creó una clase agnóstica para gestionar módulos del Kernel en Mininet-WiFi, y migró todo el proyecto de Mininet-IoT a Mininet-WiFi. De esta forma, el mantenimiento del \textit{core} que compartían ambas herramientas se hacía únicamente en un proyecto, y daba la posibilidad al usuario de Mininet-WiFi de establecer enlaces de baja capacidad en sus topologías inalámbricas.
+Mininet-IoT \cite{mininetIOT} es una herramienta de emulación de redes de baja capacidad diseñada para trabajar bajo el estándar \texttt{ieee802154} y la capa de adaptación 6LoWPAN. Esta herramienta se deriva de Mininet-WiFi, que a su vez se deriva de Mininet. En la práctica, Mininet-IoT utiliza las mismas técnicas de virtualización ``ligera" que Mininet.\\
+\\
+La principal diferencia entre Mininet-IoT y Mininet-WiFi radica en el módulo utilizado para emular interfaces y el medio inalámbrico. Mientras que Mininet-WiFi utiliza el módulo mac80211\_hwsim, Mininet-IoT utiliza el módulo del kernel llamado mac802154\_hwsim (se requiere una versión del kernel superior a la \texttt{4.18.x} para utilizar este módulo). Sin embargo, la gestión de nodos, interfaces y enlaces es idéntica en ambas herramientas. Para simplificar el mantenimiento y compartir el núcleo común, Ramon Fontes, el principal desarrollador, creó una clase agnóstica para gestionar los módulos del kernel en Mininet-WiFi y migró todo el proyecto de Mininet-IoT a Mininet-WiFi. Esto permite a los usuarios de Mininet-WiFi establecer enlaces de baja capacidad en sus topologías inalámbricas. Por tanto, Mininet-IoT es una extensión de Mininet-WiFi diseñada para emular redes de baja capacidad en el estándar \texttt{ieee802154} y 6LoWPAN. Comparte muchas características con Mininet-WiFi, pero utiliza el módulo mac802154\_hwsim para la emulación inalámbrica. Esta herramienta proporciona a los usuarios la capacidad de simular y experimentar con topologías inalámbricas de baja capacidad.
