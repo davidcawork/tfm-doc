@@ -69,31 +69,29 @@ Ahora que hemos creado el escenario, podemos verificar si hay \textit{Network Na
     \label{fig:mininet_02}
 \end{figure}
 
-%%%%%%%%%%%55 hasta aqui 
-Según se puede apreciar en la figura \ref{fig:mininet_02}, no parece que haya ninguna \textit{Network Namespace} en el sistema, pero entonces, ¿Dónde está el problema? El problema de que el comando \texttt{ip netns list} no arroje información, es que Mininet no está creando el \textit{softlink} requerido para que la herramienta sea capaz de listar las \textit{Network Namespaces}. Atendiendo a la documentación del comando se puede averiguar que dicho comando lee del path \texttt{/var/run/netns/} donde se encuentran todas las \textit{Network Namespaces} con nombre\footnote{Aquellas Netns las cuales se ha hecho un bindmount con su nombre en ese directorio para que persistan aunque no haya ningún proceso corriendo en ellas.}.\\
-\par
-Como ya se explicó, las \textit{Namespaces} tienen una vida finita, éstas viven siempre y cuando estén referenciadas (Ir a \ref{tab:linux_ns}), por tanto, si ninguna condición de referenciación se cumple, la \textit{Namespace} en cuestión es eliminada.\\
-\par
-Mininet se encarga de recrear la red emulada, y cuando el usuario termine la emulación, la red emulada debe desaparecer, este proceso debe ser lo más ligero y rápido posible para así ofrecer una mejor experiencia al usuario. La naturaleza del diseño de Mininet incita a pensar que la creación y destrucción de las \textit{Network Namespace} vienen asociadas a la primera condición de refereciación de una \textit{Namespace}. \\
-\par
-Es decir, no tendría sentido hacer \textit{mounts} ni \textit{softlinks} que a posteriori se deberán eliminar, ya que supondría una carga de trabajo bastante significativa para emulaciones de redes grandes y un aumento del tiempo destinado a la limpieza del sistema una vez que la emulación haya terminado. Además, se debe tener en cuenta que existe una condición que es bastante idónea con las necesidades de Mininet, ya que solo es necesario un proceso corriendo por cada \textit{Network Namespace}, y a la hora de limpiar únicamente se debe terminar con los procesos que sostienen las \textit{Network Namespace}. Cuando ya no haya ningún proceso corriendo en la \textit{Namespace}, y el Kernel se encargará de eliminar las \textit{Namespaces}.\\
-\par
-Según el razonamiento expuesto, se debería ver varios procesos que son creados a la hora del levantamiento del escenario en Mininet. Estos procesos deberán tener cada uno un fichero de \textit{Network Namespace}, \texttt{/proc/\{pid\}/ns/net}, con un \textit{inode} distinto para aquellos procesos que corren en distintas \textit{Network Namespaces}.\\
+
+Al observar la figura \ref{fig:mininet_02}, no parece haber ninguna \textit{Network Namespace} en el sistema. Entonces, ¿dónde está el problema? La razón por la que el comando \texttt{ip netns list} no muestra información es que Mininet no está creando el enlace simbólico (\textit{softlink}) necesario para que la herramienta pueda listar las \textit{Network Namespaces}. Según la documentación del comando, este lee desde la ruta \texttt{/var/run/netns/}, donde se encuentran todas las \textit{Network Namespaces} con nombre. Estas Netns son aquellas en las que se ha realizado un \textit{bindmount} con su nombre en ese directorio para que persistan incluso si no hay ningún proceso en ejecución en ellas.Como se mencionó anteriormente, las \textit{Namespaces} tienen una vida finita y solo existen mientras estén referenciadas (consulte la tabla \ref{tab:linux_ns}). Por lo tanto, si no se cumple ninguna condición de referencia, la \textit{Namespace} en cuestión se elimina.\\
+\\
+Mininet se encarga de recrear la red emulada y, cuando el usuario finaliza la emulación, la red emulada debe desaparecer. Este proceso debe ser lo más rápido y eficiente posible para brindar una mejor experiencia al usuario. La naturaleza del diseño de Mininet sugiere que la creación y destrucción de las \textit{Network Namespaces} están asociadas con la primera condición de referencia de una \textit{Namespace}.\\
+\\
+En otras palabras, no tendría sentido realizar enlaces o enlaces simbólicos que luego se deban eliminar, ya que esto implicaría una carga de trabajo significativa para emulaciones de redes grandes y aumentaría el tiempo necesario para limpiar el sistema una vez finalizada la emulación. Además, hay que tener en cuenta que existe una condición que se adapta bien a las necesidades de Mininet: solo se requiere un proceso en ejecución por cada \textit{Network Namespace}, y al realizar la limpieza, solo se deben finalizar los procesos que mantienen las \textit{Network Namespaces}. Cuando no haya más procesos en ejecución en una \textit{Namespace}, el kernel se encargará de eliminarla.\\
+\\
+De acuerdo con el razonamiento expuesto, se deberían ver varios procesos que se crean al iniciar el escenario en Mininet. Cada uno de estos procesos deberá tener un archivo de \textit{Network Namespace} (\texttt{/proc/{pid}/ns/net}) con un número de nodo único (\textit{inode}) para los procesos que se ejecutan en diferentes \textit{Network Namespaces}.\\
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=15.5cm]{archivos/img/teoria/mn_03.png}
-    \caption{Listado de procesos asociados a Mininet}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mn_03.png}
+    \caption{Listado de procesos con referencias a Mininet}
     \label{fig:mininet_03}
 \end{figure}
 
-Si se inspecciona el fichero \texttt{/proc/\{pid\}/ns/net} para cada proceso indicado en la figura \ref{fig:mininet_03} se podrá ver cuales de ellos están en una \textit{Network Namespace} distinta, en función del valor que tenga el \textit{inode}. Por ejemplo, se va a comprobar los procesos asociados a los \texttt{Host1} y \texttt{Host2}.\\
-\par
+Si examinamos el archivo \texttt{/proc/{pid}/ns/net} para cada proceso mencionado en la figura \ref{fig:mininet_03}, podremos determinar cuáles de ellos se encuentran en una \textit{Network Namespace} distinta, según el valor del \textit{inode}. Por ejemplo, verifiquemos los procesos asociados a los \texttt{Host1} y \texttt{Host2}.\\
+
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=15.5cm]{archivos/img/teoria/mn_04.png}
-    \caption{Información relativa al proceso del Host1}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mn_04.png}
+    \caption{Información de contexto sobre el proceso del Host1}
     \label{fig:mininet_04}
 \end{figure}
 
@@ -101,12 +99,12 @@ Si se inspecciona el fichero \texttt{/proc/\{pid\}/ns/net} para cada proceso ind
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=15.5cm]{archivos/img/teoria/mn_05.png}
-    \caption{Información relativa al proceso del Host2}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/mn_05.png}
+    \caption{Información de contexto sobre el proceso del Host2}
     \label{fig:mininet_05}
 \end{figure}
 
-Como se puede ver, \textit{inode} distintos, ficheros distintos, distintas \textit{Network namespaces}. Con esta prueba se puede ver como Mininet hace uso de procesos de bash para sostener las \textit{Network Namespaces} de los nodos que lo requieran.
+Como se puede observar, hay diferentes \textit{inodes}, archivos distintos y \textit{Network namespaces} diferentes. Esta prueba demuestra cómo Mininet utiliza procesos de bash para mantener las \textit{Network Namespaces} de los nodos que lo requieren.
 
 
 \subsection{Mininet-WiFi}
