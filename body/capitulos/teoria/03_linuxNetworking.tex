@@ -192,3 +192,42 @@ Por lo tanto, se puede representar el siguiente diagrama básico para ilustrar e
     \caption{Enlace entre interfaces Veth separadas en dos Network Namespaces \cite{carrascal2020diseno}}
     \label{fig:linuxNet_veth}
 \end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Linux Wireless Subsystem}
+\label{linux_w}
+
+El subsistema inalámbrico de Linux consiste en un conjunto de módulos presentes en el kernel de Linux. Estos módulos se encargan de manejar la configuración del hardware según el estándar \texttt{ieee80211}, así como de la gestión de la transmisión y recepción de paquetes de datos. En la arquitectura de este subsistema, el primer bloque que encontramos al analizar de abajo hacia arriba es el módulo mac80211\_hwsim. Este módulo es responsable de crear las interfaces inalámbricas virtuales en Mininet-WiFi.\\
+\\
+El objetivo principal del módulo mac80211\_hwsim es facilitar a los desarrolladores de controladores de tarjetas inalámbricas la prueba de su código y la interacción con el siguiente bloque llamado mac80211. Las interfaces virtualizadas no tienen ciertas limitaciones presentes en el hardware real, lo que facilita la realización de diversas pruebas con diferentes configuraciones sin estar limitados por recursos materiales. Este módulo generalmente recibe un parámetro único, que es el número de ``radios" o interfaces virtuales que se desean virtualizar. Dado que las posibilidades ofrecidas por este módulo eran algo limitadas, se han creado varios wrappers que proporcionan funcionalidades adicionales más allá de las que ofrece el módulo en sí. La mayoría de las herramientas creadas hacen uso de la biblioteca Netlink para comunicarse directamente con el subsistema en el kernel y lograr configuraciones adicionales, como agregar un RSSI en particular, o asignar un nombre a la interfaz. Un ejemplo de dicha herramienta es \texttt{mac80211\_hwsim\_mgmt}, que es utilizada por Mininet-WiFi para gestionar la creación de interfaces inalámbricas en cada nodo que las requiere.\\
+\\
+Es importante destacar el cambio de paradigma que existe en el subsistema inalámbrico de Linux en relación al concepto de interfaz. Generalmente, se piensa en una interfaz como un elemento que gestiona el acceso al medio en la capa dos y el propio hardware en la capa física, como sería el caso de una interfaz Ethernet. Sin embargo, en el subsistema inalámbrico se descompone la interfaz en dos capas \cite{8330098}. Una de ellas es la capa física (\textit{PHY}), donde se puede gestionar, por ejemplo, en qué canal está operando la tarjeta inalámbrica emulada. La otra capa es el acceso al medio, representado por las interfaces virtuales que se derivan de una tarjeta inalámbrica. La idea detrás de este paradigma es que se pueden tener \textit{N} interfaces virtuales asociadas a una misma tarjeta inalámbrica, aunque es importante destacar que estas interfaces virtuales funcionan principalmente como interfaces Ethernet (a excepción de las que están en modo monitor).
+
+\subsubsection{Limitaciones del módulo \texttt{mac80211\_hwsim}}
+\label{limits}
+
+Como se mencionó anteriormente, la mayoría de las interfaces virtuales asociadas a una tarjeta inalámbrica emulada son del tipo Ethernet, lo que implica que todos los paquetes que se reciben están encapsulados con cabeceras Ethernet. Esta situación plantea una limitación, ya que en ciertos casos de uso se desea manipular las cabeceras WiFi. Sin embargo, debido a que las interfaces virtuales son principalmente del tipo Ethernet, no es posible lograr este objetivo.
+
+% foto downstream
+% figura escenario
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.2\textwidth]{archivos/img/dev/p4-wifi/analysis/linux_wireless_subsystem_tx.png}
+    \caption{Pipeline de transmisión del módulo mac80211\_hwsim \cite{5415877}}
+    \label{fig:analysis_p4_wifi_7}
+\end{figure}
+
+Sin embargo, ¿cuál es el motivo de convertir las cabeceras WiFi a cabeceras Ethernet? Hasta ahora, la única razón que se ha encontrado para esta decisión de diseño es simplificar la implementación de los controladores que funcionan con el módulo mac80211\_hwsim. Estos controladores convierten las cabeceras a Ethernet y las entregan al stack de red para que las gestione como paquetes de una red cableada convencional. Este enfoque permite que las aplicaciones que operan a nivel de interfaz sean más fácilmente compatibles y extrapolables.
+
+% foto upstream
+% figura escenario
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\textwidth]{archivos/img/dev/p4-wifi/analysis/linux_wireless_subsystem_rx.png}
+    \caption{Pipeline de recepción del módulo mac80211\_hwsim \cite{5415877}}
+    \label{fig:analysis_p4_wifi_8}
+\end{figure}
+
+Es importante mencionar que esto implica un consumo considerable de recursos, ya que el paquete se encola hasta tres veces (controlador, cola Ethernet, cola de la disciplina de planificación de colas) y se requiere tiempo y recursos para llevar a cabo la traducción de las cabeceras. Puedes encontrar la función en el kernel donde se realiza este proceso \href{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}{aquí}\footnote{\url{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}}. Esta situación ocurre generalmente, pero no siempre, ya que el único modo en el que una interfaz puede recibir paquetes WiFi es en el modo monitor. Sin embargo, el modo monitor está diseñado únicamente para la escucha de paquetes, no para la transmisión. Este modo se puede llevar al límite al realizar una inyección de paquetes (packet injection) a través de la interfaz. Por tanto, cuando se trabaje con este módulo del kernel, se tiene que ser cosciente que los paquetes que se verán por las tarjetas WiFi emuladas serán paquetes con cabeceras 802.3 en vez de 802.11. 
