@@ -20,11 +20,18 @@ Estas capas se comunican entre sí a través de interfaces abiertas. Por ejemplo
     \label{fig:sdnBasicArch}
 \end{figure}
 
-\subsection{OpenFlow}
+\subsection{Protocolo OpenFlow}
 
-Existen varios protocolos para el control de los elementos de red desde el controlador, pero el más utilizado es Openflow. OpenFlow es un protocolo de la interfaz \textit{Southbound} que comunica los controladores \gls{sdn} con los elementos de red para configurar el estado de reenvío de estos últimos. La especificación de este protocolo se encuentra recogida por la \gls{onf}\footnote{\url{https://www.opennetworking.org/software-defined-standards/specifications/}}, contando con numerosas versiones siendo la última la versión \texttt{1.5.1} del 2015. \\
-\par
+Existen varios protocolos para el control de los elementos de red desde el controlador, pero el más ampliamente utilizado es OpenFlow. OpenFlow es un protocolo de la interfaz \textit{Southbound} que establece la comunicación entre los controladores \gls{sdn} y los elementos de red para configurar el plano de forwarding de estos últimos. La especificación de este protocolo está definida por la \gls{onf}\footnote{\url{https://www.opennetworking.org/software-defined-standards/specifications/}}, y cuenta con varias versiones, siendo la más reciente la versión \texttt{1.5.1} lanzada en 2015.\\
+\\
+El concepto fundamental en OpenFlow es el flujo (\textit{flow}), el cual está compuesto por paquetes que se han clasificado según reglas específicas. Estas reglas se encuentran en las tablas de flujo (\textit{flow table}) y suelen estar relacionadas con los puertos de entrada o los valores de los campos de cabecera del paquete. Cuando los criterios de una regla coinciden con los valores de un paquete entrante, se produce una coincidencia (\textbf{\textit{match}}).\\
+\\
+Cuando se produce una coincidencia (\textit{match}), el paquete se somete a una serie de instrucciones asociadas a la regla con la que ha coincidido. Estas instrucciones pueden incluir la medición del paquete, la aplicación de acciones específicas o el enrutamiento hacia otra tabla de flujo. De esta manera, al completar las tablas de flujo con reglas suministradas por el controlador \gls{sdn}, se configura el estado de reenvío del switch en cuestión \cite{nadeau2013sdn}. A continuación, en la figura \ref{fig:openflow_arch}, se puede apreciar los elementos básicos que suele contener un switch Openflow. Más adelante en la sección \ref{subsec:BOFUSS} sobre \textit{software switches} se estudiarán en profundidad los elementos básicos que componen un agente \gls{sdn} que implementa un agente Openflow.
 
-El elemento clave de OpenFlow es el flujo (\textit{flow}), los cuales se conforman de paquetes que ha sido clasificados en función de reglas. Dichas reglas se encuentran en las tablas de flujo (\textit{flow table}) y  suelen estar relacionadas con los puertos de entrada o valores de cabecera típicos. Cuando estos criterios coinciden con los del paquete entrante se produce un \textbf{\textit{match}}.\\
-\par
-En el momento en que se produce un \textit{match}, el paquete en cuestión se verá sujeto a una serie de instrucciones asociadas a la regla con la que a hecho \textit{matching}. Estas instrucciones pueden ir desde, hacer una medición del paquete, aplicar una acción ó ir a otra tabla de flujo. De esta forma, con unas tablas de flujo completadas con unas reglas suministradas por el controlador \gls{sdn}, se conforma el estado de reenvío del switch en cuestión \cite{nadeau2013sdn}. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{archivos/img/teoria/openflow_arch.png}
+    \caption{Arquitectura básica de agente OpenFlow \cite{fernandes2015software}}
+    \label{fig:openflow_arch}
+\end{figure}
