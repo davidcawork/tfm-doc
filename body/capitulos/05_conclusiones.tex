@@ -7,32 +7,19 @@ En este capítulo, se concluirá la memoria presentando las conclusiones del tra
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusiones del \glsentryshort{tfm}}
 
-La finalidad de los casos de uso era la de ver con qué tecnología (\gls{xdp}, P4) es más sencillo y eficiente definir el \textit{datapath} de los dispositivos \gls{iot} en entornos \gls{sdn}. Por tanto, antes de realizar las conclusiones, se deberá revisar los resultados de las evaluaciones de ambas tecnologías en los distintos entornos, cableado e inalámbrico. \\
-\par
-Como se puede apreciar en la tabla \ref{tab:useCases}, con la tecnología \gls{xdp} en medios cableados no se pudo realizar un Broadcast de forma nativa, es decir, dicha tecnología no fue suficiente para lograr el broadcast. Es verdad que dicha limitación fue estudiada, y se planteó una solución, haciendo uso de un programa \gls{bpf} adicional en el \gls{tc}, pero aún teniendo en cuenta que se solucionó, no se puede afirmar que la tecnología lo soporte.  En cambio, si se observa dicha funcionalidad en un entorno Wireless, ya no habría dicha limitación dado que no sería necesario clonar los paquetes. Generalmente cambiando la dirección destino del paquete de capa dos a difusión, y transmitiéndolo al medio, será suficiente para lograr el Broadcast. \\
-\par
-
-En cambio, la tecnología P4, a diferencia de \gls{xdp}, tiene una interfaz de alto nivel para definir funcionalidades de broadcast/multicast. Esta interfaz, comúnmente conocida como ``grupos multicast", permite definir en una estructura de datos de tipo JSON por qué puertos inundar y con qué cantidad de réplicas por puerto. De forma adicional, cabe mencionar que los grupos multicast permiten modificar el tipo de instancia de los paquetes clonados, siendo posible diferenciar los paquetes originales de los clonados. \\
-\par
-
-\input{archivos/diagramas/tabla_CasosUso_conclusion}
-
-Volviendo a la tabla \ref{tab:useCases}, se quiere hacer especial hincapié en que la tecnología P4 no soporta la funcionalidad de dejar pasar o delegar los paquetes, sin afectarles el plano de datos programado en P4. Por otro lado, con \gls{xdp} siempre se puede pasar el paquete al Kernel para que se encargue él del procesamiento. Sin embargo, en P4, se debe definir de forma exclusiva todo el \textit{datapath}, por lo que no hay a quien delegar el paquete, es decir, se tiene que encargar el propio programa P4. Este punto es muy positivo para \gls{xdp}, ya que acciones sencillas y repetitivas pueden ser definidas en un programa \gls{xdp} y delegar el resto de funcionalidades al Kernel. Por tanto, se actuaría de forma cooperativa y ganando en rendimiento como se vio en el case04 (\ref{xdp_ether_case04}), donde se trabajaba de forma conjunta para obtener información de routing desde el propio Kernel. \\
-\par
-Por último, se quiere mencionar la diferencia que existe entre ambas tecnologías en la interfaz de control. En P4 la interfaz de control serán las tablas, las cuales se definirán su estructura desde el propio programa P4 pero se irán completando vía P4Runtime por un controlador externo. Por ejemplo, ONOS\footnote{\url{https://wiki.onosproject.org/display/ONOS/P4+brigade}}, el cual soporta la configuración vía P4Runtime. En cambio, en \gls{xdp} se podría decir que el equivalente a las tablas serían los mapas \gls{bpf}.\\
-\par
-Estos mapas, de tipo clave-valor, son definidos por el programa que se ancla en el Kernel, y generalmente son completados por programas de espacio de usuario, que acceden a éste a través de descriptores de archivo. Se podría decir que es un sistema al que aún le queda recorrido para ser igual de consistente que las tablas en P4, dado que sería necesario el desarrollo de un servidor \gls{xdp} de espacio de usuario que estuviera a la escucha de información de control. Este servidor se encargaría de escribir en los mapas \gls{bpf} la información equivalente de control que permitiese que el programa anclado en el Kernel actuara acorde a las directrices de un hipotético controlador.\\
-\par
-
-Por tanto, se concluye indicando que la tecnología \gls{xdp} actualmente está mejor enfocada para escenarios de integración totales (Ver figura \ref{sdn_iot_total}), donde el dispositivo \gls{iot} únicamente dispone de interfaces wireless. Este dispositivo se beneficiará del rendimiento y la optimización de recursos que ofrece \gls{xdp} al actuar de forma reactiva a los paquetes. \\
-\par
-En cuanto a la tecnología P4 se cree que está más enfocada a escenarios de integración parcial (Ver figura \ref{sdn_iot_parcial}), donde el dispositivo \gls{iot} mediador dispone tanto de interfaces cableadas para comunicarse con el core \gls{sdn}, como de una interfaz inalámbrica para comunicarse con otros dispositivos \gls{iot}. Dichos dispositivos se beneficiarán de las facilidades que otorga P4 para realizar multicast, y de la interfaz de control tan bien definida que tiene para ser controlado por un controlador \gls{sdn} convencional.
-\vspace{2cm}
+En este Trabajo de Fin de Máster (TFM), se ha llevado a cabo el diseño e implementación de un protocolo de control escalable para redes \gls{iot} en entornos SDN de la nueva generación de redes móviles, \gls{6g}. El protocolo se ha basado en un enfoque de control in-band, estableciendo la conectividad entre los nodos de la red y el controlador a través del plano de datos para transmitir información de control.\\
+\\
+En la primera fase del proyecto, se realizó un exhaustivo estudio y documentación de las principales herramientas y tecnologías relacionadas, sentando así una sólida base teórica antes de abordar el diseño y prototipado del protocolo de control in-band. Posteriormente, se analizaron las necesidades y características de las distintas tecnologías para seleccionar las herramientas más adecuadas para la implementación del protocolo de control. Se llevó a cabo un minucioso estudio de estas herramientas con el objetivo de lograr una implementación optimizada en la medida de lo posible.  El proyecto se completó mediante la validación del protocolo desarrollado a través de la emulación, lo que permitió realizar pruebas de funcionamiento del protocolo implementado en el entorno \gls{bofus} sobre interfaces inalámbricas emuladas. De este modo, se pudo comprobar el correcto desempeño del protocolo en diferentes casos de uso. Esta validación resulta fundamental para asegurar que el protocolo cumple con los requisitos de escalabilidad y control en entornos \gls{iot} y \gls{sdn}.\\
+\\
+Durante todo el proceso de ejecución del proyecto, se generó un gran valor adicional. Se aportó claridad al documentar el funcionamiento interno de herramientas como ``dpctl" y su interfaz de comandos, lo que permitió resolver problemas relacionados con ellas. Se exploró a fondo el funcionamiento de Mininet-WiFi, documentando su jerarquía de clases y los módulos que utiliza en el kernel de Linux para emular el entorno de radio, lo que facilitó la identificación de posibles fuentes de errores debido a desvíos en las interfaces inalámbricas emuladas. También se profundizó en el funcionamiento interno de \gls{bofus}, solucionando problemas de compilación para las últimas versiones de distribuciones Linux y actualizando documentación incorrecta sobre su funcionamiento.\\
+\\
+Además, se crearon escenarios replicables mediante Vagrant, que incluyen todas las herramientas relacionadas con entornos \gls{sdn} (Mininet, Mininet-WiFi, Ryu, \gls{onos}, \gls{bofus}) en la última versión de Ubuntu 22.04. Esto ha permitido mantener actualizadas estas herramientas y proyectos que habían sido abandonados. Por ejemplo, el proyecto \gls{bofus} fue retomado después de casi cuatro años sin recibir ningún commit, gracias a la colaboración entre el autor y el autor de este \gls{tfm}, quien asumió un rol de maintainer en el proyecto.\\
+\\
+En conclusión, este \gls{tfm} ha logrado desarrollar un mecanismo de control in-band para dispositivos \gls{iot} en entornos \gls{6g}. Además, se ha generado una cadena de valor al aportar conocimiento y mejoras a herramientas y proyectos previamente abandonados, lo que ha contribuido a revitalizarlos.\\
+\\
 
 
 
-
-\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Líneas de trabajo futuro}
 \label{trabajoFuturo}
@@ -46,6 +33,8 @@ Tras concluir y revisar el alcance conseguido de los objetivos propuestos para l
     \item Añadir seguridad mediante el uso de TLS en las conexiones OpenFlow in-band desde el UserAP hacia el controlador. Esto garantizará la confidencialidad y la integridad de las comunicaciones, protegiendo la información transmitida entre el UserAP y el controlador.
 
     \item Realizar simulaciones de pérdida utilizando el protocolo desarrollado y evaluar cómo afecta al funcionamiento intrínseco de la operativa programada. Esto ayudará a comprender el impacto de la pérdida de paquetes en el rendimiento del sistema y permitirá optimizar el protocolo en función de los resultados obtenidos.
+
+    \item MOdificar la interfaz del \gls{bofus} con la herramienta de gestión ``dpctl'' para que implemente una interfaz estándar como JSON.
 
     \item Explorar la posibilidad de tener dos UserAPs en el espacio de nombres raíz (root namespace). Actualmente, solo se permite tener uno para evitar el bypass de paquetes. Investigar cómo gestionar la presencia de dos UserAPs y evaluar cómo afecta a la conectividad y al rendimiento del sistema.
 \end{itemize}
