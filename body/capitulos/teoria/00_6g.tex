@@ -80,6 +80,18 @@ P4DNS \cite{woodruff2019p4dns} presenta una solución para reducir la latencia h
 
 \subsubsection{Infraestructuras flexibles y programables }
 
+En las redes móviles de la próxima generación, la conectividad estará presente en todas partes, lo que plantea la necesidad de gestionar estas redes extremadamente complejas que abarcan múltiples dominios, incluso llegando hasta el \textit{edge} más extremo. Esto implica utilizar agentes de control para administrar toda la red heterogénea de recursos. A medida que aumenta el número de dispositivos que participan en la topología de la red, también aumenta proporcionalmente la complejidad de su gestión y control. Por lo que se requiere de un paradigma de red que nos brinde una flexibilidad y programabilidad suficiente para hacer frente a estos nuevos retos, todo el mundo apunta a las redes \gls{sdn}. \\
+\\
+El objetivo principal que tienen que cumplir las Infraestructuras del \gls{6g}, es traducir automáticamente los requisitos del usuario en estrategias de despliegue y operación de la red. Para lograr este objetivo, es necesario: i) aprovechar el uso de big data para recopilar información sobre el funcionamiento de la red y el rendimiento de los usuarios, lo cual es necesario para la automatización y adquirir visibilidad; ii) desarrollar modelos de inteligencia artificial capaces de predecir la experiencia del usuario (QoE) y el rendimiento de la red, con el fin de determinar si los cambios en la red podrían afectar el rendimiento; y iii) explorar los planos de datos programables de la red, como \gls{p4} y OpenFlow, e integrar sus respectivos controladores de red en el plano de control de las redes de próxima generación.\\
+\\
+Además de admitir e interconectar dinámicamente una amplia variedad de dispositivos que pueden escalar según la demanda de capacidad y admitir interfaces declarativas de administración y orquestación (MANO), otro caso de uso que se explorará es la capacidad de garantizar el aislamiento del rendimiento en redes tan heterogéneas y descentralizadas. La red debe poder dividirse (\textit{slicing})  en segmentos de rendimiento más pequeños que puedan garantizar el retardo, el aislamiento del tráfico y/o la capacidad de un subconjunto de servicios en comunicación (Ver figura \ref{fig:flex}). Para lograr este aislamiento del rendimiento, es necesario explorar: i) algoritmos inteligentes de detección del rendimiento del tráfico que puedan predecir patrones de tráfico a una escala muy detallada; ii) mecanismos de control dinámico de asignación de recursos de red que reprogramen los recursos en función de métricas en tiempo real y tráfico previsto; y iii) \textit{network digital twins}, que proporcione capacidades de simulación, planificación y reproducción de la red a operar.\\
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{archivos/img/teoria/flex.jpg}
+    \caption{\textit{Slicing} de red en segmentos funcionales \cite{qin20236g}}
+    \label{fig:flex}
+\end{figure}
 
 
 
