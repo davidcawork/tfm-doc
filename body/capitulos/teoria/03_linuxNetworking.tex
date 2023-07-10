@@ -16,8 +16,8 @@ En el mundo de las redes siempre se habla de las interfaces tun/tap de forma ind
     \item \texttt{TAP} se puede llegara utilizar para crear un bridge.
 \end{itemize}
 
-Generalmente, cuando los paquetes son enviados por el sistema operativo a través de una interfaz TUN/TAP,  serán recibidos por algún programa de espacio de usuario, el cual, está enganchado directamente en la interfaz. Cualquier programa de espacio de usuario podrá pasar paquetes por las interfaces, y las interfaces virtuales se lo pasarán al \textit{stack} de red por defecto, emulando la recepción de los paquetes inyectados desde espacio de usuario.
-
+Generalmente, cuando los paquetes son enviados por el sistema operativo a través de una interfaz TUN/TAP,  serán recibidos por algún programa de espacio de usuario, el cual, está enganchado directamente en la interfaz. Cualquier programa de espacio de usuario podrá pasar paquetes por las interfaces, y las interfaces virtuales se lo pasarán al \textit{stack} de red por defecto, emulando la recepción de los paquetes inyectados desde espacio de usuario.\\
+\\
 % fig
 \begin{figure}[ht]
     \centering
@@ -26,7 +26,7 @@ Generalmente, cuando los paquetes son enviados por el sistema operativo a travé
     \label{fig:linux1}
 \end{figure}
 
-Para la creación de estas interfaces lo podemos hacer por ioctl o podemos hacerlo más fácil a través del binario tunctl o en su defecto con el comando de \texttt{tuntap} del set de herramientas iproute2. A continuación, en el bloque \ref{code:tun_tap_use} se indican todos los comandos necesarios para trabajar con las interfaces TUN/TAP.
+Para la creación de estas interfaces lo podemos hacer por ioctl o podemos hacerlo más fácil a través del binario tunctl o en su defecto con el comando de \texttt{tuntap} del set de herramientas iproute2. A continuación, en el bloque \ref{code:tun_tap_use} se indican todos los comandos necesarios para trabajar con las interfaces TUN/TAP.\\
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Manejo de interfaces TUN - TAP},label=code:tun_tap_use]
     # En caso de querer utilizar tunctl hay que instalar el binario
@@ -159,9 +159,9 @@ Si ninguna de estas condiciones se cumple, el kernel eliminará automáticamente
 
 Una vez comprendido el concepto de \textit{Namespace} en Linux, es necesario introducir las \textit{Network Namespace}, las cuales desempeñarán un papel fundamental en las plataformas utilizadas para emular. Estas \textit{Network Namespace} consisten en réplicas lógicas del \textit{stack} de red predeterminado de Linux, que incluye rutas, tablas ARP, Iptables e interfaces de red \cite{netns}.\\
 \\
-Linux se inicia con una \textit{Network Namespace} predeterminada, conocida como el espacio \textit{root}, que tiene su propia tabla de rutas, tabla ARP, Iptables e interfaces de red. Sin embargo, también es posible crear \textit{Network Namespace} adicionales que no son predeterminadas, crear nuevos dispositivos dentro de esos espacios de nombres o trasladar dispositivos existentes de un espacio de nombres a otro.\\
+Linux se inicia con una \textit{Network Namespace} predeterminada, conocida como el espacio \textit{root}, que tiene su propia tabla de rutas, tabla ARP, Iptables e interfaces de red. Sin embargo, también es posible crear \textit{Network Namespace} adicionales que no son predeterminadas, crear nuevos dispositivos dentro de esos espacios de nombres o trasladar dispositivos existentes de un espacio de nombres a otro. La herramienta más sencilla para llevar a cabo todas estas tareas de gestión con las Netns es \texttt{iproute2} (consulte el Anexo \ref{iproute2}). Esta herramienta, utilizando el módulo \texttt{netns}, permite gestionar todo lo relacionado con las \textit{Network Namespace} con nombre (\textit{named network namespaces}). \\
 \\
-La herramienta más sencilla para llevar a cabo todas estas tareas de gestión con las Netns es \texttt{iproute2} (consulte el Anexo \ref{iproute2}). Esta herramienta, utilizando el módulo \texttt{netns}, permite gestionar todo lo relacionado con las \textit{Network Namespace} con nombre (\textit{named network namespaces}). La característica ``con nombre" significa que todas las \textit{Network Namespace} administradas mediante \texttt{iproute2} serán persistentes, ya que se realizará un \textit{bind-mount} del archivo identificador de la \textit{Namespace} en cuestión con su nombre correspondiente en el directorio \texttt{/var/run/netns}. A continuación, en el bloque \ref{code:iproute2_ns}, se enumeran los comandos más comunes utilizados para gestionar las \textit{Network Namespace}. Se asume que estos comandos se ejecutan con privilegios de root.
+La característica ``con nombre" significa que todas las \textit{Network Namespace} administradas mediante \texttt{iproute2} serán persistentes, ya que se realizará un \textit{bind-mount} del archivo identificador de la \textit{Namespace} en cuestión con su nombre correspondiente en el directorio \texttt{/var/run/netns}. A continuación, en el bloque \ref{code:iproute2_ns}, se enumeran los comandos más comunes utilizados para gestionar las \textit{Network Namespace}. Se asume que estos comandos se ejecutan con privilegios de root.\\
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Casos de uso de las Netns},label=code:iproute2_ns]
     # Con el siguiente comando creamos una network namespace
@@ -180,6 +180,7 @@ La herramienta más sencilla para llevar a cabo todas estas tareas de gestión c
     ip netns del {netns_name}
     
 \end{lstlisting}
+\vspace{0.2cm}
 
 \subsubsection{Comunicación inter-Namespaces: \glsentryshort{veth}}
 \label{linuxVeths}
@@ -188,7 +189,7 @@ Por lo tanto, se puede representar el siguiente diagrama básico para ilustrar e
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.7\textwidth]{archivos/img/teoria/user_kernel.png}
+    \includegraphics[width=0.9\textwidth]{archivos/img/teoria/user_kernel.png}
     \caption{Enlace entre interfaces Veth separadas en dos Network Namespaces \cite{carrascal2020diseno}}
     \label{fig:linuxNet_veth}
 \end{figure}
@@ -214,7 +215,7 @@ Como se mencionó anteriormente, la mayoría de las interfaces virtuales asociad
 % figura escenario
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.2\textwidth]{archivos/img/dev/p4-wifi/analysis/linux_wireless_subsystem_tx.png}
+    \includegraphics[width=0.3\textwidth]{archivos/img/dev/p4-wifi/analysis/linux_wireless_subsystem_tx.png}
     \caption{Pipeline de transmisión del módulo mac80211\_hwsim \cite{5415877}}
     \label{fig:analysis_p4_wifi_7}
 \end{figure}
@@ -230,4 +231,4 @@ Sin embargo, ¿cuál es el motivo de convertir las cabeceras WiFi a cabeceras Et
     \label{fig:analysis_p4_wifi_8}
 \end{figure}
 
-Es importante mencionar que esto implica un consumo considerable de recursos, ya que el paquete se encola hasta tres veces (controlador, cola Ethernet, cola de la disciplina de planificación de colas) y se requiere tiempo y recursos para llevar a cabo la traducción de las cabeceras. Puedes encontrar la función en el kernel donde se realiza este proceso \href{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}{aquí}\footnote{\url{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}}. Esta situación ocurre generalmente, pero no siempre, ya que el único modo en el que una interfaz puede recibir paquetes WiFi es en el modo monitor. Sin embargo, el modo monitor está diseñado únicamente para la escucha de paquetes, no para la transmisión. Este modo se puede llevar al límite al realizar una inyección de paquetes (packet injection) a través de la interfaz. Por tanto, cuando se trabaje con este módulo del kernel, se tiene que ser cosciente que los paquetes que se verán por las tarjetas WiFi emuladas serán paquetes con cabeceras 802.3 en vez de 802.11. 
+Es importante mencionar que esto implica un consumo considerable de recursos, ya que el paquete se encola hasta tres veces (controlador, cola Ethernet, cola de la disciplina de planificación de colas) y se requiere tiempo y recursos para llevar a cabo la traducción de las cabeceras. Puedes encontrar la función en el kernel donde se realiza este proceso \href{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}{aquí}\footnote{\url{https://elixir.bootlin.com/linux/latest/C/ident/__ieee80211_data_to_8023}}. Esta situación ocurre generalmente, pero no siempre, ya que el único modo en el que una interfaz puede recibir paquetes WiFi es en el modo monitor. Sin embargo, el modo monitor está diseñado únicamente para la escucha de paquetes, no para la transmisión. Este modo se puede llevar al límite al realizar una inyección de paquetes (packet injection) a través de la interfaz. Por tanto, cuando se trabaje con este módulo del kernel, se tiene que ser cosciente que los paquetes que se verán por las tarjetas WiFi emuladas serán paquetes con cabeceras 802.3 en vez de 802.11.

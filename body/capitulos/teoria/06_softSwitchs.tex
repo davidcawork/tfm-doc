@@ -140,7 +140,9 @@ En cuanto aspectos de implementación, podemos destacar, las reglas se indexan e
 
 \subsubsection{Group Table}
 
-Las \textit{Group Tables}, se utilizan para agregar flow entries que tienen una política de acción similar. Cada grupo tiene un identificador único y contiene una lista de buckets que definen las acciones a tomar en caso de que el paquete coincida con ese grupo en particular. Cada bucket en una \textit{Group Tables} define una serie de acciones a ejecutar para un paquete que coincide con ese grupo. Estas acciones pueden incluir enrutamiento, reenvío a puertos específicos, encapsulación, copia de paquetes, descarte, entre otras. Un bucket puede tener múltiples acciones y también puede contener una acción especial para indicar que el paquete debe ser procesado por otros grupos en cascada. La utilización de \textit{Group Tables} permite un procesamiento más eficiente de los flujos de paquetes, ya que se pueden realizar acciones comunes de manera conjunta en lugar de procesar cada flujo de paquetes individualmente. Esto reduce la carga de procesamiento en los switches OpenFlow y facilita la implementación de políticas de red más complejas y flexibles. A continuación, en la figura \ref{bofuss4} se puede apreciar la estructura de las \textit{Group Tables}.
+Las \textit{Group Tables}, se utilizan para agregar flow entries que tienen una política de acción similar. Cada grupo tiene un identificador único y contiene una lista de buckets que definen las acciones a tomar en caso de que el paquete coincida con ese grupo en particular. Cada bucket en una \textit{Group Tables} define una serie de acciones a ejecutar para un paquete que coincide con ese grupo. Estas acciones pueden incluir enrutamiento, reenvío a puertos específicos, encapsulación, copia de paquetes, descarte, entre otras. Un bucket puede tener múltiples acciones y también puede contener una acción especial para indicar que el paquete debe ser procesado por otros grupos en cascada. \\
+\\
+La utilización de \textit{Group Tables} permite un procesamiento más eficiente de los flujos de paquetes, ya que se pueden realizar acciones comunes de manera conjunta en lugar de procesar cada flujo de paquetes individualmente. Esto reduce la carga de procesamiento en los switches OpenFlow y facilita la implementación de políticas de red más complejas y flexibles. A continuación, en la figura \ref{fig:bofuss4} se puede apreciar la estructura de las \textit{Group Tables}.
 
 % fig
 \begin{figure}[ht]
@@ -158,7 +160,7 @@ La \textit{Meter Table} es el core del \gls{qos} del software switch. Para cada 
 % fig
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{archivos/img/teoria/bofuss5.png}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/bofuss5.png}
     \caption{Estructura de las \textit{Meter tables} del \glsentryshort{bofus} \cite{fernandes2015software}}
     \label{fig:bofuss5}
 \end{figure}
@@ -173,12 +175,12 @@ Entre las responsabilidades de las meter tables podemos encontrarnos las siguien
 
 \subsubsection{oflib}
 
-Los mensajes de OpenFlow están definidos de una manera en particular para ser transmitidos por la red. Los mensajes tienen que estar en modo 8-byte alineados, por lo que habrá alguna ocasión donde se tenga que añadir padding para que se cumpla esta regla. Otro requisito es que el mensaje tiene que estar en Network byte order, es decir, Big Endian. Los mensajes OpenFlow que se mandan por la red tienen que estar en el formato indicado anteriormente, es decir, el byte de mayor peso de una palabra tiene que estar almacenado en la posición más pequeña (la dirección más baja).
+Los mensajes de OpenFlow están definidos de una manera en particular para ser transmitidos por la red. Los mensajes tienen que estar en modo 8-byte alineados, por lo que habrá alguna ocasión donde se tenga que añadir padding para que se cumpla esta regla. Otro requisito es que el mensaje tiene que estar en Network byte order, es decir, Big Endian. Los mensajes OpenFlow que se mandan por la red tienen que estar en el formato indicado anteriormente, es decir, el byte de mayor peso de una palabra tiene que estar almacenado en la posición más pequeña (la dirección más baja).\\
 
 % fig
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{archivos/img/teoria/bofuss6.png}
+    \includegraphics[width=\textwidth]{archivos/img/teoria/bofuss6.png}
     \caption{Proceso de Marshaling y Unmarshaling }
     \label{fig:bofuss6}
 \end{figure}
