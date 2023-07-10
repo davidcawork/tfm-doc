@@ -1,16 +1,16 @@
 \chapter{Conclusiones y trabajo futuro}
 \label{conclusiones}
 
- En este capítulo, se finalizará la memoria con las conclusiones del trabajo realizado, haciendo una valoración del mismo y de los resultados obtenidos del desarrollo. Además, se presentarán las vías de trabajo futuro que han ido apareciendo a medida que se realizaba el \gls{tfg}. En concreto, se expondrán dichas vías, y se concluirá con un breve análisis sobre la viabilidad de las mismas.
+En este capítulo, se concluirá la memoria presentando las conclusiones del trabajo realizado y evaluando tanto el trabajo en sí como los resultados obtenidos durante el desarrollo. Además, se explorarán las posibles vías de trabajo futuro que surgieron a medida que se llevaba a cabo el TFM. Se presentarán estas vías y se cerrará la memoria con una visión general y reflexiva sobre el proyecto realizado.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusiones del \glsentryshort{tfg}}
+\section{Conclusiones del \glsentryshort{tfm}}
 
 La finalidad de los casos de uso era la de ver con qué tecnología (\gls{xdp}, P4) es más sencillo y eficiente definir el \textit{datapath} de los dispositivos \gls{iot} en entornos \gls{sdn}. Por tanto, antes de realizar las conclusiones, se deberá revisar los resultados de las evaluaciones de ambas tecnologías en los distintos entornos, cableado e inalámbrico. \\
 \par
 Como se puede apreciar en la tabla \ref{tab:useCases}, con la tecnología \gls{xdp} en medios cableados no se pudo realizar un Broadcast de forma nativa, es decir, dicha tecnología no fue suficiente para lograr el broadcast. Es verdad que dicha limitación fue estudiada, y se planteó una solución, haciendo uso de un programa \gls{bpf} adicional en el \gls{tc}, pero aún teniendo en cuenta que se solucionó, no se puede afirmar que la tecnología lo soporte.  En cambio, si se observa dicha funcionalidad en un entorno Wireless, ya no habría dicha limitación dado que no sería necesario clonar los paquetes. Generalmente cambiando la dirección destino del paquete de capa dos a difusión, y transmitiéndolo al medio, será suficiente para lograr el Broadcast. \\
 \par
-
-
 
 En cambio, la tecnología P4, a diferencia de \gls{xdp}, tiene una interfaz de alto nivel para definir funcionalidades de broadcast/multicast. Esta interfaz, comúnmente conocida como ``grupos multicast", permite definir en una estructura de datos de tipo JSON por qué puertos inundar y con qué cantidad de réplicas por puerto. De forma adicional, cabe mencionar que los grupos multicast permiten modificar el tipo de instancia de los paquetes clonados, siendo posible diferenciar los paquetes originales de los clonados. \\
 \par
@@ -37,10 +37,20 @@ En cuanto a la tecnología P4 se cree que está más enfocada a escenarios de in
 \section{Líneas de trabajo futuro}
 \label{trabajoFuturo}
 
-Como se ha podido apreciar a lo largo del \gls{tfg}, la tecnología \gls{xdp} aun se está asentando; se está abriendo camino dando nuevas posibilidades a los desarrolladores de la parte de \textit{Networking} del Kernel, reescribiendo herramientas y distintos procesos del \textit{stack} de red del Kernel de Linux\footnote{\url{https://github.com/xdp-project/net-next}}. Por otro lado, se encuentra la tecnología P4, la cual ya lleva un par de años en escena, pero cuya comunidad va aumentando día tras día,  con ello, la calidad y robustez de sus implementaciones.   \\
-\par
-Desgraciadamente, aunque estas dos tecnologías estén en constante crecimiento, no parece que a día de hoy haya un interés especial por llevarlas al \gls{iot}. Debido a lo cual, a lo largo de este \gls{tfg} no se ha encontrado la información suficiente, ni las plataformas adecuadas para realizar el estudio y análisis de la integración de los dispositivos \gls{iot} en entornos \gls{sdn}, llegando incluso a tener que realizar implementaciones personalizadas de plataformas para la emulación de redes wireless con finalidad de poder evaluar los casos de uso. \\
-\par
-El hecho que de que aún no haya un interés general por llevar a dichas tecnologías al mundo \gls{iot}, deja mucho por hacer, explorar, desarrollar y probar. A continuación, se indican las vías de trabajo futuro que se cree que abrirán el camino a futuros trabajos e implementaciones, que son principalmente dos: la manipulación directa de las cabeceras \texttt{ieee80211} y la evaluación en redes de baja capacidad (\texttt{ieee802154}).
+Tras concluir y revisar el alcance conseguido de los objetivos propuestos para la ejecución del proyecto, podemos apuntar a próximas líneas de trabajo futuro basadas en los siguientes puntos.
+\begin{itemize}
+    \item Realizar un despliegue en real utilizando Raspberry Pi (RPi) que tienen una interfaz WiFi nativa para evaluar el funcionamiento del in-BOFUSS con varias RPis. Esto permitirá verificar si el rendimiento es similar al observado durante el proyecto.
+
+    \item Realizar la integración del switch BOFUSS en la jerarquía de clases de Mininet-WiFi. Esto facilitará la realización de pruebas y evaluaciones más consistentes al combinar las funcionalidades de ambos proyectos.
+
+    \item Añadir seguridad mediante el uso de TLS en las conexiones OpenFlow in-band desde el UserAP hacia el controlador. Esto garantizará la confidencialidad y la integridad de las comunicaciones, protegiendo la información transmitida entre el UserAP y el controlador.
+
+    \item Realizar simulaciones de pérdida utilizando el protocolo desarrollado y evaluar cómo afecta al funcionamiento intrínseco de la operativa programada. Esto ayudará a comprender el impacto de la pérdida de paquetes en el rendimiento del sistema y permitirá optimizar el protocolo en función de los resultados obtenidos.
+
+    \item Explorar la posibilidad de tener dos UserAPs en el espacio de nombres raíz (root namespace). Actualmente, solo se permite tener uno para evitar el bypass de paquetes. Investigar cómo gestionar la presencia de dos UserAPs y evaluar cómo afecta a la conectividad y al rendimiento del sistema.
+\end{itemize}
+
+Estas líneas de trabajo futuro proporcionan oportunidades para mejorar y ampliar el proyecto, explorando nuevas funcionalidades, mejorando la seguridad y evaluando su rendimiento en diferentes escenarios y condiciones. Como se ha indicado en las conclusiones, aparte de apuntar a las posibles líneas de trabajo a futuro, también hay que mencionar la realidad inmediata, que después de estar trabajando con el \textit{software switch} BOFUSS, hacerle funcionar en las últimas versiones se tomará el relevo a Eder como maintainer del proyecto en una nueva organización agnóstica de organizaciones.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
