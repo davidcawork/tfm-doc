@@ -71,6 +71,13 @@ El \gls{fl} es un enfoque descentralizado y recientemente introducido en el cual
 
 \subsubsection{Plano de datos inteligente}
 
+Uno de los conceptos más importantes dentro del desarrollo de un plano de datos inteligente el término \textit{In-network computing}, el cual describe el paradigma de delegar funciones de procesamiento sobre la capa de aplicación al plano de datos \cite{hu2021energy}. Este concepto no es una novedad, pero el auge de la \gls{ai}/\gls{ml} junto con el creciente rendimiento de los equipos intermedios de la red, abren la posibilidad de no solo la computación en red, sino la posibilidad de realizar predicciones en aplicaciones y casos de uso de carácter háptico generando una \gls{qos} mejorada reduciendo la latencia considerablemente. Hasta la fecha, este tipo de operativas se lleva a cabo con tarjetas de red \textbf{programables} de alto rendimiento, que permiten procesar hasta 10.000 millones de paquetes por segundo \cite{hu2021energy}. Esto nos permite procesar el tráfico a medida que se transmite, lo que reduce el consumo de recursos de computación y energía de los dispositivos finales.\\
+\\
+Según \cite{sapio2017network}, los principales potenciales de la computación en red son (1) una reducción significativa de la latencia y un aumento del rendimiento para determinadas operaciones, lo que resulta especialmente interesante en contextos orientados al rendimiento, y (2) una reducción de la carga de la red. Sin embargo, los casos de uso en los que la computación en red puede explotarse de forma razonable están limitados por una serie de requisitos: (1) Debe lograrse una reducción significativa de la carga de tráfico de red, (2) no deben requerirse cambios significativos a nivel de aplicación. Algunos trabajos pretenden utilizar la computación en red para mejorar la eficiencia de las aplicaciones. A continuación, se indica alguno de ellos.\\
+\\
+P4DNS \cite{woodruff2019p4dns} presenta una solución para reducir la latencia hasta que se obtiene una respuesta DNS. El parser del equipo \gls{p4} inspecciona todos los paquetes entrantes y extrae sus cabeceras hasta la cabecera DNS. Si el paquete es una consulta DNS y la respuesta correspondiente está disponible en la tabla de caché DNS que tiene el switch, el dispositivo de red responde activamente a la consulta, ahorrando todo el proceso de resolución de la consulta DNS. Para ello basta con modificar el paquete en el sentido de que se intercambian las direcciones de origen y destino, y se añade la cabecera de respuesta DNS. Los autores han evaluado su desarrollo preeliminar de la herramienta y demuestran que P4DNS es capaz de reducir drásticamente la latencia de todas las resoluciones DNS.\\
+
+
 \subsubsection{Infraestructuras flexibles y programables }
 
 
