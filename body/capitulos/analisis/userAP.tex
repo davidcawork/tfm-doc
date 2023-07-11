@@ -25,8 +25,7 @@ La topología que se va a desplegar se puede apreciar en la figura \ref{fig:topo
 \end{lstlisting}
 \vspace{0.5cm}
 
-Algún lector podría preguntarse en este punto como va a llevar se a cabo la comuniación entre el controlador \gls{sdn} y el \gls{bofus}. Dicha comuniación se producirá a través de la interfaz de red de \textit{loopback} de la Network namespace por defecto, donde el controlador de ryu estará escuchando en el puerto 6633, con una interfaz virtual de tipo \textit{tun} generada por el \gls{bofus} para llevar a cabo la conexión Openflow.  Para recolectar información sobre la traza de ejecución del script en Mininet-WiFi se debe poner el nivel de log a \textit{debug}.
-
+Algún lector podría preguntarse en este punto como va a llevar se a cabo la comunicación entre el controlador \gls{sdn} y el \gls{bofus}. Dicha comunicación se producirá a través de la interfaz de red de \textit{loopback} de la Network namespace por defecto, donde el controlador de ryu estará escuchando en el puerto 6633, con una interfaz virtual de tipo \textit{tun} generada por el \gls{bofus} para llevar a cabo la conexión Openflow.  Para recolectar información sobre la traza de ejecución del script en Mininet-WiFi se debe poner el nivel de log a \textit{debug}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\textwidth]{archivos/img/analisis/topoBasic.png}
@@ -35,7 +34,7 @@ Algún lector podría preguntarse en este punto como va a llevar se a cabo la co
 \end{figure}
 
 
-A continuación, en el bloque de cógido \ref{code:trazatopobasic}, se puede apreciar la traza de ejecución de la topología basica. Dicha traza se ha limpiado y se han marcado las partes más importantes. Como se indico anteriormente, esta traza es muy enriquecedora dado que nos permitirá a posteriori hacer nuestros propios esecnarios a medida con topologías inlambricas a bajo nivel. A lo largo de la traza, se podrán encontrar comentariso en verde que indican que operativas se están llevando a cabo en que parte. 
+A continuación, en el bloque de código \ref{code:trazatopobasic}, se puede apreciar la traza de ejecución de la topología básica. Dicha traza se ha limpiado y se han marcado las partes más importantes. Como se indicó anteriormente, esta traza es muy enriquecedora dado que nos permitirá a posteriori hacer nuestros propios escenarios a medida con topologías inalámbricas a bajo nivel. A lo largo de la traza, se podrán encontrar comentarios en verde que indican que operativas se están llevando a cabo en que parte.
 
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Traza de la puesta en marcha del escenario básico},label=code:trazatopobasic]
@@ -209,7 +208,7 @@ A continuación, en el bloque de cógido \ref{code:trazatopobasic}, se puede apr
 \end{lstlisting}
 \vspace{0.5cm}
 
-De esta traza se quiere destacar, aparte de la gestion que lleva a cabo con las interfaces inalambricas que se ha ido comentando a lo largo de la traza, es la ejecución de los binarios pertenecientes al software switch \gls{bofus}, \texttt{ofdatapath} y el \texttt{ofprotocol}. A continuación en el bloque \ref{code:bofussLaunch}, se dejan las lineas extraidas del bloque anterior. 
+De esta traza se quiere destacar, aparte de la gestión que lleva a cabo con las interfaces inalámbricas que se ha ido comentando a lo largo de la traza, es la ejecución de los binarios pertenecientes al software switch \gls{bofus}, \texttt{ofdatapath} y el \texttt{ofprotocol}. A continuación en el bloque \ref{code:bofussLaunch}, se dejan las líneas extraídas del bloque anterior.
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Puesta en marcha del BOFUSS},label=code:bofussLaunch]
     # Binario del datapath 
@@ -219,3 +218,5 @@ De esta traza se quiere destacar, aparte de la gestion que lleva a cabo con las 
     ofprotocol unix:/tmp/ap1 tcp:localhost:6633 --fail=closed  --listen=punix:/tmp/ap1.listen 1> /tmp/ap1-ofp.log 2>/tmp/ap1-ofp.log 
 \end{lstlisting}
 \vspace{0.5cm}
+
+Según se ha estudiado en la sección anterior \ref{sec:ana_bofuss} donde se ha estudiado la interfaz CLI del \gls{bofus}, podemos llegar a entender cada parámetro que Mininet-WiFi mediante la clase \texttt{UserAP} ha conseguido traducir del script de la topología básica a la llamada de los dos binarios del software switch.  De las dos llamadas a cada binario, se quiere mencionar que Mininet-WiFi por defecto suele mandar los logs del plano de datos y del agente de control al directorio temporal (\texttt{/tmp/}) de la distribución linux en cuestión, pero no solo los archivos de logs, también se ubican ahí los descriptores de archivos UNIX para intercomunicar \texttt{ofdatapath} y el \texttt{ofprotocol}.
