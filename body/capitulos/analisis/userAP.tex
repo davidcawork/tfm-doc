@@ -212,10 +212,10 @@ A continuación, en el bloque de cógido \ref{code:trazatopobasic}, se puede apr
 De esta traza se quiere destacar, aparte de la gestion que lleva a cabo con las interfaces inalambricas que se ha ido comentando a lo largo de la traza, es la ejecución de los binarios pertenecientes al software switch \gls{bofus}, \texttt{ofdatapath} y el \texttt{ofprotocol}. A continuación en el bloque \ref{code:bofussLaunch}, se dejan las lineas extraidas del bloque anterior. 
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Puesta en marcha del BOFUSS},label=code:bofussLaunch]
-    # Lanzamos el script que pone en marcha el medio inalambrico via Mininet-WiFi
-    sudo python3 topo.py
+    # Binario del datapath 
+    ofdatapath -i ap1-wlan1 punix:/tmp/ap1 -d 100000000001 --no-slicing 1> /tmp/ap1-ofd.log 2> /tmp/ap1-ofd.log 
    
-    # Lanzamos el controlador (en otra terminal)
-    ryu-manager ryu.app.simple_switch_13
+    # Binario del agente de control
+    ofprotocol unix:/tmp/ap1 tcp:localhost:6633 --fail=closed  --listen=punix:/tmp/ap1.listen 1> /tmp/ap1-ofp.log 2>/tmp/ap1-ofp.log 
 \end{lstlisting}
 \vspace{0.5cm}
