@@ -1,2 +1,11 @@
 \section{Análisis funcional de la interfaz del \glsentryshort{bofus}}
 \label{sec:ana_bofuss}
+
+En esta sección, exploraremos en detalle el análisis funcional de la interfaz del \gls{bofus}, centrándonos específicamente en los binarios que componen su arquitectura. Estos binarios, conocidos como ofdatapath y ofprotocol, desempeñan un papel fundamental en la operativa básica de este switch de espacio de usuario.\\
+\\
+El ofdatapath, como su nombre sugiere, es responsable de procesar el plano de datos en el \gls{bofus}. Este componente se encarga de recibir, analizar y tomar decisiones en función de los paquetes que circulan por la red. A través de técnicas como la clasificación, el enrutamiento y la manipulación de paquetes, el ofdatapath garantiza una transferencia de datos fluida y eficiente en el entorno OpenFlow. Por otro lado, el ofprotocol se ocupa del agente de control en el \gls{bofus}. Su función principal consiste en establecer la comunicación entre el controlador y el switch. A través del ofprotocol, el controlador puede enviar instrucciones y recibir información sobre el estado de la red. Esto permite una gestión centralizada y dinámica de las políticas de red, facilitando la adaptación y optimización de la infraestructura según las necesidades del entorno.\\
+
+
+\subsection{Binario \texttt{ofprotocol}}
+
+\subsection{Binario \texttt{ofdatapath}}
