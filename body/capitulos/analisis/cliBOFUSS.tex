@@ -58,7 +58,7 @@ A continuación, se indican algunos de los parámetros más importantes de la in
 El valor del puerto por defecto se puede comprobar fácilmente, a continuación en las figuras \ref{fig:ofdata_1} y \ref{fig:ofdata_2}. Como se puede ver se lanza el binario de forma \textit{standalone} sobre la interfaz de loopback del sistema, y si comprobamos con la herramienta \texttt{lsof} los puertos TCP en esto de escucha en la Network namespace por defecto, se puede ver como el binario está utilizando el puerto 6653. Pero se puede ir un paso más allá, podemos ir al propio código fuente de la herramienta, y ver en que macro definen el puerto por defecto, lo cual se puede comprobar \href{https://github.com/CPqD/ofsoftswitch13/blob/master/include/openflow/openflow.h#LL75C1-L75C27}{aquí}.
 
 %fig 1
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/analisis/ofdata_1.png}
     \caption{Ejecución del binario \texttt{ofdatapath} en modo standalone}
@@ -66,7 +66,7 @@ El valor del puerto por defecto se puede comprobar fácilmente, a continuación 
 \end{figure}
 
 %fig 2
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/analisis/ofdata_2.png}
     \caption{Comprobación del puerto de  escucha del binario \texttt{ofdatapath}}
