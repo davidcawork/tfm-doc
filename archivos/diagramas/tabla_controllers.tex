@@ -1,0 +1,26 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[ht!]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|
+                >{\columncolor[HTML]{F8A102}}c |
+                >{\columncolor[HTML]{34FF34}}c |}
+            \hline
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Característica}} & \cellcolor[HTML]{EFEFEF}\textbf{Controlador ONOS}                           & \cellcolor[HTML]{EFEFEF}\textbf{Controlador Ryu}                                 \\ \hline
+            Solidez                                                               & \cellcolor[HTML]{34FF34}Más solido dado que tienen una comunidad más grande & \cellcolor[HTML]{F8A102}{\color[HTML]{333333} Sistema de test bastante pobre}    \\ \hline
+            Popularidad                                                           & \cellcolor[HTML]{34FF34}Ampliamente utilizado por los operadores de red     & \cellcolor[HTML]{F8A102}Utilizado por la academia para hacer pruebas de concepto \\ \hline
+            Rendimiento                                                           & \cellcolor[HTML]{34FF34}Alto rendimineto                                    & \cellcolor[HTML]{F8A102}Es un script de Python, lenguaje interpretado            \\ \hline
+            Depuración                                                            & Al ser tan grande es dificil depurarlo                                      & Es un script de Python, es facil de depurar                                      \\ \hline
+            Facilidad para añadir código                                          & Añadir código al core es muy complicado                                     & Añadir código es muy sencillo, solo hay que añadir las fuciones nuevas           \\ \hline
+            Tamaño                                                                & Es muy grande                                                               & Relativamente ligero                                                             \\ \hline
+            Despliegue e Instalación                                              & Al ser tan grande, tarda mucho                                              & Rápido                                                                           \\ \hline
+            Curva de aprendizaje                                                  & Muy lenta                                                                   & Muy rápida                                                                       \\ \hline
+            Interfaz de usuario                                                   & \cellcolor[HTML]{34FF34}Refinada y cercana al usuario                       & \cellcolor[HTML]{F8A102}Bastante pobre                                           \\ \hline
+        \end{tabular}%
+    }
+    \caption{Comparativa del controlador \glsentryshort{onos}  con el controlador Ryu}
+    \label{tab:controllers}
+\end{table}
