@@ -1,0 +1,41 @@
+\begin{algorithm}[ht!]
+    \SetAlgoLined
+    %\KwResult{Write here the result }
+    % initialization\;
+    send \textit{Hello}\;
+    \While{frame received}{
+        %instructions\;
+        \uIf{Hello}{
+            \eIf{MAC not in Hello table}{
+                assign unique \textit{suffix}\;
+                save tuple \{\textit{MAC,suffix}\}\;
+                \If{root node}{
+                    create \textit{SetHLMAC} with HLMAC=1\;
+                    \For{each tuple in Hello table}{
+                        add tuple to \textit{SetHLMAC}\;
+                    }
+                    broadcast \textit{SetHLMAC}\;
+                }
+            }{
+                discard\;
+            }
+        }
+        \uElseIf{SetHLMAC}{
+            \eIf{HLMAC (or prefix) not in HLMAC table}{
+                save HLMAC in \textit{HLMAC table}\;
+                create \textit{SetHLMAC} with received HLMAC\;
+                \For{each tuple in Hello table}{
+                    add tuple to \textit{SetHLMAC}\;
+                }
+                broadcast \textit{SetHLMAC}\;
+            }{
+                discard\;
+            }
+        }
+        \Else{
+            discard\;
+        }
+    }
+    \caption{Assignment of HLMACs in IoTorii}
+    \label{iotorii-alg}
+\end{algorithm}
