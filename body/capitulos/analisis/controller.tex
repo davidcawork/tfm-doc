@@ -1,0 +1,21 @@
+\section{Agente de control \glsentryshort{sdn}}
+\label{sec:ana_controller}
+
+En este punto se tiene que valorar qué agente de control \gls{sdn}, es decir controlador \gls{sdn} se va a utilizar. Se tendrán en cuenta las condiciones del entorno sobre el cual se va a desplegar, así como las características propias de cada controlador, así como la facilidad y flexibilidad que nos entregue cada uno para desplegarlo sobre la plataforma emulada. Las opciones que se han considerado para este cometido son las siguientes:
+
+\begin{itemize}
+    \item Ryu, explicado anteriormente en la sección \ref{subsec:ryu} del estado del arte.
+
+    \item \gls{onos}, explicado anteriormente en la sección \ref{subsec:ONOS} del estado del arte.
+\end{itemize}
+
+Según se ha explicado ya, cada herramienta tiene sus puntos fuertes y sus puntos debiles, por lo que vamos a realizar una comparativa para nuestro caso de uso para ver cual de las dos nos interasa mś utilizar para este proyecto.
+
+\begin{itemize}
+    \item El controlador ONOS es más potente que Ryu, es utilizado generalmente por los operadores de red, y es conocido por su rendimiento y su solided.
+    \item El controlador ONOS tiene un rendimiento superior a Ryu en terminos de procesamiento de paquetes.
+    \item El controlador Ryu sin embargo, pesa menos, y es más sencillo de depurarle y meter nuevas funcionalidades si es necesario.
+    \item El controlador Ryu al pesar menos, tambien se despliega y se instala más rapido frente al controlador de ONOS.
+    \item Al ser más Ryu más pequeño, la curva de aprendizaje de ryu frente a ONOS también es menor.
+    \item Una cosa que sería una ventaja es que ONOS tiene descubrimiento topologico con una interfaz web bastante fancy que nos ayudaría a depurar el código desarrollado del protocolo, sin embargo, esta aplicación de descubrimiento topologico corre haciendo uso del protocolo \gls{lldp}, el cual no decubriría la configuración de los enlaces inalambricos, solo a los nodos, por lo que no seria de utilidad. Si bien es cierto que hay algunas publicaciones que si han contemplado esta necesidad, sería inviable poner a implementar dicho protocolo en el proyecto dado que se escaparía de los objetivos temporales y de alcance del proyecto.
+\end{itemize}
