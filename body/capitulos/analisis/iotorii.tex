@@ -7,8 +7,14 @@ El protocolo IoTorii ofrece una serie de ventajas significativas para el control
 \\
 En este contexto, se ha tomado la decisión de hacer uso de los caminos generados por el protocolo IoTorii, donde cada nodo de la red posee rutas distintas para alcanzar el nodo raíz de la topología. En el caso de este proyecto, el nodo raíz se designará como el controlador (o el nodo que brinda acceso al controlador). Por lo tanto, la innovación radica en la implementación de IoTorii en un entorno de redes definidas por software (SDN).La integración de IoTorii con el entorno SDN permitirá aprovechar las capacidades y ventajas de ambos enfoques. La combinación de la eficiencia y escalabilidad jerárquica de IoTorii con la flexibilidad y el control centralizado de SDN ofrece un enfoque prometedor para el desarrollo y la gestión de redes \gls{iot}. Este enfoque innovador proporcionará una base sólida para llevar a cabo el proyecto y permitirá explorar nuevas posibilidades y mejoras en el ámbito del control in-band para entornos de \gls{iot}.
 
-\subsection{Operativa del protocolo IoTorii}
+\subsection{Protocolo IoTorii}
 
+El protocolo IoTorii fue diseñado para trabajar en redes de baja capacidad en entornos \gls{iot}, tratando de solventar carencias de otros protocolos del mismo ámbito como \gls{rpl}, basándose en dos principios: (1) Intercambiar menos mensajes y reducir el tamaño de las tablas de rutas, y (2) Ofrecer resiliencia a través de caminos de \textit{back-up}, con una exploración inicial relativamente rápida. Dichos principios básicos tratan de impactar sobre el consumo y la robustez de las redes de baja capacidad, factores clave en este tipo de redes.
+
+
+\subsubsection{Operativa del protocolo IoTorii}
+
+El objetivo de IoTorii es dar cada nodo de la red por lo menos una etiqueta jerartica, en adelante \gls{hlm},
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/analisis/iotorii-operation.pdf}
@@ -26,4 +32,4 @@ En este contexto, se ha tomado la decisión de hacer uso de los caminos generado
 \end{sidewaysfigure}
 
 
-\subsection{Configuración del protocolo IoTorii}
+\subsubsection{Configuración del protocolo IoTorii}
