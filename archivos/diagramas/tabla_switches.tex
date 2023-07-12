@@ -1,0 +1,30 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[]
+    \centering
+    \caption{}
+    \label{tab:my-table}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|
+                >{\columncolor[HTML]{34FF34}}c |
+                >{\columncolor[HTML]{F8A102}}c |}
+            \hline
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}\textbf{Característica}} & \cellcolor[HTML]{EFEFEF}\textbf{Software Switch OvS} & \cellcolor[HTML]{EFEFEF}\textbf{Software Switch BOFUSS}        \\ \hline
+            Solidez                                                               & Más solido dado que tienen una comunidad más grande  & {\color[HTML]{333333} Sistema de test inexistente}             \\ \hline
+            Popularidad                                                           & Ampliamente utilizado en entornos de virtualización  & Utilizado por la academia para hacer pruebas de concepto       \\ \hline
+            Rendimiento                                                           & Alto rendimineto                                     & Pobre, corre en espacio de usuario                             \\ \hline
+            Depuración                                                            & \cellcolor[HTML]{F8A102}Difícil, corre en el Kernel  & \cellcolor[HTML]{34FF34}Asequible, corre en espacio de usuario \\ \hline
+            Facilidad para añadir código                                          & \cellcolor[HTML]{F8A102}Difícil, corre en el Kernel  & \cellcolor[HTML]{34FF34}Relativamente sencillo                 \\ \hline
+            Versatilidad                                                          & Versátil, puede trabajar en standalone               & Requiere de un agente de control                               \\ \hline
+            Curva de aprendizaje                                                  & \cellcolor[HTML]{F8A102}Muy lenta                    & \cellcolor[HTML]{34FF34}Muy rápida                             \\ \hline
+        \end{tabular}%
+    }
+    \caption{Comparativa del \glsebtryshort{ovs} con el  \glsebtryshort{bofus}}
+    \label{tab:switches}
+\end{table}

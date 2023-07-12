@@ -1,6 +1,24 @@
 \section{Agente \glsentryshort{sdn}}
 \label{sec:ana_switch}
 
-why bofuss ? i mean, we have already an implementation of inband on it
+En este punto se tiene que valorar qué \textit{software switch} \gls{sdn} se va a utilizar. Se tendrán en cuenta las condiciones del entorno sobre el cual se van a desplegar los nodos \gls{sdn}, así como las características propias de cada switch, así como la facilidad y flexibilidad que nos entregue cada uno para desplegarlo sobre la plataforma emulada. Las opciones que se han considerado para este cometido son las siguientes:
 
-\dots
+\begin{itemize}
+    \item \gls{ovs}, explicado anteriormente en la sección \ref{subsec:OVS} del estado del arte.
+
+    \item \gls{bofus}, explicado anteriormente en la sección \ref{subsec:BOFUSS} del estado del arte.
+\end{itemize}
+
+Dado que cada herramienta tiene sus propias fortalezas y debilidades, es importante realizar una comparativa para determinar cuál de las dos opciones es más adecuada para nuestro caso de uso específico.
+
+\begin{itemize}
+    \item El \gls{ovs} tiene mucho más rendimiento que el \gls{bofus} dado que la mitad de su switch trabaja en espacio de Kernel, mientras que el \gls{bofus} como su nombre indica, trabaja en espacio de usuario.
+    \item El \gls{ovs} es mucho más sólido, y por ende popular, dado que tiene una gran comunidad de desarrolladores que someten al software switch a una amplia variedad de test. Mientras que el \gls{bofus} no tiene un sistema de test, y hasta la fecha únicamente contaba con un mainteiner.
+    \item El \gls{ovs} puede trabajar en modo standalone, o en modo software switch \gls{sdn}, mientras que el \gls{bofus} requiere de un agente de control que le rellene las tablas de flujo OpenFlow.
+    \item El \gls{ovs} al trabajar en modo standalone se puede encontrar en la mayoría de entornos virtualizados, como infraestructura de red para interconectar instancias virtuales.
+    \item Sin embargo, el \gls{ovs} al igual que tiene puntos a favor por trabajar a nivel de Kernel, también supone puntos negativos, como por ejemplo la complejidad que tiene para depurarlo y añadir nuevas funcionalidades en él. Mientras tanto, el \gls{bofus} al trabajar en espacio de usuario, permite una sencilla  depuración por ejemplo GDB, y es relativamente accesible añadirle nuevas funcionalidades.
+\end{itemize}
+
+\input{archivos/diagramas/tabla_switches.tex}
+
+Después de analizar las fortalezas y debilidades de cada opción, ver tabla \ref{tab:switches}, hemos llegado a una decisión sobre qué controlador utilizar en nuestro proyecto. Tanto \gls{onos} como Ryu tienen características distintivas que deben ser consideradas en nuestro caso de uso. Pero finalmente se ha elegido Ryu como controlador \gls{sdn}, dado que para nuestro proyecto es la opción más adecuada.
