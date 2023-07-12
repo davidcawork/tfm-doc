@@ -9,13 +9,13 @@ En este punto se tiene que valorar qué agente de control \gls{sdn}, es decir co
     \item \gls{onos}, explicado anteriormente en la sección \ref{subsec:ONOS} del estado del arte.
 \end{itemize}
 
-Según se ha explicado ya, cada herramienta tiene sus puntos fuertes y sus puntos debiles, por lo que vamos a realizar una comparativa para nuestro caso de uso para ver cual de las dos nos interasa mś utilizar para este proyecto.
+Como se ha mencionado previamente, cada herramienta presenta sus fortalezas y debilidades. Por lo tanto, llevar a cabo una comparativa es pertinente para nuestro caso de uso, a fin de determinar cuál de las dos opciones resulta más conveniente para este proyecto.
 
 \begin{itemize}
-    \item El controlador ONOS es más potente que Ryu, es utilizado generalmente por los operadores de red, y es conocido por su rendimiento y su solided.
-    \item El controlador ONOS tiene un rendimiento superior a Ryu en terminos de procesamiento de paquetes.
-    \item El controlador Ryu sin embargo, pesa menos, y es más sencillo de depurarle y meter nuevas funcionalidades si es necesario.
-    \item El controlador Ryu al pesar menos, tambien se despliega y se instala más rapido frente al controlador de ONOS.
-    \item Al ser más Ryu más pequeño, la curva de aprendizaje de ryu frente a ONOS también es menor.
-    \item Una cosa que sería una ventaja es que ONOS tiene descubrimiento topologico con una interfaz web bastante fancy que nos ayudaría a depurar el código desarrollado del protocolo, sin embargo, esta aplicación de descubrimiento topologico corre haciendo uso del protocolo \gls{lldp}, el cual no decubriría la configuración de los enlaces inalambricos, solo a los nodos, por lo que no seria de utilidad. Si bien es cierto que hay algunas publicaciones que si han contemplado esta necesidad, sería inviable poner a implementar dicho protocolo en el proyecto dado que se escaparía de los objetivos temporales y de alcance del proyecto.
+    \item El controlador ONOS exhibe una mayor potencia en comparación con Ryu, siendo ampliamente utilizado por los operadores de red debido a su destacado rendimiento y solidez.
+    \item El controlador ONOS supera a Ryu en términos de procesamiento de paquetes, evidenciando un rendimiento superior en este aspecto.
+    \item Por otro lado, el controlador Ryu presenta una menor carga y es más sencillo de depurar y ampliar con nuevas funcionalidades, en caso de ser necesario.
+    \item Asimismo, debido a su menor tamaño, el controlador Ryu se despliega e instala de manera más rápida en comparación con el controlador ONOS.
+    \item La curva de aprendizaje de Ryu es también más breve en comparación con ONOS, dado su tamaño reducido.
+    \item Aunque una ventaja potencial de ONOS es su aplicación de descubrimiento topológico, que cuenta con una interfaz web sofisticada, esta aplicación utiliza el protocolo \gls{lldp} para el descubrimiento. Sin embargo, dicho protocolo no permite descubrir la configuración de enlaces inalámbricos, sino solo la de los nodos, lo cual lo hace inútil en este contexto. Aunque existen algunas publicaciones que abordan esta necesidad, resultaría inviable implementar dicho protocolo en el proyecto, ya que excedería los objetivos temporales y el alcance establecidos.
 \end{itemize}
