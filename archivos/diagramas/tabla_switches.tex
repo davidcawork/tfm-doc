@@ -6,10 +6,8 @@
 % \usepackage{graphicx}
 % \usepackage[table,xcdraw]{xcolor}
 % If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-\begin{table}[]
+\begin{table}[ht!]
     \centering
-    \caption{}
-    \label{tab:my-table}
     \resizebox{\textwidth}{!}{%
         \begin{tabular}{|l|
                 >{\columncolor[HTML]{34FF34}}c |
@@ -25,6 +23,6 @@
             Curva de aprendizaje                                                  & \cellcolor[HTML]{F8A102}Muy lenta                    & \cellcolor[HTML]{34FF34}Muy rápida                             \\ \hline
         \end{tabular}%
     }
-    \caption{Comparativa del \glsebtryshort{ovs} con el  \glsebtryshort{bofus}}
+    \caption{Comparativa del \glsentryshort{ovs} con el  \glsentryshort{bofus}}
     \label{tab:switches}
 \end{table}
