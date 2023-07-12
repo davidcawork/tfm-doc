@@ -14,8 +14,11 @@ Como se ha mencionado previamente, cada herramienta presenta sus fortalezas y de
 \begin{itemize}
     \item El controlador ONOS exhibe una mayor potencia en comparación con Ryu, siendo ampliamente utilizado por los operadores de red debido a su destacado rendimiento y solidez.
     \item El controlador ONOS supera a Ryu en términos de procesamiento de paquetes, evidenciando un rendimiento superior en este aspecto.
-    \item Por otro lado, el controlador Ryu presenta una menor carga y es más sencillo de depurar y ampliar con nuevas funcionalidades, en caso de ser necesario.
+    \item Por otro lado, el controlador Ryu presenta una menor carga y es más sencillo de depurar y ampliar con nuevas funcionalidades en caso de ser necesario.
     \item Asimismo, debido a su menor tamaño, el controlador Ryu se despliega e instala de manera más rápida en comparación con el controlador ONOS.
-    \item La curva de aprendizaje de Ryu es también más breve en comparación con ONOS, dado su tamaño reducido.
-    \item Aunque una ventaja potencial de ONOS es su aplicación de descubrimiento topológico, que cuenta con una interfaz web sofisticada, esta aplicación utiliza el protocolo \gls{lldp} para el descubrimiento. Sin embargo, dicho protocolo no permite descubrir la configuración de enlaces inalámbricos, sino solo la de los nodos, lo cual lo hace inútil en este contexto. Aunque existen algunas publicaciones que abordan esta necesidad, resultaría inviable implementar dicho protocolo en el proyecto, ya que excedería los objetivos temporales y el alcance establecidos.
+    \item La curva de aprendizaje de Ryu es también más pequeña en comparación con ONOS, dado su tamaño reducido.
+    \item Aunque una ventaja potencial de ONOS es su aplicación de descubrimiento topológico, que cuenta con una interfaz web bastante \textit{fancy}, esta aplicación utiliza el protocolo \gls{lldp} para el descubrimiento. Sin embargo, dicho protocolo no permite descubrir la configuración de enlaces inalámbricos, sino solo los nodos, lo cual lo hace inútil en este contexto. Aunque existen algunas publicaciones \cite{martinez2021ehddp} que abordan esta necesidad, resultaría inviable implementar dicho protocolo en el proyecto, ya que excedería los objetivos temporales y de alcance establecidos.
 \end{itemize}
+
+
+\input{archivos/diagramas/tabla_controllers.tex}
