@@ -14,7 +14,12 @@ El protocolo IoTorii fue diseñado para trabajar en redes de baja capacidad en e
 
 \subsubsection{Operativa del protocolo IoTorii}
 
-El objetivo de IoTorii es dar cada nodo de la red por lo menos una etiqueta jerartica, en adelante \gls{hlm},
+El objetivo de IoTorii es dar cada nodo de la red por lo menos una etiqueta jerartica, en adelante \gls{hlm}, para establecer una jereararquía en la topología. Otra forma de verlo puede ser ver la jerarquía como un arbol que se va ramificando, y está enraizado en el nodo que actua como \textit{root}. Las \gls{hlm} tratan de proveer de más significado a las MACs convencionales. IoTorii está basado en el protocolo GA3 \cite{rojas2017ga3}, el cual trataba de buscar el mismo etiquetado jerarquico pero en redes cableadas de Data Centers. El principio de estas etiquetas está basado en una revisión del estandar \texttt{ieee802} que se hizo para dar cabida al uso de direcciones MAC mejoradas para el reenvio de paquetes en red.\\
+\\
+El proceso de la difusión de dichas etiquetas se pueder ver en la figura \ref{fig:iotorii-operation}. El primer paso es establecer en la topología quien va actuar como nodo \textit{root}, este caso según se puede apreciar es el nodo \texttt{A}. Este nodo será  el encargado de iniciar todo el proceso de asignación de etiquetas en la topología. La asignación de etiquetas empezará desde el \textit{root} haciendo uso de un mensaje de tipo \textit{SetHLMAC}, el cual consiste en mandar la \gls{hlm} del remitente más un sufijo asociado al vecino (destinatario). Pero, ¿A qué consideramos vecino? La condición de vecino se da cuando dos nodos se encunetran en rango de cobertura, y se han notificado entre ellos de su presencia mediante un mensaje de tipo \textit{Hello}. Dicho mensaje es una trama vacia donde solo anuncian su dirección MAC real. Un simil en la vida real podría verse como cuando una nueva familia llega al vecindario y va casa por casa presentandose, ``¡Hola somos nuevos aquí {\DejaSans 😃}!, acabamos de llegar al vecindario, nos hemos mudado a la casa de enfrente ''\\
+\\
+
+
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/analisis/iotorii-operation.pdf}
