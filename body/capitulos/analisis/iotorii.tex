@@ -27,9 +27,20 @@ Un símil en la vida real podría verse como cuando una nueva familia llega al v
     \label{fig:iotorii-operation}
 \end{figure}
 
+Por tanto, según se ha explicado, habrá dos tipos de mensajes en este protocolo los mensajes de tipo \textit{Hello} y de tipo, \textit{SetHLMAC}. Este último, recordemos que asigna una nueva \gls{hlm}, la cual se compone de la \gls{hlm} del remitente más un sufijo único que se asocia al vecino en cuestión. Por ejemplo en la figura \ref{fig:iotorii-operation}, el nodo \texttt{A} asigna a sus vecinos los sufijos $\texttt{1,2,3,4,5}$, por lo que las  \gls{hlm} que mandará respectivamente serán las siguientes, $\texttt{[1.1],[1.2],[1.3],[1.4],[1.5]}$. Dichos sufijos únicos por vecino se van asignando según se reciben mensajes de tipo \textit{Hello}, por lo que, se va construyendo una asociación de MAC real con sufijo único.\\
+\\
+Los mensajes de tipo \textit{Hello} se tienen que transmitir de forma periódica para que todo el mundo tenga actualizado su lista de vecinos, ya que en este caso no se tiene una red cableada donde las relaciones entre los nodos son constantes, sino, nodos en un escenario inalámbrico, por lo que movilidad es inherente. Por ello, de forma periódica se tiene que reafirmar que sigues siendo vecino de tus nodos adyacentes. Volviendo al símil de la vida real, podría verse como que el vecindario en vez de ser casas al uso, son caravanas, las cuales tienen la capacidad de aparcar donde quieran del vecindario, por lo que de vez en cuando tienes que presentarte de nuevo porque puede que los vecinos que tengas no sean los mismos.\\
+\\
+Cuando un nodo recibe un mensaje de tipo \textit{SetHLMAC}, lo almacenan en su  tabla de posibles rutas al nodo raíz, y lo reenvían a todos sus posibles vecinos poniendo sus respectivos sufijos únicos. Este proceso se lleva a cabo de forma iterativa hasta que se han difundido todas las posibles \gls{hlm} o hasta que se haya llegado al número máximo de \gls{hlm} por nodos (parámetro configurable del protocolo). Por ejemplo, si nos fijamos de nuevo en la figura \ref{fig:iotorii-operation}, podemos ver como siguiendo con este proceso el nodo \texttt{B} recibe del nodo root la \gls{hlm} $\texttt{[1.5]}$, por lo que, una vez almacenada la etiqueta la difundirá a todos sus posibles vecinos. El nodo \texttt{B} generará las etiquetas $\texttt{[1.5.8],[1.5.1],[1.5.3]}$, y las mandará a sus nodos vecinos. La etiqueta $\texttt{[1.5.8]}$ le llegará al nodo \texttt{C} desde el nodo \texttt{B}, pero también le llegará la etiqueta $\texttt{[1.3.2.8]}$ a través del nodo \texttt{B} (como se puede ver el sufijo es el mismo en ambos casos), las guardará y las dinfundirá a todos sus vecinos. Para prevenir bucles solo hay que inspeccionar si la \gls{hlm} que te llega es hija de algunas que tienes guardadas en tu tabla de rutas. Por ejemplo, el nodo \texttt{B} descartará todas \gls{hlm} que le lleguen siguiendo el formato $\texttt{[1.5.X.Y]}$ o $\texttt{[1.3.2.X.Y]}$. Todo este proceso de difusión de etiquetas \gls{hlm} se encuentra descrito en el bloque de algoritmo \ref{iotorii-alg}.\\
+\\
+Una vez convergida la difusión de etiquetas \gls{hlm}, se tendrá construido un árbol enraizado en el nodo establecido como \textit{root}, y cada hoja del árbol tendrá una o más rutas para alcanzar al \textit{root}.
 
+\newpage
 
 \input{archivos/diagramas/iotorii_alg}
+
+
+\subsubsection{Configuración del protocolo IoTorii}
 
 \begin{sidewaysfigure}
     \centering
@@ -37,6 +48,3 @@ Un símil en la vida real podría verse como cuando una nueva familia llega al v
     \caption{Mensajes de control en IoTorii \cite{rojas2021outperforming}}
     \label{fig:frameformat-setHLMAC}
 \end{sidewaysfigure}
-
-
-\subsubsection{Configuración del protocolo IoTorii}
