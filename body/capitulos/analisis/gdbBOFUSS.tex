@@ -13,9 +13,11 @@ En esta sección, exploraremos el proceso de depuración del \gls{bofus} utiliza
 
 Por tanto, vamos a resumir que estrategia vamos a seguir para depurar al switch. Según se puede apreciar en la figura \ref{fig:debugBOFUSS}, los pasos que se van a seguir para conseguir depurar al \gls{bofus} son los siguientes. Como se ha indicado, se va a utilizar la misma topología descrita en la sección \ref{sec:ana_userap}, de las cual se va a obtener la traza de ejecución de la misma. Una vez que se tiene la traza de ejecución de la misma, se desarrrollan dos shell script para levantar el escenario y otro para destruirlo. La idea destras de esto, es que podamos externalizar el proceso de levantar la topología. Si los scripts son capaces de replicar el funcionamiento de Mininet-WiFi, pasaremos a la siguiente fase, donde se configura el depurador de C que se prefiera, en nuestro caso trabajaremos con GDB. Una vez configurado en VS Code, lanzaremos la el escenario con los scripts previamente programados, y se depurará el funcionamiento del software switch.
 
+\newpage
+
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{archivos/img/analisis/debugBOFUSS.drawio.pdf}
+    \includegraphics[width=0.9\textwidth]{archivos/img/analisis/debugBOFUSS.drawio.pdf}
     \caption{Proceso de debug al \glsentryshort{bofus}}
     \label{fig:debugBOFUSS}
 \end{figure}
@@ -36,6 +38,8 @@ La simplicidad del script de limpieza es una de sus principales fortalezas. Aunq
 Durante las pruebas realizadas, en una de ellas, se han ejecutado manualmente los comandos para levantar de forma individual la interfaz wireless para el punto de acceso AP1. En este proceso, se ha observado que el script de limpieza elimina correctamente todas las configuraciones previamente establecidas con nuestro shell script. ¿Cuál es el secreto detrás de esta efectividad?\\
 \\
 Aquí es donde debemos reconocer el trabajo de Ramon Fontes y su contribución en el desarrollo de Mininet-WiFi. Al examinar el contenido\footnote{\href{https://github.com/intrig-unicamp/mininet-wifi/blob/master/mn_wifi/clean.py\#L77}{mininet-wifi/blob/master/mn\_wifi/clean.py-L77}} de la ruta \texttt{/sys/kernel/debug/ieee80211}, se puede encontrar una lista de todas las interfaces inalámbricas emuladas cargadas en el sistema. Es gracias a esta información que el script de limpieza puede identificar y eliminar de manera precisa todas las configuraciones relacionadas con las interfaces wireless, garantizando una limpieza completa. Como se puede ver en la figura \ref{fig:debugBOFUSS_1}, cuando se lanza el escenario topo.py, al listar las interfaces de la misma forma que lo hace Mininet-WiFi somos capaces de listar todas las interfaces inalámbricas emuladas del sistema, tanto las lanzadas desde Mininet-WiFi como las añadidas a mano haciendo uso de un shell script en paralelo.
+
+\newpage
 
 % fig
 \begin{figure}[ht!]
@@ -133,7 +137,7 @@ Es necesario que para trabajar con la herramienta, \texttt{hwsim\_mgmt}, que el 
 
 \subsubsection{Troubleshooting}
 
-Uno de los problemas más comunes que pueden surgir durante el desarrollo del escenario inalámbrico emulado, es que en algunas ocasiones, nos podemos encontrar con que la interfaz inalámbrica se bloquea y nos muestra un mensaje de advertencia indicando lo siguiente:\\
+Uno de los problemas más comunes que pueden surgir durante el desarrollo del escenario inalámbrico emulado, es que en algunas ocasiones, nos podemos encontrar con que la interfaz inalámbrica se bloquea y nos muestra un mensaje de advertencia indicando lo siguiente:
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Bloqueo de la interfaz por RF-Kill},label=code:rfkills1]
     ~$  Operation not possible due to RF-kill

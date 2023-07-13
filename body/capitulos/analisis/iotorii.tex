@@ -42,9 +42,19 @@ Una vez convergida la difusión de etiquetas \gls{hlm}, se tendrá construido un
 
 \subsubsection{Configuración del protocolo IoTorii}
 
-\begin{sidewaysfigure}
+La difusión de las \gls{hlm}s puede ser configurada para ajustarse mejor sobre la red que se vaya a trabajar. Se han dejado tres parámetros de diseño.
+
+\begin{itemize}
+    \item Longitud de \gls{hlm}, establece como de larga podrá ser una etiqueta \gls{hlm}. Este parámetro nos indica a cuantos saltos estaremos desde una hoja del árbol, al nodo raíz.
+    \item Número de bits para sufijos únicos, es decir, que amplitud de \gls{hlm} vamos a tener. Esto definirá cuantos vecinos recibirán etiquetas desde un nodo dado. Por ejemplo, si tenemos 2 bits, podremos dar cabida hasta 4 vecinos.
+    \item Número de \gls{hlm}, indica el número de rutas máximo que cada nodo guardará en su tabla de rutas al \textit{root}.
+\end{itemize}
+
+Todos los parámetros anteriormente mencionados afectarán también sobre el tamaño de la trama generada de tipo \textit{SetHLMAC}, la cual se puede apreciar en la figura \ref{fig:frameformat-setHLMAC} Otro parámetro configurable es la periodicidad de los mensajes de tipo \textit{Hello}, los cuales son fundamentales para gestionar la movilidad de los nodos en la red.
+
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/analisis/Comparation_frame_iotorii.eps}
     \caption{Mensajes de control en IoTorii \cite{rojas2021outperforming}}
     \label{fig:frameformat-setHLMAC}
-\end{sidewaysfigure}
+\end{figure}
