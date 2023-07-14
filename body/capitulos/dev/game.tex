@@ -1,2 +1,25 @@
 \section{Entorno de desarrollo y validación}
 \label{sec:scenarioDEV}
+
+En esta sección se quiere resumir que entorno de trabajo se va a tener, después del minucioso análisis realizado en el capítulo anterior. La primera decisión de diseño ha sido utilizar el entorno de emulación Mininet-Wifi para el desarrollo y validación. Recordemos que esta decisión radica en la sobrecarga de trabajo que se tendría por tener que implementar un controlador \gls{sdn} si se quisiera simular en Cooja.\\
+\\
+En cuanto al software switch, se ha optado por utilizar \gls{bofus} en lugar de \gls{ovs}. El motivo principal es que \gls{bofus} trabaja en espacio de usuario, mientras que \gls{ovs} trabaja en espacio de Kernel. Aunque \gls{ovs} tiene un rendimiento superior gracias a que parte de su switch opera en espacio de Kernel, \gls{bofus} es más accesible para depuración y permite añadir nuevas funcionalidades de manera más sencilla. Además, \gls{ovs} cuenta con una comunidad de desarrolladores más amplia y una gran cantidad de pruebas, lo que lo hace más sólido y popular. Sin embargo, \gls{bofus}, aunque cuenta únicamente con un \textit{manteiner} y carece de un sistema de pruebas establecido, se considera la opción más adecuada para este proyecto debido a su implementación preliminar de in-band, la cual es requerida en nuestro caso de uso específico.\\
+\\
+En cuanto al controlador, se ha evaluado la opción de utilizar \gls{onos} en comparación con Ryu. \gls{onos} destaca por su potencia y rendimiento, y es ampliamente utilizado por los operadores de red. Sin embargo, Ryu presenta una menor carga y es más fácil de depurar y ampliar con nuevas funcionalidades si es necesario. Ryu también se despliega e instala más rápidamente debido a su menor tamaño y tiene una curva de aprendizaje más pequeña en comparación con \gls{onos}. Aunque \gls{onos} cuenta con una aplicación de descubrimiento topológico con una interfaz web llamativa, esta aplicación utiliza el protocolo \gls{lldp}, que no permite descubrir la configuración de enlaces inalámbricos, lo cual es fundamental para nuestro proyecto. Implementar un nuevo protocolo de descubrimiento excedería los objetivos temporales y de alcance establecidos.\\
+\\
+En resumen, ver Tabla \ref{tab:resuDEVAL}, se ha elegido utilizar Mininet-Wifi para la emulación de redes inalámbricas, \gls{bofus} como el software switch SDN debido a su implementación preliminar de in-band, y el controlador Ryu debido a su menor carga, facilidad de depuración y ampliación, y una curva de aprendizaje más pequeña.
+
+
+\begin{table}[ht!]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \rowcolor[HTML]{EFEFEF}
+            \textbf{Paradigma} & \textbf{Plataforma}            & \textbf{Agente SDN} & \textbf{Agente de control SDN} \\ \hline
+            Emulación          & Mininet-WiFi (mac80211\_hwsim) & BOFUSS              & Ryu                            \\ \hline
+        \end{tabular}
+    }
+    \caption{Resumen del entorno de desarrollo y validación}
+    \label{tab:resuDEVAL}
+\end{table}
