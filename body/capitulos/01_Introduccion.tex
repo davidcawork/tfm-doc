@@ -11,16 +11,16 @@
 %En este capítulo de introducción se quiere exponer de manera breve los conceptos más importantes del \gls{tfg}, como son el \gls{sdn} y la tecnología \gls{iot}. Se discutirán las ventajas que tiene cada una de ellas, y qué valor añadido genera la integración de ambas. Más adelante, se indicarán las tecnologías con las cuales se podrá definir el denominado \textit{datapath} de los dispositivos \gls{iot}, para alcanzar la integración de estos en un entorno \gls{sdn}.\\
 \par
 %Con todo ello, se marcarán unos objetivos de este trabajo y cómo se quieren llevar a cabo. Dichos objetivos servirán para prefijar con que tecnologías es más viable la definición del plano de datos de los dispositivos \gls{iot}. Por último, se expondrá como es la estructura general de este trabajo, explicando brevemente de que tratará cada capítulo.
-En este primer capítulo, se desea presentar de manera concisa los aspectos más relevantes del \gls{tfm}, como son, las redes de dispositivos \gls{iot}, la llegada de los entornos \gls{6g}, y la tecnología habilitadora en dichos entornos, el \gls{sdn}. Se explorarán las necesidades actuales de las redes de sensores \gls{iot}, se indagará la postulada nueva generación de redes moviles, \gls{6g}, y se verá donde entrará las redes \gls{sdn}, y qué mejoras deberán hacerse para hacer frente a las necesidades imperantes de las próximas redes de sensores.\\
+En este primer capítulo, se desea presentar de manera concisa los aspectos más relevantes del \gls{tfm}, como son, las redes de dispositivos \gls{iot}, la llegada de la \gls{6g}, y la tecnología habilitadora en dichos entornos, el \gls{sdn}. Se explorarán las necesidades actuales de las redes de sensores \gls{iot}, se indagará la postulada nueva generación de redes moviles, \gls{6g}, y se verá donde entrará las redes \gls{sdn}, y qué mejoras deberán hacerse para hacer frente a las necesidades imperantes de las próximas redes de sensores.\\
 \\
-Se establecerán objetivos claros para el \gls{tfm} y se describirá detalladamente cómo se planea llevarlos a cabo cada uno de ellos. Estos objetivos ayudarán a al diseño y desarrollo de un nuevo protocolo de comunicación de control escalable para redes de sensores en un ambito de red \gls{sdn}. De forma adicional, se presentará la estructura general del \gls{tfm}, describiendo de manera breve los temas que se abordarán en cada capítulo. Por último, se indicarán las contribuciones realizadas en revistas cientificas de alto impacto de este proyecto.
+De igual manera, se establecerán objetivos claros para el \gls{tfm} y se describirá detalladamente cómo se planea llevarlos a cabo cada uno de ellos. Estos objetivos ayudarán a al diseño y desarrollo de un nuevo protocolo de comunicación de control escalable para redes de sensores en un ambito de red \gls{sdn}. De forma adicional, se presentará la estructura general del \gls{tfm}, describiendo de manera breve los temas que se abordarán en cada capítulo. Por último, se indicarán las contribuciones realizadas en revistas cientificas de alto impacto de este proyecto.
 
 \section{El Internet de las Cosas y la red \glsentryshort{6g}}
 \label{sec:6gIoT}
 
 Los recientes avances en las comunicaciones móviles junto a la mejora de las capacidades tecnológicas de los elementos hardware han llevado al \gls{iot} a un punto álgido, donde, a día de hoy, interconecta billones de objetos entre sí con comunicaciones \gls{m2m} tanto en entornos particulares, como en entornos industriales~\cite{Balaji2019}. Se puede afirmar que sin lugar a dudas el \gls{iot} es parte del hoy y el mañana de Internet, ha revolucionado la forma en se interactúa con el mundo que nos rodea, permitiendo conectar dispositivos entre sí de forma completamente autónoma a través de la red, proveyendo al humano de entornos inteligentes y adaptativos a las necesidades de la sociedad.\\
 \\
-Sin embargo, el aumento exponencial de los dispositivos \gls{iot} conectados a las redes de comunicaciones móviles ha generado nuevas necesidades en términos de capacidad, rendimiento, latencia y eficiencia de las redes que deben ser solventadas. Las tecnologías móviles \gls{5g} ya se han propuesto y desplegado comercialmente para dar soporte a las necesidades de las redes \gls{iot} y sus aplicaciones. Esta tecnología habilitadora daba solución a las necesidades preliminares del \gls{iot} haciendo uso de las funcionalidades que traía consigo, como por ejemplo, \gls{embb}, \gls{mmtc}, \gls{urllc}~\cite{Li2018}. Dichas funcionalidades proveían a los ecosistemas \gls{iot} de servicios de alto ancho de banda, baja latencia y optimización del consumo, siendo esta última muy importante para los dispositivos \gls{iot}. No obstante, con la rápida proliferación de nuevos de sensores, y con ello, el aumento de las redes \gls{iot} según se puede apreciar en la figura \ref{fig:intro_fig_iot}, los requisitos técnicos necesarios se han visto aumentados para poder seguir manteniendo entornos \gls{m2m} tal cual se conocían, completamente autónomos, dinámicos e inteligentes.
+Sin embargo, el aumento exponencial de los dispositivos \gls{iot} conectados a las redes de comunicaciones móviles ha generado nuevas necesidades en términos de capacidad, rendimiento, latencia y eficiencia de las redes que deben ser solventadas. Las tecnología de \gls{5g} ya se ha propuesto y desplegado comercialmente para dar soporte a las necesidades de las redes \gls{iot} y sus aplicaciones. La arquitectura planteada en \gls{5g} daba solución a las necesidades preliminares del \gls{iot} haciendo uso de las funcionalidades que traía consigo, como por ejemplo, \gls{embb}, \gls{mmtc}, \gls{urllc}~\cite{Li2018}. Dichas funcionalidades proveían a los ecosistemas \gls{iot} de servicios de alto ancho de banda, baja latencia y optimización del consumo, siendo esta última muy importante para los dispositivos \gls{iot}. No obstante, con la rápida proliferación de nuevos de sensores, y con ello, el aumento de las redes \gls{iot} según se puede apreciar en la Figura \ref{fig:intro_fig_iot}, los requisitos técnicos necesarios se han visto aumentados para poder seguir manteniendo entornos \gls{m2m} tal cual se conocían, completamente autónomos, dinámicos e inteligentes.
 
 
 % figura aumento en el crecimiento de los dispositivos iot
@@ -36,12 +36,12 @@ Por ello, se necesita una tecnología más avanzada que pueda satisfacer las fut
 \\
 Si bien es cierto que la tecnología \gls{6g} está todavía siendo formulada, se espera que esta pueda proporcionar una \gls{qos} totalmente mejorada frente a la generación anterior, dado sus prestaciones son claramente superiores, como por ejemplo, comuniaciones de ultabaja latencia, tasas de velocidad de datos mejoradas y entornos inteligentes de comunicación con satelites. \\
 \\
-Por consiguiente, muchos de los esfuerzos de las instituciones están pasando por impulsar las redes \gls{6g}-\gls{iot}. Desde Europa se está impulsando la carrera por el \gls{6g} poniendo sobre la mesa una hoja de ruta dividida en cuatro fases diferenciadas, esperando poder finalizar en 2030 \cite{eu6GFases}. Dichos esfuerzos están siendo coordinados desde la EU’s Smart Networks and Services Joint Undertaking (SNS-JU) la cual tiene como misiones principales impulsar el despliegue del \gls{5g}, y situar a los paises miembros de la EU a la vanguardía del desarrollo de la próxima generación de redes moviles \cite{eu6gSNS}. Estas misiones planean llevarlas a cabo a través de un detallado \textit{roadmap} el cual se puede apreciar en la figura \ref{fig:intro_banner_screen}.
+Por consiguiente, muchos de los esfuerzos de las instituciones están pasando por impulsar las redes \gls{6g}-\gls{iot}. Desde Europa se está impulsando la carrera por el \gls{6g} poniendo sobre la mesa una hoja de ruta dividida en cuatro fases diferenciadas, esperando poder finalizar en 2030 \cite{eu6GFases}. Dichos esfuerzos están siendo coordinados desde la EU’s Smart Networks and Services Joint Undertaking (SNS-JU) la cual tiene como misiones principales impulsar el despliegue del \gls{5g}, y situar a los paises miembros de la EU a la vanguardía del desarrollo de la próxima generación de redes moviles \cite{eu6gSNS}. Estas misiones planean llevarlas a cabo a través de un detallado \textit{roadmap} el cual se puede apreciar en la Figura \ref{fig:intro_banner_screen}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/intro/banner-screen-1.png}
-    \caption{\textit{Roadmap} propuesto por el SNS-JU para el desarrollo del \gls{6g} \cite{eu6gSNS}}
+    \caption{\textit{Roadmap} propuesto por el SNS-JU para el desarrollo del \glsentryshort{6g} \cite{eu6gSNS}}
     \label{fig:intro_banner_screen}
 \end{figure}
 
@@ -58,7 +58,7 @@ Como se puede ver, el interés por el \gls{6g} es real, y se están realizando e
 
 %Como se ha podido ver, las redes \gls{sdn} son un hecho en las próximas redes de comuniaciones moviles \gls{6g}. Con las redes SDN, como se puede apreciar en la figura 1.1, se desea extraer el plano de control de los dispositivos intermedios de procesamiento de la red, unificándolo en entes llamados controladores, haciendo la administración de red una tarea más centralizada y flexible.
 
-Como se ha podido ver, las redes \gls{sdn} serán una realidad en las próximas redes de comunicaciones móviles \gls{6g}. La figura \ref{fig:sdnParadig} muestra cómo con estas redes, se pretende separar el plano de control de los dispositivos intermedios de procesamiento de la red y centralizarlo en entidades denominadas controladores, lo que permitirá una administración más flexible y centralizada de la red.\\
+Como se ha podido ver, las redes \gls{sdn} serán una realidad en las próximas redes de comunicaciones móviles \gls{6g}. La Figura \ref{fig:sdnParadig} muestra cómo con estas redes, se pretende separar el plano de control de los dispositivos intermedios de procesamiento de la red y centralizarlo en entidades denominadas controladores, lo que permitirá una administración más flexible y centralizada de la red.\\
 \\
 Antes de que apareciera el concepto de \gls{sdn}, las redes convencionales solían tener un plano de control unificado en los propios dispositivos, llamado generalmente \textit{Control plane}, en el que se definía la lógica que dictaba cómo se debía llevar a cabo el forwarding de los paquetes, y un plano de datos, conocido como \textit{Data plane}, que se implementaba definiendo su datapath, compuesto por varios bloques de procesamiento para reenviar los paquetes. Sin embargo, con la aparición del paradigma de las redes \gls{sdn}, como se muestra en la Figura \ref{fig:sdnParadig}, los nodos tradicionales de la red verían cómo su plano de control sería delegado a una entidad externa llamada controlador. Este controlador tendría una perspectiva global de toda la red en su conjunto, lo que permitiría una gestión más flexible, dinámica y optimizada.
 
@@ -66,7 +66,7 @@ Antes de que apareciera el concepto de \gls{sdn}, las redes convencionales solí
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\textwidth]{archivos/img/intro/sdn.png}
-    \caption{Paradigma en las redes \gls{sdn} \cite{carrascal2020diseno}}
+    \caption{Paradigma en las redes \glsentryshort{sdn} \cite{carrascal2020diseno}}
     \label{fig:sdnParadig}
 \end{figure}
 
@@ -80,7 +80,7 @@ No hay un paradigma mejor que otro, cada paradigma de control tiene unos pros y 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{archivos/img/intro/InBandOutBandScheme.pdf}
-    \caption{Paradigma control en las redes \gls{sdn} \cite{carrascal2023comprehensive}}
+    \caption{Paradigma control en las redes \glsentryshort{sdn} \cite{carrascal2023comprehensive}}
     \label{fig:sdnParadigControl}
 \end{figure}
 

@@ -7,11 +7,11 @@ Los controladores \gls{sdn}, también conocidos como sistemas operativos de red,
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/teoria/sdn_controllers.jpg}
-    \caption{Arquitectura generica de controlador \gls{sdn} \cite{zhu2020sdn}}
+    \caption{Arquitectura generica de controlador \glsentryshort{sdn} \cite{zhu2020sdn}}
     \label{fig:sdn_controllers}
 \end{figure}
 
-En la literatura hay muchas propuestas de arquitecturas para los controladores, pero en vez de ir una por una viendo las diferencias vamos a presentar la arquitectura genérica que se puede encontrar en la gran mayoría de controladores \gls{sdn}. Si nos fijamos en la figura \ref{fig:sdn_controllers}, podemos ver dos partes claramente diferenciadas, el núcleo del controlador y las interfaces del mismo \cite{zhu2020sdn}. Empezando por el \textit{core}, se puede resumir que las funciones básicas del controlador están relacionadas principalmente con el descubrimiento de la topología y la gestión de los flujos de tráfico. El módulo de descubrimiento de la topología suele trabajar con el protocolo \gls{lldp}. La implementación puede variar entre controladores y aplicaciones de descubrimiento topológico, pero en términos generales, se transmite regularmente consultas utilizando mensajes \texttt{packet\_out}, los cuales viajaran por la topología física y volverán al controlador en forma de mensajes \texttt{packet\_in}, que permiten al controlador construir la topología de la red.\\
+En la literatura hay muchas propuestas de arquitecturas para los controladores, pero en vez de ir una por una viendo las diferencias vamos a presentar la arquitectura genérica que se puede encontrar en la gran mayoría de controladores \gls{sdn}. Si nos fijamos en la Figura \ref{fig:sdn_controllers}, podemos ver dos partes claramente diferenciadas, el núcleo del controlador y las interfaces del mismo \cite{zhu2020sdn}. Empezando por el \textit{core}, se puede resumir que las funciones básicas del controlador están relacionadas principalmente con el descubrimiento de la topología y la gestión de los flujos de tráfico. El módulo de descubrimiento de la topología suele trabajar con el protocolo \gls{lldp}. La implementación puede variar entre controladores y aplicaciones de descubrimiento topológico, pero en términos generales, se transmite regularmente consultas utilizando mensajes \texttt{packet\_out}, los cuales viajaran por la topología física y volverán al controlador en forma de mensajes \texttt{packet\_in}, que permiten al controlador construir la topología de la red.\\
 \\
 Una vez que se conoce la topología de red, el controlador puede empezar a poner en marcha distintos módulos de toma de decisiones para encontrar los caminos óptimos entre los nodos de la red. Con todos los caminos ya construidos, entran en juego otros módulos del controlador como son \gls{qos} y de seguridad, los cuales pueden optar por instalar una ruta sub-óptima para satisfacer los criterios de \gls{qos} o de seguridad. De forma adicional, el controlador puede tener un recopilador de estadísticas y un gestor de colas para recopilar información sobre el rendimiento de las diferentes colas de paquetes entrantes y salientes de los dispositivos de red que gestiona, y con ellos realimentar a los módulos de \gls{qos}. Por último, tenemos uno de los módulos más importantes del controlador, el gestor de flujos. El gestor de flujos, puede variar su implementación en función de los protocolos que se utilicen en la \gls{sbi}, pero su misión es la misma, instalar reglas en los dispositivos de red que gestiona las directrices necesarias para gestionar los paquetes de un determinado flujo de una determinada manera. \\
 \\
@@ -32,11 +32,11 @@ Ryu es altamente modular y proporciona una API bien definida que permite a los d
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{archivos/img/teoria/ryu.png}
-    \caption{Arquitectura del controlador \gls{sdn} RYU \cite{ryu2}}
+    \caption{Arquitectura del controlador \glsentryshort{sdn} RYU \cite{ryu2}}
     \label{fig:ryu}
 \end{figure}
 
-En la figura \ref*{fig:ryu}, se puede apreciar como la arquitectura del controlador está divida en dos grandes bloques de acuerdo se han estudiado los controladores \gls{sdn}, la parte de \textit{core} y la parte de interfaces. En la parte del núcleo se puede apreciar como se a programado todas las librerías y el manejador de eventos que se mencionaba anteriormente. Por otro lado también se puede apreciar las capas de adaptación a la \gls{sbi} y a la \gls{nbi}, la primera de ellas se adapta a través de una API REST a servicios de aplicaciones externas, mientas que la interfaz \gls{sbi} implementa todos los protocolos de control \gls{sdn}. Algunas de las características y funcionalidades de Ryu incluyen:
+En la Figura \ref*{fig:ryu}, se puede apreciar como la arquitectura del controlador está divida en dos grandes bloques de acuerdo se han estudiado los controladores \gls{sdn}, la parte de \textit{core} y la parte de interfaces. En la parte del núcleo se puede apreciar como se a programado todas las librerías y el manejador de eventos que se mencionaba anteriormente. Por otro lado también se puede apreciar las capas de adaptación a la \gls{sbi} y a la \gls{nbi}, la primera de ellas se adapta a través de una API REST a servicios de aplicaciones externas, mientas que la interfaz \gls{sbi} implementa todos los protocolos de control \gls{sdn}. Algunas de las características y funcionalidades de Ryu incluyen:
 
 \begin{itemize}
     \item Compatibilidad con múltiples protocolos SDN de la interfaz \gls{sbi}.
@@ -64,13 +64,13 @@ Ryu es utilizado en una amplia gama de entornos, desde laboratorios de investiga
 
 \gls{onos} se concibe como un sistema operativo de red completo que va más allá de ser solo un controlador \gls{sdn}. Ofrece una amplia gama de funcionalidades que incluyen herramientas como APIs que proporcionan abstracción para el desarrollo de aplicaciones \gls{sdn}, así como APIs para la administración, supervisión y programación de dispositivos de red. Además, \gls{onos} ofrece capacidades de virtualización, aislamiento, acceso seguro y abstracción de los recursos de red administrados por el sistema operativo. \gls{onos} tiene la capacidad de multiplexar recursos tanto hardware como software entre las aplicaciones \gls{sdn}, permitiendo una utilización eficiente de los recursos disponibles. Además, facilita la configuración de políticas de red basadas en las intenciones de las aplicaciones, lo que implica la aplicación de políticas de red diseñadas para satisfacer los requisitos específicos de las aplicaciones, así como el procesamiento de eventos de red \cite{onos2}. \\
 \\
-Si nos fijamos en la figura \ref*{fig:onos}, podemos ver que este sistema operativo está diseñado para operar con dispositivos de red \textit{whitebox}, con el objetivo de reducir los costes asociados con las soluciones propietarias. \gls{onos} posee una arquitectura flexible que facilita la integración sencilla de nuevos dispositivos de hardware en el framework \gls{sdn}. Solo se requiere que se añada un driver del equipo o target propietario.  Además, puede funcionar como un sistema distribuido a través de múltiples servidores en modo cluster, lo que permite aprovechar los recursos de CPU y memoria de varios equipos simultáneamente. Esta capacidad también proporciona resiliencia ante posibles fallos de los servidores y permite realizar cambios en hardware y software sin interrumpir el tráfico de red \cite{onos1}.
+Si nos fijamos en la Figura \ref*{fig:onos}, podemos ver que este sistema operativo está diseñado para operar con dispositivos de red \textit{whitebox}, con el objetivo de reducir los costes asociados con las soluciones propietarias. \gls{onos} posee una arquitectura flexible que facilita la integración sencilla de nuevos dispositivos de hardware en el framework \gls{sdn}. Solo se requiere que se añada un driver del equipo o target propietario.  Además, puede funcionar como un sistema distribuido a través de múltiples servidores en modo cluster, lo que permite aprovechar los recursos de CPU y memoria de varios equipos simultáneamente. Esta capacidad también proporciona resiliencia ante posibles fallos de los servidores y permite realizar cambios en hardware y software sin interrumpir el tráfico de red \cite{onos1}.
 
 % fig
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/teoria/onos.png}
-    \caption{Arquitectura del controlador \gls{sdn} onos \cite{onos1}}
+    \caption{Arquitectura del controlador \glsentryshort{sdn} onos \cite{onos1}}
     \label{fig:onos}
 \end{figure}
 

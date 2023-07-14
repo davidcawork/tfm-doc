@@ -24,7 +24,7 @@ Aunque Mininet ofrece muchas ventajas, también tiene una limitación importante
 
 \subsection{Funcionamiento de Mininet}
 
-Anteriormente se mencionó que Mininet utiliza \textit{Network Namespaces} como método para virtualizar \textit{stacks} de red independientes y así emular redes con un costo mínimo. En la figura \ref{fig:mininet_arch}, se muestra la arquitectura interna de Mininet para una topología compuesta por dos nodos \texttt{Host} y un software switch conectado por TCP a un controlador remoto.\\
+Anteriormente se mencionó que Mininet utiliza \textit{Network Namespaces} como método para virtualizar \textit{stacks} de red independientes y así emular redes con un costo mínimo. En la Figura \ref{fig:mininet_arch}, se muestra la arquitectura interna de Mininet para una topología compuesta por dos nodos \texttt{Host} y un software switch conectado por TCP a un controlador remoto.\\
 \\
 Como se puede observar, cada nodo \texttt{Host} está aislado en su propia \textit{Namespace} de red, mientras que el switch se ejecuta en la \textit{Namespace} por defecto (root). La comunicación entre los nodos de esta topología se realiza mediante \gls{veth}s (consultar \ref{linuxVeths}), las cuales permiten emular los enlaces entre los diferentes nodos de la red.\\
 
@@ -36,7 +36,7 @@ Como se puede observar, cada nodo \texttt{Host} está aislado en su propia \text
     \label{fig:mininet_arch}
 \end{figure}
 
-Una vez presentada toda la teoría sobre Mininet, puede surgir la pregunta de cómo se puede comprobar si realmente utiliza \textit{Network Namespaces}. Para hacerlo, lo primero que se debe hacer es crear el escenario para que Mininet pueda crear las \textit{Network Namespaces} necesarias. En este caso, se utilizará la topología mostrada en la figura \ref{fig:mininet_arch}. Para crear esta topología, solo se necesita tener Mininet instalado y seguir los pasos que se indican en el bloque \ref{code:scenarioMininet}. Una vez levantado el escenario, se debería obtener el output indicado en la figura \ref{fig:mininet_01}.
+Una vez presentada toda la teoría sobre Mininet, puede surgir la pregunta de cómo se puede comprobar si realmente utiliza \textit{Network Namespaces}. Para hacerlo, lo primero que se debe hacer es crear el escenario para que Mininet pueda crear las \textit{Network Namespaces} necesarias. En este caso, se utilizará la topología mostrada en la Figura \ref{fig:mininet_arch}. Para crear esta topología, solo se necesita tener Mininet instalado y seguir los pasos que se indican en el bloque \ref{code:scenarioMininet}. Una vez levantado el escenario, se debería obtener el output indicado en la Figura \ref{fig:mininet_01}.
 
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Ejecución de Mininet con la topología por defecto},label=code:scenarioMininet]
@@ -70,7 +70,7 @@ Ahora que hemos creado el escenario, podemos verificar si hay \textit{Network Na
 \end{figure}
 
 
-Al observar la figura \ref{fig:mininet_02}, no parece haber ninguna \textit{Network Namespace} en el sistema. Entonces, ¿dónde está el problema? La razón por la que el comando \texttt{ip netns list} no muestra información es que Mininet no está creando el enlace simbólico (\textit{softlink}) necesario para que la herramienta pueda listar las \textit{Network Namespaces}. Según la documentación del comando, este lee desde la ruta \texttt{/var/run/netns/}, donde se encuentran todas las \textit{Network Namespaces} con nombre. Estas Netns son aquellas en las que se ha realizado un \textit{bindmount} con su nombre en ese directorio para que persistan incluso si no hay ningún proceso en ejecución en ellas.Como se mencionó anteriormente, las \textit{Namespaces} tienen una vida finita y solo existen mientras estén referenciadas (consulte la tabla \ref{tab:linux_ns}). Por lo tanto, si no se cumple ninguna condición de referencia, la \textit{Namespace} en cuestión se elimina.\\
+Al observar la Figura \ref{fig:mininet_02}, no parece haber ninguna \textit{Network Namespace} en el sistema. Entonces, ¿dónde está el problema? La razón por la que el comando \texttt{ip netns list} no muestra información es que Mininet no está creando el enlace simbólico (\textit{softlink}) necesario para que la herramienta pueda listar las \textit{Network Namespaces}. Según la documentación del comando, este lee desde la ruta \texttt{/var/run/netns/}, donde se encuentran todas las \textit{Network Namespaces} con nombre. Estas Netns son aquellas en las que se ha realizado un \textit{bindmount} con su nombre en ese directorio para que persistan incluso si no hay ningún proceso en ejecución en ellas.Como se mencionó anteriormente, las \textit{Namespaces} tienen una vida finita y solo existen mientras estén referenciadas (consulte la tabla \ref{tab:linux_ns}). Por lo tanto, si no se cumple ninguna condición de referencia, la \textit{Namespace} en cuestión se elimina.\\
 \\
 Mininet se encarga de recrear la red emulada y, cuando el usuario finaliza la emulación, la red emulada debe desaparecer. Este proceso debe ser lo más rápido y eficiente posible para brindar una mejor experiencia al usuario. La naturaleza del diseño de Mininet sugiere que la creación y destrucción de las \textit{Network Namespaces} están asociadas con la primera condición de referencia de una \textit{Namespace}.\\
 \\
@@ -85,7 +85,7 @@ De acuerdo con el razonamiento expuesto, se deberían ver varios procesos que se
     \label{fig:mininet_03}
 \end{figure}
 
-Si examinamos el archivo \texttt{/proc/{pid}/ns/net} para cada proceso mencionado en la figura \ref{fig:mininet_03}, podremos determinar cuáles de ellos se encuentran en una \textit{Network Namespace} distinta, según el valor del \textit{inode}. Por ejemplo, verifiquemos los procesos asociados a los \texttt{Host1} y \texttt{Host2}.\\
+Si examinamos el archivo \texttt{/proc/{pid}/ns/net} para cada proceso mencionado en la Figura \ref{fig:mininet_03}, podremos determinar cuáles de ellos se encuentran en una \textit{Network Namespace} distinta, según el valor del \textit{inode}. Por ejemplo, verifiquemos los procesos asociados a los \texttt{Host1} y \texttt{Host2}.\\
 
 
 \begin{figure}[ht]
@@ -113,7 +113,7 @@ Mininet-WiFi \cite{7367387}, es una extensión (\textit{fork}) del emulador de r
 \\
 Mininet-WiFi hace uso de este módulo para crear interfaces inalámbricas virtuales y puntos de acceso virtuales en las emulaciones de redes. Esto permite simular la configuración de redes inalámbricas complejas, incluyendo la conexión de dispositivos a puntos de acceso virtuales, la emulación de diferentes canales inalámbricos y la aplicación de configuraciones específicas de los dispositivos inalámbricos. Al utilizar el módulo mac80211\_hwsim, Mininet-WiFi puede proporcionar una capa de emulación adicional para redes inalámbricas, permitiendo a los usuarios experimentar con aplicaciones, protocolos y algoritmos inalámbricos en un entorno virtual controlado. Esto es especialmente útil para la investigación, desarrollo y pruebas de nuevas soluciones de redes inalámbricas, ya que se pueden crear y reproducir escenarios de red de manera rápida y eficiente.\\
 \\
-Como se puede ver en la figura \ref{fig:mininetwifi}, Mininet-WiFi aparte de utilizar el módulo del kernel mac80211\_hwsim para la emulación del entorno inalámbrico, también hace uso de una serie de herramientas para controlarlo y gestionarlo. De forma adicional, si nos fijamos en las herramientas que se despliegan para la emulación se puede ver como los puntos de acceso requieren de un proceso propio (\texttt{hostAPd}) para correr las funcionalidades de AP.\\
+Como se puede ver en la Figura \ref{fig:mininetwifi}, Mininet-WiFi aparte de utilizar el módulo del kernel mac80211\_hwsim para la emulación del entorno inalámbrico, también hace uso de una serie de herramientas para controlarlo y gestionarlo. De forma adicional, si nos fijamos en las herramientas que se despliegan para la emulación se puede ver como los puntos de acceso requieren de un proceso propio (\texttt{hostAPd}) para correr las funcionalidades de AP.\\
 \\
 La arquitectura de virtualización utilizada en Mininet-WiFi es similar a la de Mininet. Se utiliza la herramienta \texttt{mnexec}\footnote{\url{https://github.com/intrig-unicamp/mininet-wifi/blob/master/mnexec.c}} para lanzar diferentes procesos de bash en nuevas Network Namespaces, uno por cada nodo independiente de la red. Estos procesos alojarán todos los procesos relacionados con los nodos de la red. Una vez finalizada la emulación, se finalizan los procesos de bash, lo que elimina las condiciones de referencia de las Network Namespaces y permite que el kernel las elimine.\\
 \\
