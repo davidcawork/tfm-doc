@@ -85,3 +85,52 @@ No obstante, es importante destacar que no soy el primero en plantear esta neces
 
 \subsection{Rollback a la herramienta \texttt{dpctl}}
 
+La segunda opción consiste en adaptar la herramienta antigua. Para lograr esto, se debe acceder al repositorio de la herramienta anterior llamada ``dpctl" y compilarla sobre la herramienta nueva desarrollada por Eder. A continuación, se proporciona el enlace\footnote{\url{https://github.com/mininet/openflow/tree/master}} al repositorio de la herramienta antigua. Los pasos a seguir son los siguientes, considerando una instalación limpia de Mininet, haciendo referencia al escenario utilizado\footnote{\url{https://github.com/davidcawork/TFM/tree/main/src/scenarios/mininet}}.
+
+\begin{lstlisting}[language= bash, style=Consola, caption={Instalación de las dependencias de la nueva versión de dpctl},label=code:dpctlold1]
+    # Tenemos que clonar el repositorio de Openflow indicado anteriormente
+    git clone https://github.com/mininet/openflow.git
+
+    # Hacemos un install de las deps
+    sudo apt install git autotools-dev pkg-config libc6-dev
+\end{lstlisting}
+\vspace{0.5cm}
+
+
+Una vez que se ha clonado el repositorio de OpenFlow de Standford con la versión 1.0 de OpenFlow, se deben instalar las dependencias generales necesarias para compilar el repositorio desde el código fuente. Cabe mencionar que sería más apropiado construir exclusivamente la herramienta y no todo el repositorio, incluyendo el controlador y la implementación 1.0 de OpenFlow. Sin embargo, para realizar una prueba conceptual, será suficiente. Una vez que se tienen las dependencias necesarias instaladas, podemos proceder hacer la contrucción de la herramienta. A continuación, en el bloque de Código \ref{code:dpctlold2}, se indican los pasos para hacer un build desde el source:
+
+\begin{lstlisting}[language= bash, style=Consola, caption={Construcción de la nueva versión de dpctl},label=code:dpctlold2]
+    # Entramos
+    cd openflow
+
+    # Booteamos y configuramos 
+    # (a.k.a pre-checking de que tenemos todas las herramientas para hacer el make)
+    ./boot.sh
+    ./configure
+
+    # Build :)
+    make
+
+    # E instalamos para que el binari oen path de dpctl sea este ultimo
+    sudo make install
+\end{lstlisting}
+\vspace{0.5cm}
+
+
+Una vez se ha instalado la herramienta, cuando se ejecute la ayuda del binario \texttt{dpctl -h}, se tendría que apreciar el contenido de la Figura \ref{}. Para hacer una prueba de concepto, se ha levantado una topología de ejemplo con Mininet, con \texttt{userSwitchs}, y se ha comprobado como ahora la herramienta de control, si es capaz de extraer los flujos sin ningún tipo de problema.
+
+% fig
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/dpctl_5.png}
+    \caption{\textit{Rollback} a la nueva herramienta \texttt{dpctl}}
+    \label{fig:dpctl_5}
+\end{figure}
+
+% fig
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/dpctl_6.png}
+    \caption{Resultado del parser la nueva herramienta \texttt{dpctl}}
+    \label{fig:dpctl_6}
+\end{figure}
