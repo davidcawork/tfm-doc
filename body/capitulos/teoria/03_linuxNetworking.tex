@@ -65,7 +65,7 @@ Las interfaces virtuales Veth son interfaces Ethernet creadas como un par de int
 Es muy común utilizar las \gls{veth} para interconectar \textit{Network Namespaces}. Al saber que estas interfaces estarán conectadas de forma directa, se puede utilizar este enlace como una pasarela entre dos \textit{Network Namespaces}. De esta manera, se pueden interconectar dos \textit{stacks} independientes de red. Más adelante se verá que alguno de los emuladores (Mininet) más utilizados para comprobar despliegues de red \gls{sdn} hace uso de estas interfaces. Y también es posible ir más allá, aunque no se busca tampoco entrar en el mundo de los contenedores dado que el \gls{tfm} no va a utilizarlos, pero cabe destacar que estas interfaces también son utilizadas para la interconexión y contenedores de Docker \cite{veths1}. La creación y eliminación de este tipo de interfaces se puede observar en el bloque de Código \ref{code:iproute2_veth}. Se recuerda que se necesitan permisos de root para realizar estas operaciones.
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Uso de las interfaces Veths},label=code:iproute2_veth]
-    # COn este comando se crean un par interfaces veth
+    # Con este comando se crean un par interfaces veth
     ip link add {veth1_name} type veth peer name {veth2_name}
     
     # Solo hace falta indicar uno de los dos nombres del par de Veths
