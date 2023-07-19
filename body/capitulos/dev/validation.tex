@@ -7,32 +7,44 @@ Cabe destacar que las pruebas desarrolladas en este capítulo no tienen como obj
 
 En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamiento adecuado de las implementaciones realizadas, sin ahondar en la medición precisa del rendimiento del switch BOFUSS.
 
+% topo scenario 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/scenario_eva.eps}
+    \caption{Entorno de validación haciendo uso del módulo del Kernel \texttt{mac80211\_hwsim}}
+    \label{fig:scenario_eva}
+\end{figure}
+
+
 \subsection{Comprobación funcional}
 
 % Lets see tomorrow
 %\subsection{Comprobación cuantitativa}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{archivos/img/dev/topo_val_mininetWifi.png}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
-    \label{fig:topo_val_mininetWifi}
-\end{figure}
+
 
 % topo eva
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{archivos/img/dev/topo_eva.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Topología básica a evaluar el funcionamiento de IoTorii}
     \label{fig:topo_eva}
 \end{figure}
 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{archivos/img/dev/topo_val_mininetWifi.png}
+    \caption{Topología básica representada con el motor de Mininet-WiFi}
+    \label{fig:topo_val_mininetWifi}
+\end{figure}
 
 % topo hellos
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{archivos/img/dev/topo_hellos.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Intercambio de mensajes de tipo \textit{Hello} en la topología básica}
     \label{fig:topo_hellos}
 \end{figure}
 
@@ -41,7 +53,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoA_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{A}}
     \label{fig:topo_hello_nodoA_nb}
 \end{figure}
 
@@ -49,7 +61,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoB_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{B}}
     \label{fig:topo_hello_nodoB_nb}
 \end{figure}
 
@@ -57,7 +69,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoC_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{C}}
     \label{fig:topo_hello_nodoC_nb}
 \end{figure}
 
@@ -66,7 +78,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoD_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{D}}
     \label{fig:topo_hello_nodoD_nb}
 \end{figure}
 
@@ -75,7 +87,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoE_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{E}}
     \label{fig:topo_hello_nodoE_nb}
 \end{figure}
 
@@ -84,7 +96,7 @@ En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamie
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_hello_nodoF_nb.eps}
-    \caption{Información ofuscada de la nueva herramienta \texttt{dpctl}}
+    \caption{Tabla de vecinos para el nodo \texttt{F}}
     \label{fig:topo_hello_nodoF_nb}
 \end{figure}
 
