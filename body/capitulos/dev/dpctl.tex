@@ -1,7 +1,7 @@
 \section{Desarrollo interfaz de control del Datapath - \texttt{dpctl}}
 \label{sec:dpctl}
 
-En esta sección se va a estudiar el funcionamiento interno de la herramienta \texttt{dpctl}\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.c}} la cual se utiliza para gestionar y controlar el plano de datos de software switch BOFUSS. La motivación de esta sección radica en el desarrollo realizado para adaptar su funcionamiento a raíz de encontrar serios problemas en su interfaz de comandos. Dichos problemas e incompatibilidades llevan registrados en varios \textit{issues}\footnote{\url{https://github.com/mininet/mininet/issues/745}}\footnote{\url{https://github.com/CPqD/ofsoftswitch13/issues/288}}\footnote{\url{https://github.com/mininet/mininet/issues/628}} desde el 2018 tanto en Mininet como en el repositorio de \gls{bofus}, lo que hacía ingestionable la comprobación del correcto funcionamiento del software switch modificado.\\
+En esta sección se va a estudiar el funcionamiento interno de la herramienta \texttt{dpctl}\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.c}}, la cual se utiliza para gestionar y controlar el plano de datos de software switch BOFUSS. La motivación de esta sección radica en el desarrollo realizado para adaptar su funcionamiento a raíz de encontrar serios problemas en su interfaz de comandos. Dichos problemas e incompatibilidades llevan registrados en varios \textit{issues}\footnote{\url{https://github.com/mininet/mininet/issues/745}}\footnote{\url{https://github.com/CPqD/ofsoftswitch13/issues/288}}\footnote{\url{https://github.com/mininet/mininet/issues/628}} desde el 2018 tanto en Mininet como en el repositorio de \gls{bofus}, lo que hacía ingestionable la comprobación del correcto funcionamiento del software switch modificado.\\
 \\
 La problemática principal que se ha encontrado a la hora de hacer \textit{debug} sobre la implementación del \gls{bofus}, cuando se deseaba obtener las tablas de los flujos que se deberían haber instalado en el switch, sin embargo, estas no aparecen.\\
 \\
@@ -25,7 +25,7 @@ En una primera instancia, procedimos a verificar la existencia y ubicación corr
 \end{figure}
 
 
-Inicialmente, se asumió que la herramienta en cuestión había sido desarrollada por Eder, basándose en el hecho de que en el repositorio de \gls{bofus} se encuentran tanto las fuentes\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.c}} del binario compilado e instalado, como la documentación asociada\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.8.in}}, es decir, las \textit{manpages}. Sin embargo, esta suposición resultó ser equivocada. En realidad, la herramienta es heredada de Stanford y data del año 2008. Se llegó a esta conclusión al percatarse de que se instalan las páginas de manual de la versión antigua de la herramienta, y en ellas se referencia a la implementación primigenea.\\
+Inicialmente, se asumió que la herramienta en cuestión había sido desarrollada por Eder, basándose en el hecho de que en el repositorio de \gls{bofus} se encuentran tanto las fuentes\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.c}} del binario compilado e instalado, como la documentación asociada\footnote{\url{https://github.com/CPqD/ofsoftswitch13/blob/master/utilities/dpctl.8.in}}, es decir, las páginas de manual o \textit{man pages}. Sin embargo, esta suposición resultó ser equivocada. En realidad, la herramienta es heredada de Stanford y data del año 2008. Se llegó a esta conclusión al percatarse de que se instalan las páginas de manual de la versión antigua de la herramienta, y en ellas se referencia a la implementación primigenea.\\
 \\
 Consultando la documentación de ambas herramientas, la original mediante \texttt{man dpctl}, y la modificada, mediante \texttt{dpctl -h}, se puedo apreciar que la sintaxis era completamente diferente. A continuación, en el bloque \ref{code:dpctlDiff} se indican las diferencias más notables en la CLI.
 
@@ -72,7 +72,8 @@ El inconveniente de extraer los flujos de esta manera es que la información obt
 
 En la figura, se visualiza el comando que se envía al socket UNIX \texttt{unix:/tmp/ap1.listen}, junto con los datos recibidos. Sin embargo, como se mencionó previamente, la información se muestra de manera poco clara o comprensible. Por lo tanto, se requerirá realizar un proceso de análisis y parseo para obtener una visualización más legible de los datos.\\
 \\
-No obstante, es importante destacar que no soy el primero en plantear esta necesidad. Un usuario de \gls{bofus} ya había abordado esta cuestión en su momento y realizó una Pull Request en el repositorio, agregando un script en Python para el análisis de la información recibida desde el switch. Dicho script, creado por un desarrollador israelí\footnote{\url{https://github.com/simhond}}, fue escrito en una versión anterior de Python (Python 2.7). Sin ánimo de menospreciar, es importante señalar que el script podría mejorarse en varios aspectos dado que el JSON resultante no está correctamente formado. Después de implementar el parser, la salida obtenida del mismo comando se puede apreciar en la Figura \ref{fig:dpctl_4}.
+
+No obstante, es relevante destacar que esta necesidad no ha sido planteada por primera vez. Un usuario de \gls{bofus} ya había abordado esta cuestión en su momento y realizó una petición en forma de \textit{pull request} en el repositorio, agregando un script en Python para el análisis de la información recibida desde el switch. Dicho script, creado por un desarrollador israelí\footnote{\url{https://github.com/simhond}}, fue escrito en una versión anterior de Python (Python 2.7). Dado que el script podría mejorarse en varios aspectos dado que el JSON resultante no está correctamente formado, y las expresiones regulares no funcionaban en todos los casos. Después de implementar el parser, la salida obtenida del mismo comando se puede apreciar en la Figura \ref{fig:dpctl_4}.
 
 
 % fig
@@ -123,7 +124,7 @@ Una vez se ha instalado la herramienta, cuando se ejecute la ayuda del binario \
 % fig
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{archivos/img/dev/dpctl_5.png}
+    \includegraphics[width=0.8\textwidth]{archivos/img/dev/dpctl_5.png}
     \caption{\textit{Rollback} a la nueva herramienta \texttt{dpctl}}
     \label{fig:dpctl_5}
 \end{figure}
