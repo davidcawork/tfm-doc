@@ -36,10 +36,11 @@ Para poner en marcha el escenario solo se tendrá que lanzar el shell script (Ve
 La comprobación funcional consistirá en el estudio y análisis de las tablas de vecinos y \gls{hlm} de cada nodo de la topología. En primera instancia se debatirá como deberá funcionar el protocolo de forma teórica, más adelante se comprobará accediendo a los logs de cada \texttt{win-BOFUSS} el contenido de las tablas de vecinos y de \gls{hlm} para comprobar si el funcionamiento esperado y real coinciden. En esta validación se habría querido poner alguna captura de Wireshark, pero, al no haber programado un disector para el protocolo IoTorii, no será posible apreciar el contenido de los mensajes intercambiados entre los nodos de la topología, solo se verá un campo que indique data con una cadena hexadecimal.\\
 
 
+
 % topo eva
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.35\textwidth]{archivos/img/dev/topo_eva.eps}
+    \includegraphics[width=0.4\textwidth]{archivos/img/dev/topo_eva.eps}
     \caption{Topología básica a evaluar el funcionamiento de IoTorii}
     \label{fig:topo_eva}
 \end{figure}
@@ -49,12 +50,14 @@ Según se ha indicado anteriormente, al trabajar con los mismos recursos que Min
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{archivos/img/dev/topo_val_mininetWifi.png}
+    \includegraphics[width=0.7\textwidth]{archivos/img/dev/topo_val_mininetWifi.png}
     \caption{Topología básica representada con el motor de Mininet-WiFi}
     \label{fig:topo_val_mininetWifi}
 \end{figure}
 
 Otro problema que se ha encontrado a la hora de emular, es el problema mencionado anteriormente en la memoria en la Sección \ref{subsubsec:problemasmalos}. Cuando se ha intentado emular topologías más grandes, parece que el módulo del kernel no hace un buen uso de los recursos reservados dado que las interfaces generadas son bloqueadas por el kernel vía \textit{software}. Por ello, se ha querido demostrar el funcionamiento en una topología sencilla, que funcione de forma sólida y sea fácil de apreciar el funcionamiento del protocolo.
+
+\newpage
 
 \subsubsection{Tablas de vecinos}
 
@@ -75,7 +78,7 @@ Esta relación entre la cantidad de mensajes \textit{Hello} y el número de nodo
 \\
 De esta manera, la generación de mensajes \textit{Hello} se convierte en un mecanismo esencial para mantener una visión actualizada de la topología de la red, permitiendo a los nodos conocer y establecer conexiones con sus vecinos cercanos. Así, la cantidad y el contenido de los mensajes \textit{Hello} desempeñan un papel crítico en la configuración y el funcionamiento adecuado del protocolo en una topología determinada.\\
 \\
-Observando la topología, ver Figura \ref{fig:topo_hello_nodoA_nb}, se puede apreciar como el único vecino que tendrá el nodo raíz será el nodo \texttt{B}, por lo que despues de notificarse, el nodo \texttt{A} apuntará al nodo \texttt{B} en su tabla de vecinos, teniendo en cuenta su dirección MAC real, y le asignará un sufijo único que en este caso es un contador que se va incrementando según se descubrenvecinos nuevos.\\
+Observando la topología, ver Figura \ref{fig:topo_hello_nodoA_nb}, se puede apreciar como el único vecino que tendrá el nodo raíz será el nodo \texttt{B}, por lo que despues de notificarse, el nodo \texttt{A} apuntará al nodo \texttt{B} en su tabla de vecinos, teniendo en cuenta su dirección MAC real, y le asignará un sufijo único que en este caso es un contador que se va incrementando según se descubrenvecinos nuevos.
 
 % topo nb - node A
 \begin{figure}[ht!]
@@ -125,8 +128,6 @@ En cuanto a los nodos \texttt{D}, \texttt{F} y \texttt{E}, ver Figuras \ref{fig:
     \label{fig:topo_hello_nodoE_nb}
 \end{figure}
 
-\newpage
-
 
 % topo nb - node F
 \begin{figure}[ht!]
@@ -152,6 +153,8 @@ Para ello, se ha levantado la topología según se ha explicado en el bloque de 
     \end{center}
 \end{sidewaysfigure}
 
+\newpage
+
 
 \subsubsection{Tablas \glsentryshort{hlm}}
 
@@ -163,16 +166,18 @@ Volviendo a la Figura \ref{fig:topo_sethlmac}, se puede apreciar como en primera
 \\
 Se quiere mencionar que hay algunas \gls{hlm} que no se difundían para evitar bucles en la topología.  La condición de ser una \gls{hlm} válida es la de no ser hija de una ya almacenada en la tabla de rutas de un nodo en cuestión. Por ejemplo, si tenemos la ruta \texttt{1.1.2}, todas las rutas del tipo \texttt{1.1.2.X.Y} serán descartadas.\\
 \\
-Otro detalle que se quiere mencionar de la implementación, es el criterio que se ha seguido para elegir una ruta al nodo raíz frente a otras. En este caso se marca como \gls{hlm} activa aquella que llegue antes al nodo. Se pueden establecer muchos criterior para tomar esta decisión, desarrollando una función objteivo y evaluar cada ruta en base a unos criterios, pero en este caso, se va a coger la primera ruta que llegue que se entenderá que es aquella ruta más rapida en alcanzar al \textit{root}.\\
+Otro detalle que se quiere mencionar de la implementación, es el criterio que se ha seguido para elegir una ruta al nodo raíz frente a otras. En este caso se marca como \gls{hlm} activa aquella que llegue antes al nodo. Se pueden establecer muchos criterior para tomar esta decisión, desarrollando una función objteivo y evaluar cada ruta en base a unos criterios, pero en este caso, se va a coger la primera ruta que llegue que se entenderá que es aquella ruta más rapida en alcanzar al \textit{root}.
 
 \newpage
 % topo difu hlmac
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/topo_sethlmac.eps}
     \caption{Proceso de difusión de mensajes de tipo \textit{SetHLMAC} en la topología básica}
     \label{fig:topo_sethlmac}
 \end{figure}
+
+
 \newpage
 % logs hlmac tables
 \begin{sidewaysfigure}[htbp]
@@ -198,5 +203,58 @@ Al obtener la topología lógica, se crea un subgrafo $G' \: = \: (\mathcal{N}',
     \label{fig:topo_logic}
 \end{figure}
 
-% Lets see tomorrow
-%\subsection{Comprobación cuantitativa}
+\subsubsection{Conexiones in-band}
+
+En este punto se quiere demostrar que se están llevando a cabo las conexiones in-band a través del nodo \texttt{A} de la topología indicada anteriormente hacia el controlador Ryu que estará corriendo en la Network Namespace \textit{root}. Para ello, haciendo uso del escenario anteriormente expuesto (Ver Figura \ref{fig:scenario_eva}), solo se tendrá en la Network Namespace por defecto al nodo \texttt{A}, y el resto de nodos se conectarán entre ellos a través del módulo del kernel \texttt{mac80211\_hwsim} al estar aislados en Network Namespaces. \\
+\\
+Una vez lanzada la topología podemos comprobar que corren en Network Namespaces difernete de la siguiente forma. Primero necesitamos obtener todos los identificadores de proceso de todos los nodos de la topología. Eso lo haremos ejecutando un \texttt{ps aux} y filtramos por nombres de nodo. En la Figura \ref{fig:inband3} se indica cómo realizar esta comprobación.\\
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/inband3.png}
+    \caption{Obtención de los PID de todos los nodos de la topología}
+    \label{fig:inband3}
+\end{figure}
+
+Una vez se tienen los PID de todos los nodos de la topología se podrá consultar dentro de la información de proceso, en que Namespaces se está ejecutando dicho proceso. En este caso, solo nos interesa la información relativa al identificador de Namespace de Red. A continuación, en la Figura \ref{fig:inband4} se demuestra como el nodo \texttt{A} (\textit{ap1}) se está ejecutando en una Network Namespace diferente a la Network Namespace en la que corre el nodo \texttt{B} (\textit{ap2}).\\
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/inband4.png}
+    \caption{Comprobación de identificadores de Network Namespaces de los nodos \texttt{A} y \texttt{B} de la topología}
+    \label{fig:inband4}
+\end{figure}
+
+Para llevar a cabo la prueba se plantea iniciar la aplicación de descubrimiento topológico de Ryu a la par que se levanta la topología. Si bien es cierto que dicha aplicación trabaja con el protocolo LLDP y no reconocerá la relación de enlaces, por ser un medio inalámbrico, el hecho de que los detecte significará que todos los nodos de la topología están descubiertos por el controlador, es decir, que será posible que todos los nodos tengan una conexión OpenFlow con él. Para lanzar Ryu con la apliación de descubrimiento topologico se tiene que ejecutar el siguiente comando (Ver bloque de Código \ref{code:ryudev}).
+
+
+\begin{lstlisting}[language= bash, style=Consola, caption={Lanzamos el controlador de Ryu con la App de topo.discovery},label=code:ryudev]
+    # Requiere permisos de root
+    ryu-manager ryu.app.gui_topology.gui_topology
+
+
+    # Nos abrirá una interfaz web en el puerto 8080 de localhost --> http://localhost:8080
+    # En dicha interfaz se verán los nodos encontrados por el controlador
+\end{lstlisting}
+\vspace{0.5cm}
+
+Si activamos el núcleo de Mininet-WiFi y le pasamos las coordenadas como antes, seremos capaces de pintar la topología, y además, comparar con el descubrimiento topológico realizado por el controlador Ryu. Si nos fijamos en la Figura \ref{fig:inband1} podemos afirmar que ha descubierto a todos los nodos de la topología, por lo que será posible llevar a cabo una conexión in-band.\\
+\\
+Si se quiere ir un paso más, podemos abrir esta vez Wireshark y consultar en la interfaz de \textit{loopback} de la Network Namespace por defecto si realmente están llegando las conexiones OpenFlow al controlador Ryu. Si nos fijamos en la Figura \ref{fig:inband2}, se puede ver como los 6 nodos de la topología son capaces de conectarse con el controlador. Se puede ver como hay conexión bi-direccional, al haber 6 mensajes de tipo \textit{Hello} en un sentido 6 en el otro, si nos fijamos después de los mensajes de tipo \textit{Hello} empieza a ver una negociación OpenFlow al uso, preguntando por las \textit{features}. Por tanto, se demuestra que las conexiones in-band se pueden llevar a cabo satisfactoriamente.\\
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/inband1.png}
+    \caption{Descubrimiento topologico llevado a cabo por Ryu}
+    \label{fig:inband1}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{archivos/img/dev/inband2.png}
+    \caption{Conexiones in-band con el controlador Ryu que corre en la interfaz de \textit{loopback} de la Network Namespace por defecto}
+    \label{fig:inband2}
+\end{figure}
+
+
