@@ -1,24 +1,32 @@
 \section{Análisis del entorno de depuración del \glsentryshort{bofus}}
 \label{sec:ana_gdb}
 
-En esta sección, exploraremos el proceso de depuración del \gls{bofus} utilizando Visual Studio Code (VS Code) y los conocimientos adquiridos sobre el funcionamiento de la interfaz de línea de comandos  del \gls{bofus} en Mininet-WiFi (Ver Sección \ref{sec:ana_bofuss}). El objetivo es comprender en detalle cómo se ejecutan los comandos y qué sucede internamente durante la operación del \gls{bofus} en un entorno de red inalámbrica emulada. En nuestro escenario, trabajaremos con Mininet-WiFi, que nos proporciona un entorno virtualizado para la emulación de redes inalámbricas gracias al modulo del Kernel mac80211\_hwsim. Por ello, trabajaremos en estrecha colaboración con Mininet-WiFi para llevar a cabo la depuración. Sin embargo, este enfoque puede presentar cierta complejidad, por lo que realizaremos una primera aproximación ejecutando el código de una topología sencilla en modo de depuración, lo que nos permitirá observar los comandos que se ejecutan y comprender su funcionamiento. Posteriormente, exploraremos cómo convertir estos comandos en scripts de shell para mayor conveniencia y automatización. Nuestras herramientas de trabajo serán las siguientes:\\
+En esta sección, exploraremos el proceso de depuración del \gls{bofus} utilizando Visual Studio Code (VS Code) y los conocimientos adquiridos sobre el funcionamiento de la interfaz de línea de comandos  del \gls{bofus} en Mininet-WiFi (Ver Sección \ref{sec:ana_bofuss}). El objetivo es comprender en detalle cómo se ejecutan los comandos y qué sucede internamente durante la operación del \gls{bofus} en un entorno de red inalámbrica emulada. En nuestro escenario, trabajaremos con Mininet-WiFi, que nos proporciona un entorno virtualizado para la emulación de redes inalámbricas gracias al modulo del Kernel mac80211\_hwsim. \\
+\\
+Por ello, trabajaremos en estrecha colaboración con Mininet-WiFi para llevar a cabo la depuración. Sin embargo, este enfoque puede presentar cierta complejidad, por lo que realizaremos una primera aproximación ejecutando el código de una topología sencilla en modo de depuración, lo que nos permitirá observar los comandos que se ejecutan y comprender su funcionamiento. Posteriormente, exploraremos cómo convertir estos comandos en scripts de shell para mayor conveniencia y automatización. Nuestras herramientas de trabajo serán las siguientes:\\
 
 \begin{itemize}
-    \item Visual Studio Code (VS Code): Utilizaremos este editor para escribir y editar el código, así como para realizar la depuración paso a paso. VS Code proporciona una interfaz intuitiva y funciones avanzadas de depuración que nos facilitarán el proceso. A parte de tener una maravillosa terminal integrada y una interfaz con GDB ya desarrollada.
+    \item \textbf{Visual Studio Code (VS Code)}: Utilizaremos este editor para escribir y editar el código, así como para realizar la depuración paso a paso. VS Code proporciona una interfaz intuitiva y funciones avanzadas de depuración que nos facilitarán el proceso. A parte de tener una maravillosa terminal integrada y una interfaz con GDB ya desarrollada.
 
-    \item Mininet-WiFi: Esta herramienta nos permitirá emular redes inalámbricas. Trabajaremos con una topología específica, la cual ya hemos mencionado en la sección anterior, y la ejecutaremos en modo de depuración para comprender mejor su funcionamiento, para así poder extraer las lineas de comandos necesarias para replicar su funcionamiento de forma completamente externa.
+    \item \textbf{Mininet-WiFi}: Esta herramienta nos permitirá emular redes inalámbricas. Trabajaremos con una topología específica, la cual ya hemos mencionado en la sección anterior, y la ejecutaremos en modo de depuración para comprender mejor su funcionamiento, para así poder extraer las lineas de comandos necesarias para replicar su funcionamiento de forma completamente externa.
 
-    \item GDB: Utilizaremos el depurador GDB para analizar y depurar el código del BOFUSS. GDB nos permitirá examinar el estado del programa en tiempo de ejecución, establecer puntos de interrupción, inspeccionar variables y ejecutar el código paso a paso, lo que nos ayudará a identificar posibles errores y problemas en el BOFUSS.
+    \item \textbf{GDB}: Utilizaremos el depurador GDB para analizar y depurar el código del BOFUSS. GDB nos permitirá examinar el estado del programa en tiempo de ejecución, establecer puntos de interrupción, inspeccionar variables y ejecutar el código paso a paso, lo que nos ayudará a identificar posibles errores y problemas en el BOFUSS.
 \end{itemize}
 
-Por tanto, vamos a resumir que estrategia vamos a seguir para depurar al switch. Según se puede apreciar en la Figura \ref{fig:debugBOFUSS}, los pasos que se van a seguir para conseguir depurar al \gls{bofus} son los siguientes. Como se ha indicado, se va a utilizar la misma topología descrita en la Sección \ref{sec:ana_userap}, de las cual se va a obtener la traza de ejecución de la misma. Una vez que se tiene la traza de ejecución de la misma, se desarrrollan dos shell script para levantar el escenario y otro para destruirlo. La idea destras de esto, es que podamos externalizar el proceso de levantar la topología. Si los scripts son capaces de replicar el funcionamiento de Mininet-WiFi, pasaremos a la siguiente fase, donde se configura el depurador de C que se prefiera, en nuestro caso trabajaremos con GDB. Una vez configurado en VS Code, lanzaremos la el escenario con los scripts previamente programados, y se depurará el funcionamiento del software switch.
+Por tanto, vamos a resumir qué estrategia vamos a seguir para depurar al switch. Según se puede apreciar en la Figura \ref{fig:debugBOFUSS}, los pasos que se van a seguir para conseguir depurar al \gls{bofus} son los siguientes. Como se ha indicado, se va a utilizar la misma topología descrita en la Sección \ref{sec:ana_userap}, de las cual se va a obtener la traza de ejecución de la misma. Una vez que se tiene la traza de ejecución de la misma, se desarrrollan dos shell script para levantar el escenario y otro para destruirlo. \\
+\\
+La idea detrás de esto, es que podamos externalizar el proceso de levantar la topología. Si los scripts son capaces de replicar el funcionamiento de Mininet-WiFi, pasaremos a la siguiente fase, donde se configura el depurador de C que se prefiera, en nuestro caso trabajaremos con GDB. Una vez configurado en VS Code, lanzaremos la el escenario con los scripts previamente programados, y se depurará el funcionamiento del software switch.\\
+
+\newpage
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{archivos/img/analisis/debugBOFUSS.drawio.pdf}
+    \includegraphics[width=0.9\textwidth]{archivos/img/analisis/debugBOFUSS.drawio.pdf}
     \caption{Proceso de debug al \glsentryshort{bofus}}
     \label{fig:debugBOFUSS}
 \end{figure}
+
+\newpage
 
 \subsection{Limpieza del escenario}
 
@@ -36,6 +44,8 @@ La simplicidad del script de limpieza es una de sus principales fortalezas. Aunq
 Durante las pruebas realizadas, en una de ellas, se han ejecutado manualmente los comandos para levantar de forma individual la interfaz wireless para el punto de acceso AP1. En este proceso, se ha observado que el script de limpieza elimina correctamente todas las configuraciones previamente establecidas con nuestro shell script. ¿Cuál es el secreto detrás de esta efectividad?\\
 \\
 Aquí es donde debemos reconocer el trabajo de Ramon Fontes y su contribución en el desarrollo de Mininet-WiFi. Al examinar el contenido\footnote{\href{https://github.com/intrig-unicamp/mininet-wifi/blob/master/mn_wifi/clean.py\#L77}{mininet-wifi/blob/master/mn\_wifi/clean.py-L77}} de la ruta \texttt{/sys/kernel/debug/ieee80211}, se puede encontrar una lista de todas las interfaces inalámbricas emuladas cargadas en el sistema. Es gracias a esta información que el script de limpieza puede identificar y eliminar de manera precisa todas las configuraciones relacionadas con las interfaces wireless, garantizando una limpieza completa. Como se puede ver en la Figura \ref{fig:debugBOFUSS_1}, cuando se lanza el escenario topo.py, al listar las interfaces de la misma forma que lo hace Mininet-WiFi somos capaces de listar todas las interfaces inalámbricas emuladas del sistema, tanto las lanzadas desde Mininet-WiFi como las añadidas a mano haciendo uso de un shell script en paralelo.
+
+\newpage
 
 % fig
 \begin{figure}[ht!]
@@ -131,7 +141,7 @@ Es necesario que para trabajar con la herramienta, \texttt{hwsim\_mgmt}, que el 
 \end{figure}
 
 
-\subsubsection{Troubleshooting}
+\subsubsection{Resolución de problemas encontrados}
 \label{subsubsec:problemasmalos}
 Uno de los problemas más comunes que pueden surgir durante el desarrollo del escenario inalámbrico emulado, es que en algunas ocasiones, nos podemos encontrar con que la interfaz inalámbrica se bloquea y nos muestra un mensaje de advertencia indicando lo siguiente:\\
 
@@ -140,7 +150,7 @@ Uno de los problemas más comunes que pueden surgir durante el desarrollo del es
 \end{lstlisting}
 \vspace{0.5cm}
 
-Este mensaje indica que la interfaz inalámbrica está bloqueada por una restricción llamada  ``RF-kill". Esta restricción puede ser causada por diferentes factores, como un interrupción mal gestionada, una mala configuración del sistema operativo, o para salvaguardar los recursos de la máquina. Pero generalmente son \textit{soft-blocked} por el Kernel, en la mayoria de los casos para auto-protegerse. Para solucionar este problema, debemos ejecutar el siguiente comando en la terminal (Ver bloque de código \ref{code:rfkills2}).\\
+Este mensaje indica que la interfaz inalámbrica está bloqueada por una restricción llamada  ``RF-kill". Esta restricción puede ser causada por diferentes factores, como un interrupción mal gestionada, una mala configuración del sistema operativo, o para salvaguardar los recursos de la máquina. Pero generalmente son \textit{soft-blocked} por el Kernel, en la mayoria de los casos para auto-protegerse. Para solucionar este problema, debemos ejecutar el siguiente comando en la terminal (Ver bloque de código \ref{code:rfkills2}).
 
 \begin{lstlisting}[language= bash, style=Consola, caption={desbloqueo de la interfaz por RF-Kill},label=code:rfkills2]
     rfkill unblock all

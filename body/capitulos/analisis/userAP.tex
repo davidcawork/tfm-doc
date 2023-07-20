@@ -3,18 +3,23 @@
 
 En esta sección, vamos a sumergirnos en un análisis exhaustivo de la clase \texttt{UserAP} en Mininet-WiFi, una pieza fundamental que envuelve al \gls{bofus}. Al observar detenidamente el diagrama UML de clases en la Figura \ref{fig:userAP}, nos encontramos con una intrigante jerarquía de clases relacionadas con \texttt{UserAP}. En el centro de esta estructura se encuentran las clases primigenias, \texttt{Node} y \texttt{Node\_wifi}, que se llevan la mayor carga lógica al albergar la mayoría de atributos y métodos esenciales. Estas clases primigenias desempeñan un papel crucial al gestionar una serie de operaciones vitales. Entre sus responsabilidades se encuentran la creación de \textit{Network namespaces}, la configuración y creación de interfaces inalámbricas, el manejo del \gls{tc} para establecer los atributos de los enlaces y mucho más. Son el núcleo de la implementación que permite el funcionamiento armonioso de la infraestructura.\\
 \\
-No obstante, es importante destacar que la clase \texttt{UserAP}, encargada de encapsular al \gls{bofus}, también aporta su propia lógica especializada. Su tarea principal radica en la gestión del proceso \texttt{HostAPd}, un daemon que trabaja incansablemente para materializar las diversas funcionalidades de punto de acceso. Este componente es fundamental para dotar de vida y dinamismo a la red inalámbrica emulada. Además de su papel esencial en el despliegue del \gls{bofus}, estas clases tienen una responsabilidad adicional: implementar una interfaz de ejecución que permite adaptar las condiciones del escenario a los parámetros necesarios de la interfaz de línea de comandos del software switch \gls{sdn}. Esta adaptabilidad se convierte en una ventaja estratégica, ya que proporciona la flexibilidad necesaria para personalizar y ajustar el entorno según las necesidades específicas de cada caso de uso.
+No obstante, es importante destacar que la clase \texttt{UserAP}, encargada de encapsular al \gls{bofus}, también aporta su propia lógica especializada. Su tarea principal radica en la gestión del proceso \texttt{HostAPd}, un daemon que trabaja incansablemente para materializar las diversas funcionalidades de punto de acceso. Este componente es fundamental para dotar de vida y dinamismo a la red inalámbrica emulada. Además de su papel esencial en el despliegue del \gls{bofus}, estas clases tienen una responsabilidad adicional: implementar una interfaz de ejecución que permite adaptar las condiciones del escenario a los parámetros necesarios de la interfaz de línea de comandos del software switch \gls{sdn}. Esta adaptabilidad se convierte en una ventaja estratégica, ya que proporciona la flexibilidad necesaria para personalizar y ajustar el entorno según las necesidades específicas de cada caso de uso.\\
+\\
+Cabe mencionar que Mininet-Wifi redefine atributos que ya se encuentran en Mininet, como por ejemplo la longitud del identificador del \textit{datapath}. Muchos de los \textit{bugs}\footnote{En términos de programación, un ``bug" es un error o fallo en el código de un programa que provoca un comportamiento inesperado o incorrecto en la aplicación.} encontrados entre los repositorios de las plataformas de emulación y el \gls{bofus}, se deben a incoherencias en la definición de las interfaces y a redefiniciones de parámetros como se ha podido encontrar. Por ello, para ver a bajo nivel cómo se ejecuta los binarios pertenecientes al \gls{bofus}, se va a hacer una prueba de concepto lanzando una topología sencilla, y se va a estudiar las trazas de ejecución del mismo. Esto nos será de utilidad para poder comprender qué comandos y llamadas al sistema se llevan a cabo para levantar una instancia de un software switch \gls{bofus}.\\
+\newpage
+
 % fig
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.8\textwidth]{archivos/img/analisis/userAP.png}
+    \includegraphics[width=0.85\textwidth]{archivos/img/analisis/userAP.png}
     \caption{Diagrama UML de la clase \texttt{UserAP}}
     \label{fig:userAP}
 \end{figure}
 
-Mencionar, que Mininet-Wifi redefine atributos que ya se encuentran en Mininet, como por ejemplo la longitud del identificador del \textit{datapath}. Muchos de los bugs encontrados entre los repositorios de las plataformas de emulación y el \gls{bofus}, se debe a incoherencias en la definición de las interfaces y a redefiniciones de parámetros como se ha podido encontrar. Por ello, para ver a bajo nivel como se ejecuta los binarios pertenecientes al \gls{bofus} se va a hacer una prueba de concepto lanzando una topología sencilla, y se va a estudiar las trazas de ejecución del mismo. Esto nos será de utilidad para poder comprender que comandos y llamadas al sistema se llevan a cabo para levantar una instancia de un software switch \gls{bofus}.\\
-\\
-La topología que se va a desplegar se puede apreciar en la Figura \ref{fig:topoBasic}. Para lanzar dicha topología se tiene que lanzar un script de Python el cual se puede encontrar en el repositorio del \gls{tfm} (Sección \ref{sec:estadoArte_github}). A la par que se ejecuta el script de python que alberga la topología, se tiene que lanzar un controlador \gls{sdn} que le permita al software switch manejar correctamente los paquetes que atraviesen su \textit{datapath}. A continuación, en el bloque de código \ref{code:topoBasic}, se puede apreciar qué comandos se tienen que utilizar para  desplegar el escenario. \\
+\newpage
+
+
+La topología que se va a desplegar se puede apreciar en la Figura \ref{fig:topoBasic}. Para lanzar dicha topología se tiene que lanzar un script de Python el cual se puede encontrar en el repositorio del \gls{tfm} (Sección \ref{sec:estadoArte_github}). A la par que se ejecuta el script de Python que alberga la topología, se tiene que lanzar un controlador \gls{sdn} que le permita al software switch manejar correctamente los paquetes que atraviesen su \textit{datapath}. A continuación, en el bloque de código \ref{code:topoBasic}, se puede apreciar qué comandos se tienen que utilizar para  desplegar el escenario.
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Puesta en marcha del escenario básico},label=code:topoBasic]
     # Lanzamos el script que pone en marcha el medio inalambrico via Mininet-WiFi
@@ -23,12 +28,13 @@ La topología que se va a desplegar se puede apreciar en la Figura \ref{fig:topo
     # Lanzamos el controlador (en otra terminal)
     ryu-manager ryu.app.simple_switch_13
 \end{lstlisting}
-\vspace{0.5cm}
+\vspace{0.4cm}
 
-Algún lector podría preguntarse en este punto como va a llevar se a cabo la comunicación entre el controlador \gls{sdn} y el \gls{bofus}. Dicha comunicación se producirá a través de la interfaz de red de \textit{loopback} de la Network namespace por defecto, donde el controlador de ryu estará escuchando en el puerto 6633, con una interfaz virtual de tipo \textit{tun} generada por el \gls{bofus} para llevar a cabo la conexión Openflow.  Para recolectar información sobre la traza de ejecución del script en Mininet-WiFi se debe poner el nivel de log a \textit{debug}.
+Algún lector podría preguntarse en este punto como va a llevar se a cabo la comunicación entre el controlador \gls{sdn} y el \gls{bofus}. Dicha comunicación se producirá a través de la interfaz de red de \textit{loopback} de la Network namespace por defecto, donde el controlador Ryu estará escuchando en el puerto 6633, con una interfaz virtual de tipo \textit{tun} generada por el \gls{bofus} para llevar a cabo la conexión OpenFlow.  Para recolectar información sobre la traza de ejecución del script en Mininet-WiFi se debe poner el nivel de log a \textit{debug}.\\
+
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.7\textwidth]{archivos/img/analisis/topoBasic.png}
+    \includegraphics[width=0.6\textwidth]{archivos/img/analisis/topoBasic.png}
     \caption{Topología básica haciendo uso del \texttt{UserAP} (\gls{bofus})}
     \label{fig:topoBasic}
 \end{figure}
@@ -219,4 +225,4 @@ De esta traza se quiere destacar, aparte de la gestión que lleva a cabo con las
 \end{lstlisting}
 \vspace{0.5cm}
 
-Según se ha estudiado en la sección anterior \ref{sec:ana_bofuss} donde se ha estudiado la interfaz CLI del \gls{bofus}, podemos llegar a entender cada parámetro que Mininet-WiFi mediante la clase \texttt{UserAP} ha conseguido traducir del script de la topología básica a la llamada de los dos binarios del software switch.  De las dos llamadas a cada binario, se quiere mencionar que Mininet-WiFi por defecto suele mandar los logs del plano de datos y del agente de control al directorio temporal (\texttt{/tmp/}) de la distribución linux en cuestión, pero no solo los archivos de logs, también se ubican ahí los descriptores de archivos UNIX para intercomunicar \texttt{ofdatapath} y el \texttt{ofprotocol}.
+Según se ha analizado en la sección anterior \ref{sec:ana_bofuss} donde se ha estudiado la interfaz CLI del \gls{bofus}, podemos llegar a entender cada parámetro que Mininet-WiFi, mediante la clase \texttt{UserAP}, ha conseguido traducir del script de la topología básica a la llamada de los dos binarios del software switch.  De las dos llamadas a cada binario, se quiere mencionar que Mininet-WiFi por defecto suele mandar los logs del plano de datos y del agente de control al directorio temporal (\texttt{/tmp/}) de la distribución linux en cuestión, pero no solo los archivos de logs, también se ubican ahí los descriptores de archivos UNIX para intercomunicar \texttt{ofdatapath} y el \texttt{ofprotocol}.
