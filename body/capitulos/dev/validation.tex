@@ -1,27 +1,27 @@
 \section{Validación}
 \label{sec:vali}
 
-En esta sección, se presenta una validación funcional exahustiva, donde se han llevado a cabo pruebas sobre una topología básica para entender el correcto funcionamiento de la implementación realizada sobre el \gls{bofus}. Cabe destacar que las pruebas desarrolladas en este capítulo no tienen como objetivo cuantificar el rendimiento del switch BOFUSS por diversas razones. En primer lugar, dicho enfoque no ha sido establecido como objetivo principal del proyecto. En segundo lugar, el switch \gls{bofus} se encuentra más orientado hacia el prototipado y desarrollo de nuevas funcionalidades que a lograr un rendimiento excepcional en el procesamiento de los paquetes. En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamiento adecuado de las implementaciones realizadas, sin ahondar en la medición precisa del rendimiento del \textit{software switch}.\\
+En esta sección, se presenta una validación funcional, donde se han llevado a cabo pruebas sobre una topología básica para entender el correcto funcionamiento de la implementación realizada sobre el \gls{bofus}. Cabe destacar que las pruebas desarrolladas en este capítulo no tienen como objetivo cuantificar el rendimiento del switch BOFUSS por diversas razones. En primer lugar, dicho enfoque no ha sido establecido como objetivo principal del proyecto. En segundo lugar, el switch \gls{bofus} se encuentra más orientado hacia el prototipado y desarrollo de nuevas funcionalidades que a lograr un rendimiento excepcional en el procesamiento de los paquetes. En consecuencia, el enfoque de las pruebas se centra en verificar el funcionamiento adecuado de las implementaciones realizadas, sin ahondar en la medición precisa del rendimiento del \textit{software switch}.\\
 \\
-A continuación, en la Figura \ref{fig:scenario_eva}, se puede apreciar el entorno de validación que se va a utilizar. En esencia, es el mismo entorno que el que se utiliza en Mininet-WiFi, pero en este caso se va a ejecutar mediante un shell script para tener más control y consciencia de que instrucciones se van a ejecutar para desplegar el escenario. Como se puede ver en la figura, todo el entorno de validación corre sobre una única máquina que porta el Kernel de Linux, el cual nos proveerá del módulo \texttt{mac80211\_hwsim} de emulación del entorno inalámbrico \texttt{ieee80211} para generar las topologías inalámbricas.\\
+A continuación, en la Figura \ref{fig:scenario_eva}, se puede apreciar el entorno de validación que se va a utilizar. En esencia, es el mismo entorno que el que se utiliza en Mininet-WiFi, pero en este caso se va a ejecutar mediante un shell script para tener más control y consciencia de que instrucciones se van a ejecutar para desplegar el escenario. Como se puede ver en la figura, todo el entorno de validación corre sobre una única máquina que porta el kernel de Linux, el cual nos proveerá del módulo \texttt{mac80211\_hwsim} de emulación del entorno inalámbrico \texttt{ieee80211} para generar las topologías inalámbricas.\\
 
 % topo scenario -
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{archivos/img/dev/scenario_eva.eps}
-    \caption{Entorno de validación haciendo uso del módulo del Kernel \texttt{mac80211\_hwsim}}
+    \caption{Entorno de validación haciendo uso del módulo del kernel \texttt{mac80211\_hwsim}}
     \label{fig:scenario_eva}
 \end{figure}
 
-Cada nodo de la topología se encapsulará en una Network namespace, la cual contendrá una de las radios WiFi emuladas por el módulo del Kernel \texttt{mac80211\_hwsim}. De esta forma se consigue que el tráfico no atraviese de un nodo al nodo raíz directamente, y siga la ruta preestablecida de la topología física emulada. Las radios internamente se verán entre ellas dentro del módulo del Kernel, donde se intercambiarán los mensajes radio, los cuales serán delegados al procesado del \textit{stack} de red que corresponda, para finalmente, ser entregado al programa de espacio de usuario \texttt{win-BOFUSS}\footnote{Técnicamente son dos, el ofdatapath y el ofprotocol}.\\
+Cada nodo de la topología se encapsulará en una Network namespace, la cual contendrá una de las radios WiFi emuladas por el módulo del kernel \texttt{mac80211\_hwsim}. De esta forma se consigue que el tráfico no atraviese de un nodo al nodo raíz directamente, y siga la ruta preestablecida de la topología física emulada. Las radios internamente se verán entre ellas dentro del módulo del kernel, donde se intercambiarán los mensajes radio, los cuales serán delegados al procesado del \textit{stack} de red que corresponda, para finalmente, ser entregado al programa de espacio de usuario \texttt{win-BOFUSS}\footnote{Técnicamente son dos, el ofdatapath y el ofprotocol}.\\
 \\
 De esta forma, se podrán replicar escenarios inalámbricos con relativa rapidez, y de una forma sencilla, dado que al utilizar los mismos recursos que Mininet y Mininet-WiFi, se pueden utilizar las herramientas auxiliares a estos para interactuar con el escenario lanzado con el shell script. Se quiere mencionar, que aunque el controlador no aparezca en la Figura \ref{fig:scenario_eva}, este puede correr en cualquiera de las Network namespace que haya en la topología. En nuestro caso, correrá en la Network namespace por defecto, la \textit{root}, donde también correrá el nodo raíz.
 
 \subsection{Comprobación funcional}
 
-En esta subsección se va a realizar una comprobación funcional de la implementación llevada a cabo sobre el \gls{bofus}. Para ello, se va a hacer uso de una topología relativamente sencilla, pero que tiene la conectividad suficiente para ver la operativa real del protocolo IoTorii. La topología está compuesta de 6 nodos, y se ha marcado al nodo \texttt{A} como nodo raíz de la topología, es decir será el nodo que tenga acceso al controlador \gls{sdn}. La topología se puede apreciar en la Figura \ref{fig:topo_eva}.\\
+En esta subsección se va a realizar una comprobación funcional de la implementación llevada a cabo sobre el \gls{bofus}. Para ello, se va a hacer uso de una topología relativamente sencilla, pero que tiene la conectividad suficiente para ver la operativa real del protocolo IoTorii. La topología está compuesta de 6 nodos, y se ha marcado al nodo \texttt{A} como nodo raíz de la topología, es decir será el nodo que tenga acceso al controlador \gls{sdn}. La topología se puede apreciar en la Figura \ref{fig:topo_eva}, habiendo seis nodos identificados por \texttt{[A,B,C,D,E,F]}, los cuales tienen las siguientes direcciones MAC respectivamente, \texttt{[:01,:02,:03,:04,:05,:06]}.\\
 \\
-Para poner en marcha el escenario solo se tendrá que lanzar el shell script (Ver sección \ref{sec:estadoArte_github}), y para limpiarlo, como se indicaba anteriormente, se hará uso de la utilidad de Mininet para limpiar los recursos reservados para la emulación de la topología. A continuación, se indica en el bloque de Código \ref{code:eva_scenario} como trabajar con el escenario.
+Para poner en marcha el escenario solo se tendrá que lanzar el shell script (Ver sección \ref{sec:estadoArte_github}), y para limpiarlo, como se indicaba anteriormente, se hará uso de la utilidad de Mininet para limpiar los recursos reservados para la emulación de la topología. A continuación, se indica en el bloque de Código \ref{code:eva_scenario} como trabajar con el escenario.\\
 
 \begin{lstlisting}[language= bash, style=Consola, caption={Puesta en marcha y limpieza del escenario},label=code:eva_scenario]
     # Levantar escenario básico
@@ -39,7 +39,7 @@ La comprobación funcional consistirá en el estudio y análisis de las tablas d
 % topo eva
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.42\textwidth]{archivos/img/dev/topo_eva.eps}
+    \includegraphics[width=0.35\textwidth]{archivos/img/dev/topo_eva.eps}
     \caption{Topología básica a evaluar el funcionamiento de IoTorii}
     \label{fig:topo_eva}
 \end{figure}
@@ -54,7 +54,7 @@ Según se ha indicado anteriormente, al trabajar con los mismos recursos que Min
     \label{fig:topo_val_mininetWifi}
 \end{figure}
 
-Otro problema que se ha encontrado a la hora de emular, es el problema mencionado anteriormente en la memoria en la Sección \ref{subsubsec:problemasmalos}. Cuando se ha intentado emular topologías más grandes, parece que el módulo del Kernel no hace un buen uso de los recursos reservados dado que las interfaces generadas son bloqueadas por el Kernel vía \textit{software}. Por ello, se ha querido demostrar el funcionamiento en una topología sencilla, que funcione de forma sólida y sea fácil de apreciar el funcionamiento del protocolo.
+Otro problema que se ha encontrado a la hora de emular, es el problema mencionado anteriormente en la memoria en la Sección \ref{subsubsec:problemasmalos}. Cuando se ha intentado emular topologías más grandes, parece que el módulo del kernel no hace un buen uso de los recursos reservados dado que las interfaces generadas son bloqueadas por el kernel vía \textit{software}. Por ello, se ha querido demostrar el funcionamiento en una topología sencilla, que funcione de forma sólida y sea fácil de apreciar el funcionamiento del protocolo.
 
 \subsubsection{Tablas de vecinos}
 
@@ -64,7 +64,7 @@ En este punto se va a estudiar las tablas de vecinos para la topología anterior
 % topo hellos
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\textwidth]{archivos/img/dev/topo_hellos.eps}
+    \includegraphics[width=0.35\textwidth]{archivos/img/dev/topo_hellos.eps}
     \caption{Intercambio de mensajes de tipo \textit{Hello} en la topología básica}
     \label{fig:topo_hellos}
 \end{figure}
@@ -75,7 +75,7 @@ Esta relación entre la cantidad de mensajes \textit{Hello} y el número de nodo
 \\
 De esta manera, la generación de mensajes \textit{Hello} se convierte en un mecanismo esencial para mantener una visión actualizada de la topología de la red, permitiendo a los nodos conocer y establecer conexiones con sus vecinos cercanos. Así, la cantidad y el contenido de los mensajes \textit{Hello} desempeñan un papel crítico en la configuración y el funcionamiento adecuado del protocolo en una topología determinada.\\
 \\
-Observando la topología, ver figura \ref{fig:topo_hello_nodoA_nb} se puede apreciar como el único vecino que tendrá el nodo raíz será el nodo \texttt{B}, por lo que despues de notificarse, el nodo \texttt{A} apuntará al nodo \texttt{B} en su tabla de vecinos, teniendo en cuenta su dirección MAC real, y le asignará un sufijo único que en este caso es un contador que se va incrementando según se descubrenvecinos nuevos.\\
+Observando la topología, ver Figura \ref{fig:topo_hello_nodoA_nb}, se puede apreciar como el único vecino que tendrá el nodo raíz será el nodo \texttt{B}, por lo que despues de notificarse, el nodo \texttt{A} apuntará al nodo \texttt{B} en su tabla de vecinos, teniendo en cuenta su dirección MAC real, y le asignará un sufijo único que en este caso es un contador que se va incrementando según se descubrenvecinos nuevos.\\
 
 % topo nb - node A
 \begin{figure}[ht!]
@@ -85,7 +85,7 @@ Observando la topología, ver figura \ref{fig:topo_hello_nodoA_nb} se puede apre
     \label{fig:topo_hello_nodoA_nb}
 \end{figure}
 
-Si nos fijamos por ejemplo en la tabla de vecinos del nodo \texttt{B}, ver figura \ref{fig:topo_hello_nodoB_nb}, se puede ver como es este caso este nodo tiene como vecinos a los nodos \texttt{[A,C,D]}, por lo que tendrá que generar tres sufijos únicos,\texttt{[1,2,3]}, uno por cada uno de ellos, para después almacenar la MAC real junto a dicho sufijo único.\\
+Si nos fijamos por ejemplo en la tabla de vecinos del nodo \texttt{B}, ver Figura\ref{fig:topo_hello_nodoB_nb}, se puede ver como es este caso este nodo tiene como vecinos a los nodos \texttt{[A,C,D]}, por lo que tendrá que generar tres sufijos únicos,\texttt{[1,2,3]}, uno por cada uno de ellos, para después almacenar la MAC real junto a dicho sufijo único.\\
 
 % topo nb - node B
 \begin{figure}[ht!]
@@ -137,7 +137,7 @@ En cuanto a los nodos \texttt{D}, \texttt{F} y \texttt{E}, ver Figuras \ref{fig:
 \end{figure}
 
 
-Hemos examinado detalladamente el comportamiento teórico del proceso de notificación de vecindad entre los nodos de la topología. Hemos explorado cómo los mensajes \textit{Hello} permiten a los nodos establecer y mantener conexiones con sus vecinos cercanos, creando una visión actualizada de la estructura de la red.\\
+Hemos examinado el comportamiento teórico del proceso de notificación de vecindad entre los nodos de la topología. Hemos explorado cómo los mensajes \textit{Hello} permiten a los nodos establecer y mantener conexiones con sus vecinos cercanos, creando una visión actualizada de la estructura de la red.\\
 \\
 Sin embargo, la comprobación teórica por sí sola no basta para garantizar la solidez y efectividad de la implementación. Es por ello que ahora nos adentraremos en la fase de contrastar este comportamiento teórico con el funcionamiento real de la misma topología, la cual hemos emulado con las condiciones reales de una red inalámbrica. Esto nos permitirá evaluar el desempeño y la estabilidad de la implementación en un entorno pseudo-real. Analizaremos el comportamiento de los nodos en tiempo real, observando cómo interactúan entre sí y si la generación y recepción de mensajes \textit{Hello} se desarrolla de acuerdo con lo esperado. Mediante este enfoque, buscaremos obtener conclusiones sólidas y fiables sobre la capacidad del protocolo para adaptarse a cambios en la topología, como la aparición o desaparición de nodos y enlaces.\\
 \\
@@ -157,7 +157,7 @@ Para ello, se ha levantado la topología según se ha explicado en el bloque de 
 
 En este punto se van a estudiar las tablas de rutas conocidas como \gls{hlm}, así como la operativa básica de anuncio de rutas al nodo raíz mediante el intercambio de mensajes \textit{SetHLMAC}. Recordemos que para que un nodo genere un mensaje genere un mensaje de \textit{SetHLMAC}, antes ha tenido que recibir una \gls{hlm}, y tener vecinos para intercambiarla. Cuando se notifica una ruta aun vecino, va la \gls{hlm} recibida más un sufijo único del vecino. De esta forma la \gls{hlm} aumenta en un nivel más.\\
 \\
-A continuación, en la Figura \ref{fig:topo_sethlmac}, se ha intentado ilustrar todo el proceso de difusión de estos mensajes \textit{SetHLMAC} a lo largo de la topología. Se han incluido cuatro \textit{snapshots}, siguiendo un orden cronológico de izquierda a derecha y de arriba abajo. Es importante señalar que aunque en esta figura se hayan representado así el intercambio de mensajes, no tiene por qué realizarse en ese mismo orden. Esto es así porque en la realidad hay que tener en cuenta latencias y tiempos de procesamiento.\\
+A continuación, en la Figura \ref{fig:topo_sethlmac}, se ha intentado ilustrar todo el proceso de difusión de estos mensajes \textit{SetHLMAC} a lo largo de la topología. Se han incluido cuatro \textit{snapshots} del proceso de difusión, siguiendo un orden cronológico de izquierda a derecha y de arriba abajo. Es importante señalar que aunque en esta figura se hayan representado así el intercambio de mensajes, no tiene por qué realizarse en ese mismo orden. Esto es así porque en la realidad hay que tener en cuenta latencias y tiempos de procesamiento.\\
 \\
 Volviendo a la Figura \ref{fig:topo_sethlmac}, se puede apreciar como en primera instancia la primera oleada de difusión empieza por el nodo \texttt{A}, generando la \gls{hlm} con valor \texttt{1}, la cual será difundida a todos los vecinos de \texttt{A}, que en este caso es el nodo \texttt{B}. Si nos fijamos en la tabla de vecinos del nodo \texttt{A}, podemos ver como el nodo \texttt{B} tiene el sufijo único con valor \texttt{1}. Por tanto, la \gls{hlm} que le llegará al nodo \texttt{B} será \texttt{1.1}. Este proceso se lleva a cabo de forma análoga por toda la topología, el nodo \texttt{B}, una vez que le llega la nueva \gls{hlm} con valor \texttt{1.1} procederá a difundirla a todos sus vecinos, que en este caso son el nodo \texttt{C} y \texttt{D} respectivamente. El nodo \texttt{B} comprobará su tabla de vecinos en busca de los  nodos \texttt{C} y \texttt{D}, y generará las \gls{hlm} \texttt{1.1.3} y \texttt{1.1.2}.\\
 \\
@@ -193,7 +193,7 @@ Al obtener la topología lógica, se crea un subgrafo $G' \: = \: (\mathcal{N}',
 % topo logic vsr fisica
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{archivos/img/dev/topo_logic.eps}
+    \includegraphics[width=0.9\textwidth]{archivos/img/dev/topo_logic.eps}
     \caption{Establecimiento de la topología lógica}
     \label{fig:topo_logic}
 \end{figure}
