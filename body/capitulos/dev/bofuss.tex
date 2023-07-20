@@ -37,7 +37,7 @@ El temporizador de los mensajes \textit{Hello} determina la frecuencia con la qu
 \\
 La resilencia de un protocolo depende en gran medida de su capacidad para recuperarse rápidamente de fallos en la red y adaptarse a cambios en la topología. Al establecer un temporizador de mensajes \textit{Hello} y una caducidad de vecinos adecuados, el protocolo puede detectar y responder de manera oportuna a eventos como enlaces caídos, nodos inalcanzables o nuevos vecinos. Esto permite que el protocolo reconstruya rápidamente su tabla de vecinos y ajuste sus rutas en consecuencia, minimizando el impacto de las fallos y optimizando la utilización de los recursos de red.\\
 \\
-A continuación se van a indicar algunas de las modificaciones más importantes a la hora de implementar la lógica del protocolo IoTorii.
+A continuación, se van a indicar algunas de las modificaciones más importantes a la hora de implementar la lógica del protocolo IoTorii:
 
 \begin{itemize}
     \item La estructura \texttt{reg\_HLMAC}, ha sido creada para representar una entrada de la tabla de HLMACs, también conocida como tabla de rutas de IoTorii. Cada entrada tiene almacenada la HLMAC, un flag de si está activa o no.
